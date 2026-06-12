@@ -47,5 +47,25 @@
   "repo": {
     "timeout_seconds": 300,
     "default_dirname": "target"
+  },
+  "graph": {
+    "exclude_dirs": [
+      ".git",
+      "__pycache__",
+      ".venv",
+      "venv",
+      "build",
+      "dist",
+      "examples",
+      "artwork",
+      "requirements",
+      ".github",
+      "node_modules"
+    ],
+    "doc_suffixes": [
+      ".md",
+      ".rst"
+    ],
+    "max_mentions_per_doc": 50
   }
 }

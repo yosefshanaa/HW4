@@ -174,15 +174,15 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 **Phase DoD:** `uv run hw4 graph` produces versioned graph artifacts for iteration 0; graph.json parsed into validated models; metrics computed; ADR-4 decision (real Graphify vs fallback) closed.
 
 ### Graphify discovery spike (timeboxed 2h)
-- [ ] T131 (P0) Locate Graphify distribution (course materials / lecturer link / package index); record exact name+version
-- [ ] T132 (P0) Install per its docs (via uv tooling if Python; document precisely)
-- [ ] T133 (P0) Run Graphify on mini_repo fixture first; inspect actual outputs (graph.json? graph.html? GRAPH_REPORT.md? hot.md/index.md?)
-- [ ] T134 (P0) Document real output schema + flags in PRD_graph_pipeline.md (replace assumptions with facts; diff vs our contract)
-- [ ] T135 (P0) Decide scan scope config for target (which dirs; vault entry decision = token decision, L07 §5)
-- [ ] T136 (P0) ADR-4 gate: if tool unusable by spike end → activate fallback AST extractor; notify lecturer; record decision
-- [ ] T137 (P0) (If fallback) TDD AST backend: module/class/function nodes; import+call EXTRACTED edges; same graph.json contract
-- [ ] T138 (P0) (If fallback) heuristic doc-mention edges marked INFERRED; anything regex-fuzzy marked AMBIGUOUS — never silently upgraded
-- [ ] T139 (P1) (If fallback) docstring/TODO/WHY comments extracted as rationale nodes (keeps Part-C rationale layer alive)
+- [x] T131 (P0) Locate Graphify distribution (course materials / lecturer link / package index); record exact name+version
+- [x] T132 (P0) Install per its docs (via uv tooling if Python; document precisely)
+- [x] T133 (P0) Run Graphify on mini_repo fixture first; inspect actual outputs (graph.json? graph.html? GRAPH_REPORT.md? hot.md/index.md?)
+- [x] T134 (P0) Document real output schema + flags in PRD_graph_pipeline.md (replace assumptions with facts; diff vs our contract)
+- [x] T135 (P0) Decide scan scope config for target (which dirs; vault entry decision = token decision, L07 §5)
+- [x] T136 (P0) ADR-4 gate: if tool unusable by spike end → activate fallback AST extractor; notify lecturer; record decision
+- [x] T137 (P0) (If fallback) TDD AST backend: module/class/function nodes; import+call EXTRACTED edges; same graph.json contract
+- [x] T138 (P0) (If fallback) heuristic doc-mention edges marked INFERRED; anything regex-fuzzy marked AMBIGUOUS — never silently upgraded
+- [x] T139 (P1) (If fallback) docstring/TODO/WHY comments extracted as rationale nodes (keeps Part-C rationale layer alive)
 
 ### runner + models
 - [ ] T140 (P0) TDD `services/graph_runner.py`: invoke backend via ProcessRunner; output dir `results/graphs/<iteration>/`; never overwrite previous iterations (FR-2.6)
