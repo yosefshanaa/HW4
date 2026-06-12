@@ -24,6 +24,9 @@ class RecordingSdk:
     def analyze(self, graph_path):
         return self._record("analyze", graph_path)
 
+    def analyze_with_agents(self):
+        return self._record("analyze_with_agents")
+
     def ask(self, question, *, mode):
         return self._record("ask", question, mode=mode)
 
@@ -62,6 +65,7 @@ class TestDispatch:
             (["vault", "g.json"], ("build_vault", ("g.json",), {})),
             (["analyze", "g.json"], ("analyze", ("g.json",), {})),
             (["analyze"], ("analyze", (None,), {})),
+            (["analyze", "--agents"], ("analyze_with_agents", (), {})),
             (["ask", "why?"], ("ask", ("why?",), {"mode": "graph"})),
             (["ask", "why?", "--mode", "naive"], ("ask", ("why?",), {"mode": "naive"})),
             (["fix", "F-001"], ("fix", ("F-001",), {"auto": False})),

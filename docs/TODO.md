@@ -363,33 +363,33 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 8 — Multi-Agent System (Milestone M5)
 **Phase DoD:** crew (Repo, GraphAnalyst, ArchitectFixer, QA + orchestrator) runs analyze→detect end-to-end on mini_repo with mocked LLM in tests and on target live; all LLM traffic via gatekeeper; findings.json produced by agents matches direct-SDK output.
 
-- [ ] T293 (P0) Install/pin agent framework per ADR-1 (CrewAI); `uv add crewai`; resolve version conflicts NOW (revisit-trigger check)
+- [x] T293 (P0) Install/pin agent framework per ADR-1 (CrewAI); `uv add crewai`; resolve version conflicts NOW (revisit-trigger check)
 - [ ] T294 (P0) If CrewAI conflicts with env → execute ADR-1 fallback to LangGraph; update ADR with evidence
-- [ ] T295 (P0) TDD `agents/tools.py`: tool wrappers (run_graphify, load_graph, run_metrics, run_detectors, retrieve_context, run_tests, apply_edit, graph_diff) — each a thin delegate to SDK services; NO logic in tools
-- [ ] T296 (P0) Tests: every tool delegates correctly (mock SDK), tool I/O is JSON-serializable
-- [ ] T297 (P0) TDD `agents/roles.py`: role/goal/backstory definitions for RepoAgent, GraphAnalyst, ArchitectFixer, QAAgent — goals phrased with context discipline ("you receive focused subgraphs; never request full files unless source-validation step")
-- [ ] T298 (P0) Typed payload dataclasses: AnalysisRequest, Finding (reuse), FixPlan, IterationVerdict — serialization tests (PLAN §3.2)
-- [ ] T299 (P0) TDD `agents/context.py`: pack payload+bundle with instructions at start, task at end; history compaction summarizer between iterations (purpose tag `compact`) (FR-5.5)
-- [ ] T300 (P0) Tests: packing order, compaction reduces tokens ≥50% on synthetic history, critical rules survive compaction (assert rule text present post-compact) (Part-B /compact protocol)
-- [ ] T301 (P0) TDD `agents/crew.py`: wire roles+tools+orchestration for the ANALYZE flow (Repo→Analyst→findings.json)
-- [ ] T302 (P0) Integration test (mock LLM): analyze flow on mini_repo emits planted findings; equality vs direct `Hw4Sdk.analyze()` output
-- [ ] T303 (P0) Enforcement test: attempt direct LLM call from an agent bypassing gatekeeper raises (FR-5.4 / NFR-2)
-- [ ] T304 (P0) Budget guard test: crew run halts gracefully on BudgetExceeded mid-flow, state persisted
+- [x] T295 (P0) TDD `agents/tools.py`: tool wrappers (run_graphify, load_graph, run_metrics, run_detectors, retrieve_context, run_tests, apply_edit, graph_diff) — each a thin delegate to SDK services; NO logic in tools
+- [x] T296 (P0) Tests: every tool delegates correctly (mock SDK), tool I/O is JSON-serializable
+- [x] T297 (P0) TDD `agents/roles.py`: role/goal/backstory definitions for RepoAgent, GraphAnalyst, ArchitectFixer, QAAgent — goals phrased with context discipline ("you receive focused subgraphs; never request full files unless source-validation step")
+- [x] T298 (P0) Typed payload dataclasses: AnalysisRequest, Finding (reuse), FixPlan, IterationVerdict — serialization tests (PLAN §3.2)
+- [x] T299 (P0) TDD `agents/context.py`: pack payload+bundle with instructions at start, task at end; history compaction summarizer between iterations (purpose tag `compact`) (FR-5.5)
+- [x] T300 (P0) Tests: packing order, compaction reduces tokens ≥50% on synthetic history, critical rules survive compaction (assert rule text present post-compact) (Part-B /compact protocol)
+- [x] T301 (P0) TDD `agents/crew.py`: wire roles+tools+orchestration for the ANALYZE flow (Repo→Analyst→findings.json)
+- [x] T302 (P0) Integration test (mock LLM): analyze flow on mini_repo emits planted findings; equality vs direct `Hw4Sdk.analyze()` output
+- [x] T303 (P0) Enforcement test: attempt direct LLM call from an agent bypassing gatekeeper raises (FR-5.4 / NFR-2)
+- [x] T304 (P0) Budget guard test: crew run halts gracefully on BudgetExceeded mid-flow, state persisted
 - [ ] T305 (P0) Run live analyze-crew on TARGET (cheap model); compare findings vs Phase 6 — reconcile differences, document
-- [ ] T306 (P0) Ledger audit: every agent step tagged (`agent.analyst`, `agent.fixer`, ...) — required for cost table
-- [ ] T307 (P1) Agent narrative quality pass: analyst's finding write-ups use careful language; add system-prompt rule if not (evidence-level vocabulary enforced in prompt)
-- [ ] T308 (P0) CLI `hw4 analyze --agents` (agent path) vs `hw4 analyze` (direct path) — both supported; README explains why (determinism vs demonstration)
-- [ ] T309 (P1) Failure-mode tests: tool exception → orchestrator retries once → surfaces structured error (no silent swallow)
-- [ ] T310 (P1) Timeout per agent step (config) tested
+- [x] T306 (P0) Ledger audit: every agent step tagged (`agent.analyst`, `agent.fixer`, ...) — required for cost table
+- [x] T307 (P1) Agent narrative quality pass: analyst's finding write-ups use careful language; add system-prompt rule if not (evidence-level vocabulary enforced in prompt)
+- [x] T308 (P0) CLI `hw4 analyze --agents` (agent path) vs `hw4 analyze` (direct path) — both supported; README explains why (determinism vs demonstration)
+- [x] T309 (P1) Failure-mode tests: tool exception → orchestrator retries once → surfaces structured error (no silent swallow)
+- [x] T310 (P1) Timeout per agent step (config) tested
 - [ ] T311 (P0) Gate check + commit; tag `m5-agents`
 - [ ] T312 (P1) PROMPTS.md: agent system prompts verbatim + iteration history
 - [ ] T313 (P1) Update PRD_agent_orchestration.md as-built
-- [ ] T314 (P1) Coverage on agents/ ≥85% (mock-heavy; adapters thin per ADR-7)
-- [ ] T315 (P1) File-length audit (roles/backstories can bloat — extract to data file if >150)
+- [x] T314 (P1) Coverage on agents/ ≥85% (mock-heavy; adapters thin per ADR-7)
+- [x] T315 (P1) File-length audit (roles/backstories can bloat — extract to data file if >150)
 - [ ] T316 (P2) Trace visualization: sequence log of one crew run rendered to markdown (nice README artifact)
 - [ ] T317 (P1) Effort + budget tracking update
 - [ ] T318 (P2) Stress: run analyze-crew twice; confirm idempotent outputs (or document LLM variance handling)
-- [ ] T319 (P1) Verify agent context sizes per step < config caps (proves discipline held in practice; log assertion)
+- [x] T319 (P1) Verify agent context sizes per step < config caps (proves discipline held in practice; log assertion)
 - [ ] T320 (P1) Status sync
 
 ## Phase 9 — Fix & Improvement Loop (Milestone M6)

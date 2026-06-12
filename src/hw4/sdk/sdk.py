@@ -112,6 +112,22 @@ class Hw4Sdk:
         """Run all detectors, return ranked findings (FR-6)."""
         return operations.analyze(self, graph_path)
 
+    def analyze_with_agents(self, repo_path: Path | str | None = None):
+        """Crew-driven analyze flow: deterministic spine + LLM narratives (FR-5).
+
+        Same findings.json as analyze() by construction; the agents add
+        careful-language interpretation, never facts. Import is local —
+        the crewai dependency tree should not tax non-agent commands.
+        """
+        from hw4.services.agents.crew import analyze_flow
+        from hw4.services.agents.payloads import AnalysisRequest
+
+        if repo_path is None:
+            repo_path = self._base_dir / self._config.path("workspace") / str(
+                self._config.get("repo.default_dirname")
+            )
+        return analyze_flow(self, AnalysisRequest(repo_path=str(repo_path)))
+
     def ask(self, question: str, *, mode: str = "graph"):
         """Answer a question about the repo, graph-guided or naive (FR-8)."""
         return operations.ask(self, question, mode=mode)

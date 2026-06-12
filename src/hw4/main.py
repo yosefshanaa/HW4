@@ -38,6 +38,8 @@ def build_parser() -> argparse.ArgumentParser:
     analyze = sub.add_parser("analyze", help="run detectors, rank findings (FR-6)")
     analyze.add_argument("graph_path", nargs="?", default=None,
                          help="path to graph.json (default: latest iteration)")
+    analyze.add_argument("--agents", action="store_true",
+                         help="crew-driven flow (adds LLM narratives; same findings)")
 
     ask = sub.add_parser("ask", help="answer a question about the repo (FR-8)")
     ask.add_argument("question")
@@ -59,7 +61,9 @@ def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
     handlers = {
         "graph": lambda: sdk.build_graph(args.repo_path, iteration=args.iteration),
         "vault": lambda: sdk.build_vault(args.graph_path),
-        "analyze": lambda: sdk.analyze(args.graph_path),
+        "analyze": lambda: (
+            sdk.analyze_with_agents() if args.agents else sdk.analyze(args.graph_path)
+        ),
         "ask": lambda: sdk.ask(args.question, mode=args.mode),
         "fix": lambda: sdk.fix(args.finding_id, auto=args.auto),
         "experiment": lambda: sdk.run_experiment(condition=args.condition),
