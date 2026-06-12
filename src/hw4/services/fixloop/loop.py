@@ -12,11 +12,11 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable
-from datetime import datetime, timezone
 from pathlib import Path
 
 from hw4.constants import FindingStatus, StopReason
 from hw4.services.detectors.base import Finding
+from hw4.services.fixloop import entries as entries_mod
 from hw4.services.fixloop import stop
 from hw4.services.fixloop.applier import ApplyFailedError
 from hw4.services.fixloop.planner import PlanRefusedError, plan
@@ -62,7 +62,7 @@ class FixLoop:
                 # unappliable edits are a blocked finding, not a crash —
                 # the applier already restored the tree
                 finding.status = FindingStatus.BLOCKED
-                entries.append(self._blocked_entry(iteration, finding, fix_plan, str(exc)))
+                entries.append(entries_mod.blocked_entry(iteration, finding, fix_plan, str(exc)))
                 remaining = len(queue) - index - 1
                 if remaining <= 0:
                     return self._finish(entries, StopReason.NO_SAFE_ACTION)
@@ -90,30 +90,13 @@ class FixLoop:
             else:
                 self._applier.revert(apply_result.base_sha)
                 finding.status = FindingStatus.BLOCKED
-            entries.append({
-                "iteration": iteration,
-                "finding_id": finding.id,
-                "strategy": fix_plan.strategy,
-                "files_changed": list(apply_result.files_changed),
-                "characterization_test": apply_result.characterization_test,
-                "tests_green": tests_green,
-                "graph_hash_before": base_hash,
-                "graph_hash_after": new_hash,
-                "metric_deltas": {
-                    "bottleneck_before": delta.top_bottleneck_before,
-                    "bottleneck_after": delta.top_bottleneck_after,
-                    "isolated_before": delta.isolated_before,
-                    "isolated_after": delta.isolated_after,
-                },
-                "verdict": verdict,
-                "accepted": outcome.accept,
-                "stop_reason": outcome.reason.value if outcome.reason else None,
-                "test_output_tail": (
-                    "" if tests_green
-                    else getattr(self._applier, "last_test_output", "")[-1200:]
-                ),
-                "recorded_utc": datetime.now(timezone.utc).isoformat(),
-            })
+            entries.append(entries_mod.iteration_entry(
+                iteration, finding, fix_plan, apply_result, tests_green,
+                base_hash, new_hash, delta,
+                (verdict, outcome.accept,
+                 outcome.reason.value if outcome.reason else None),
+                getattr(self._applier, "last_test_output", ""),
+            ))
             base_hash = new_hash if outcome.accept else base_hash
             self._write_log(entries, outcome.reason)
             if outcome.stop:
@@ -129,26 +112,6 @@ class FixLoop:
             except PlanRefusedError:
                 continue  # refusals are by design; they stay hypotheses
         return queue
-
-    @staticmethod
-    def _blocked_entry(iteration: int, finding, fix_plan, error: str) -> dict:
-        return {
-            "iteration": iteration,
-            "finding_id": finding.id,
-            "strategy": fix_plan.strategy,
-            "files_changed": [],
-            "characterization_test": "",
-            "tests_green": False,
-            "graph_hash_before": "",
-            "graph_hash_after": "",
-            "metric_deltas": {"bottleneck_before": 0, "bottleneck_after": 0,
-                              "isolated_before": 0, "isolated_after": 0},
-            "verdict": "unappliable",
-            "accepted": False,
-            "stop_reason": None,
-            "error": error,
-            "recorded_utc": datetime.now(timezone.utc).isoformat(),
-        }
 
     def _finish(self, entries: list[dict], reason: StopReason, note: str = "") -> dict:
         report = {
