@@ -104,7 +104,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T071 (P1) `__init__.py` exports audit: `__all__` defined in sdk and shared packages
 - [ ] T072 (P2) Type-check pass with mypy/pyright locally (not a gate, hygiene only)
 - [x] T073 (P0) Verify relative imports/paths only; no absolute filesystem paths in code (paths come from config) (NFR-10)
-- [ ] T074 (P1) Start `docs/PROMPTS.md` with prompts used so far for scaffolding (NFR-14)
+- [x] T074 (P1) Start `docs/PROMPTS.md` with prompts used so far for scaffolding (NFR-14)
 - [x] T075 (P1) Record any deviation discovered between PLAN file map and reality — update PLAN (living doc, version bump note)
 
 ## Phase 2 — Documentation Suite & Approvals (Milestone M0 — gates implementation)
@@ -135,7 +135,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T098 (P1) Define findings.json schema doc (id, kind, nodes[], evidence_chain[], confidence, status{hypothesis,validated,rejected,fixed,blocked})
 - [ ] T099 (P2) Glossary page in vault: hub, bridge, community, betweenness, SPOF, evidence classes (reused later as wiki seed)
 - [ ] T100 (P0) Commit docs suite; tag `m0-docs-approved`
-- [ ] T101 (P1) Log doc-authoring prompts to PROMPTS.md
+- [x] T101 (P1) Log doc-authoring prompts to PROMPTS.md
 - [ ] T102 (P1) Calendar check: confirm submission deadline; back-plan milestones M2–M8 with dates; write into PLAN §12
 - [ ] T103 (P2) Set up shared scratchpad for pair notes (decisions made verbally must land in ADRs same day)
 - [ ] T104 (P0) Verify no implementation code (beyond Phase-1 infra) exists before this gate — honest check
