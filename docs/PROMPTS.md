@@ -103,3 +103,14 @@ pages. **Lesson:** the first preflight shipped zero file content in A
 "paste as much as fits" rule or the baseline is a strawman.
 
 *Maintained continuously; see git history for the per-commit trail.*
+
+## P-008 · 2026-06-12 · Fix loop (Phase 9)
+
+Applier prompts (verbatim, they are the fixer methodology): EDIT_SYSTEM
+demands SEARCH/REPLACE blocks byte-exact against listed files only;
+CHAR_SYSTEM demands a pytest file pinning CURRENT behavior. Failed
+attempts are re-prompted once with the exact apply error as feedback.
+**Lesson:** the retry-with-error-feedback path was cheaper to test than
+to reason about — scripted bad-then-good responses caught a tree-state
+bug (revert must happen before retry, or the second patch applies to a
+half-edited file).

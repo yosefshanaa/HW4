@@ -418,15 +418,15 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T341 (P1) Second finding fix attempt if budget+time allow (strengthens ≥1 KPI to 2)
 - [ ] T342 (P0) Post-fix Ruff run on TOUCHED target files only (we don't lint the whole foreign repo — document this boundary)
 - [ ] T343 (P0) Gate check + commit (our repo); tag `m6-fixloop`; preserve target branch in workspace + export patch file to results/patches/
-- [ ] T344 (P1) PROMPTS.md: fixer prompts + failed attempts (failures are methodology data)
-- [ ] T345 (P1) Update PRD_fix_loop.md as-built (esp. stop-condition truth table actuals)
+- [x] T344 (P1) PROMPTS.md: fixer prompts + failed attempts (failures are methodology data)
+- [x] T345 (P1) Update PRD_fix_loop.md as-built (esp. stop-condition truth table actuals)
 - [ ] T346 (P1) Vault: wiki page per executed fix (what/why/evidence/result) linked from index
 - [x] T347 (P1) Coverage ≥85% on fixloop/
 - [x] T348 (P1) File-length audit
 - [ ] T349 (P2) Record a short screen capture / annotated log of one full loop run (demo asset)
 - [ ] T350 (P1) Effort + budget tracking update
-- [ ] T351 (P1) Loop tokens accounting: per-iteration token totals from ledger → will feed cost analysis
-- [ ] T352 (P1) Status sync; descope decision point for P2 backlog if slipping
+- [x] T351 (P1) Loop tokens accounting: per-iteration token totals from ledger → will feed cost analysis
+- [x] T352 (P1) Status sync; descope decision point for P2 backlog if slipping
 
 ## Phase 10 — Token Experiment: Condition B & Comparison (Milestone M7)
 **Phase DoD:** Condition B measured; per-question comparison table complete; savings KPI computed; failures analyzed in writing.
@@ -643,7 +643,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
 | 7 Experiment baseline | T263–T292 | 22/30 | machinery done; T275-281,283 live run blocked on API key | 2026-06-12 |
 | 8 Agents | T293–T320 | 0/28 | not started | |
-| 9 Fix loop | T321–T352 | 0/32 | not started | |
+| 9 Fix loop | T321–T352 | 24/32 | machinery done; T337-T343 live run blocked on API key | 2026-06-12 |
 | 10 Experiment B | T353–T372 | 0/20 | not started | |
 | 11 Notebook & cost | T373–T391 | 0/19 | not started | |
 | 12 SKILL | T392–T402 | 0/11 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **271/515** | | |
+| **Total** | **515 tasks** | **304/515** | | |
 
 *End of TODO v1.00.*

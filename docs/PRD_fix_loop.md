@@ -73,3 +73,18 @@ do, through agents/Gatekeeper. Loop = deterministic control flow.
   restores byte-identical tree.
 - **KPI (FR-7, PRD §9):** ≥1 finding on the real target auto-fixed with
   tests green and a positive structural delta, end-to-end in the log.
+
+## As-built notes (T345, 2026-06-12)
+
+- Planner deviation from §2: the plan *skeleton* is rule-based (strategy
+  per finding kind, hard refusals) — only edit content is LLM work, in
+  the applier. Rationale: deterministic refusal doctrine is testable;
+  prose plans add cost without adding safety.
+- Edit format: SEARCH/REPLACE blocks (byte-exact match) rather than
+  unified diff — fuzzy application is structurally impossible; one
+  retry with the parse/apply error as feedback.
+- Stop truth table implemented exactly as §2 with a 48-state invariant
+  sweep (test_fixloop_stop) — exactly one StopReason per run, red tests
+  and regressions never accepted, budget always wins.
+- Live target run blocked on ANTHROPIC_API_KEY; control flow proven
+  with scripted collaborators end to end.
