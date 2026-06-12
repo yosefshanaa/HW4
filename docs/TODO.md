@@ -478,16 +478,16 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 12 — SKILL Protocol & Guardrails (Milestone M8 start)
 **Phase DoD:** SKILL.md complete (frontmatter, procedure, guardrails), copied into vault, referenced by agents; guardrail behavior demonstrably enforced.
 
-- [ ] T392 (P0) Author `docs/SKILL.md` frontmatter: name `graph-guided-codebase-analysis`, short discriminative routing description (skill-listing budget lesson — short, sharp, activating; Part-B 12–13), allowed-tools list
-- [ ] T393 (P0) Body — When to use: trigger phrases + problem patterns (problem→skill paradigm, Part-A skill-to-need slide)
-- [ ] T394 (P0) Body — Procedure: identify task → load skill → read index.md → retrieve focused context → act → return traceable result (Part-B protocol)
-- [ ] T395 (P0) Body — Guardrails table: read-only (auto), reversible (requires revert path — branch edits), irreversible (delete/send/publish — human approval required); note disable-model-invocation concept for sensitive skills (Part-B slide 11)
-- [ ] T396 (P0) Skill-refresh rule documented: re-read SKILL before complex/sensitive steps; /compact recovery protocol (skill drift, Part-B 17)
-- [ ] T397 (P0) Copy skill into vault wiki + link from index
-- [ ] T398 (P1) Wire skill text into agent system prompts (fixer + analyst read the procedure section verbatim at session start)
-- [ ] T399 (P1) Guardrail enforcement test: applier refuses non-branch (irreversible) edit path; deletion-type plan requires `--confirm` flag (demonstrable, not aspirational)
-- [ ] T400 (P1) Second skill (P1): `token-experiment-runner` skill documenting the A/B protocol as an activation protocol
-- [ ] T401 (P1) Commit; PROMPTS.md update
+- [x] T392 (P0) Author `docs/SKILL.md` frontmatter: name `graph-guided-codebase-analysis`, short discriminative routing description (skill-listing budget lesson — short, sharp, activating; Part-B 12–13), allowed-tools list
+- [x] T393 (P0) Body — When to use: trigger phrases + problem patterns (problem→skill paradigm, Part-A skill-to-need slide)
+- [x] T394 (P0) Body — Procedure: identify task → load skill → read index.md → retrieve focused context → act → return traceable result (Part-B protocol)
+- [x] T395 (P0) Body — Guardrails table: read-only (auto), reversible (requires revert path — branch edits), irreversible (delete/send/publish — human approval required); note disable-model-invocation concept for sensitive skills (Part-B slide 11)
+- [x] T396 (P0) Skill-refresh rule documented: re-read SKILL before complex/sensitive steps; /compact recovery protocol (skill drift, Part-B 17)
+- [x] T397 (P0) Copy skill into vault wiki + link from index
+- [x] T398 (P1) Wire skill text into agent system prompts (fixer + analyst read the procedure section verbatim at session start)
+- [x] T399 (P1) Guardrail enforcement test: applier refuses non-branch (irreversible) edit path; deletion-type plan requires `--confirm` flag (demonstrable, not aspirational)
+- [x] T400 (P1) Second skill (P1): `token-experiment-runner` skill documenting the A/B protocol as an activation protocol
+- [x] T401 (P1) Commit; PROMPTS.md update
 - [ ] T402 (P2) Skill-listing budget demo: show truncated-description behavior in a note (educational tie-in)
 
 ## Phase 13 — Creative Extension: Refactor Truth Dashboard (ADR-6)

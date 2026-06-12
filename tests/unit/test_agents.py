@@ -108,3 +108,18 @@ class TestAnalyzeFlow:
         assert result["halted"].startswith("budget firewall")
         assert result["findings_count"] > 0  # detectors ran anyway (no LLM)
         assert result["trace"][-1]["result"]["written"] == 0
+
+
+class TestSkillWiring:
+    def test_analyst_prompt_carries_skill_procedure(self, tmp_path):
+        """T398: the SKILL procedure rides into every narrative prompt."""
+        import shutil
+
+        sdk, transport = make_sdk(tmp_path)
+        (tmp_path / "docs").mkdir()
+        repo_root = MINI_REPO.parents[2]
+        shutil.copyfile(repo_root / "docs" / "SKILL.md", tmp_path / "docs" / "SKILL.md")
+        analyze_flow(sdk, AnalysisRequest(repo_path=str(MINI_REPO), narrative_top_n=1))
+        prompt = transport.calls[-1]["messages"][0]["content"]
+        assert "Read `index.md` first" in prompt
+        assert prompt.startswith("Rules (non-negotiable)")

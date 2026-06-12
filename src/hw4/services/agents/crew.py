@@ -27,6 +27,18 @@ ANALYST_RULES = (
 )
 
 
+def analyst_rules(sdk) -> str:
+    """ANALYST_RULES + the SKILL procedure verbatim (T398, anti-drift)."""
+    skill = sdk.base_dir / "docs" / "SKILL.md"
+    if not skill.exists():
+        return ANALYST_RULES
+    text = skill.read_text(encoding="utf-8")
+    if "## Procedure" not in text:
+        return ANALYST_RULES
+    procedure = text.split("## Procedure", 1)[1].split("\n## ", 1)[0]
+    return f"{ANALYST_RULES}\n\nSkill procedure (reloaded fresh):{procedure}"
+
+
 def build_crew(sdk) -> Crew:
     """A real CrewAI crew for the live demo path (kickoff needs an API key)."""
     repo_agent = make_agent("repo", sdk.llm)
@@ -58,9 +70,10 @@ def analyze_flow(sdk, request: AnalysisRequest) -> dict:
     trace.append({"step": "analyst.run_detectors", "result": {"count": detection["count"]}})
 
     narratives, halted = [], ""
+    rules = analyst_rules(sdk)
     for finding in detection["findings"][: request.narrative_top_n]:
         prompt = pack(
-            ANALYST_RULES,
+            rules,
             f"Finding {finding['id']} ({finding['kind']}, confidence "
             f"{finding['confidence']}):\n{finding['evidence_chain']}",
             "Write a 3-sentence careful-language narrative for this finding.",
