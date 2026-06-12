@@ -115,7 +115,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T078 (P0) Review docs/PLAN.md v1.00; sanity-check file map vs 150-line budget; approve
 - [ ] T079 (P0) Review this TODO; assign owners per phase; mark P2 items we pre-emptively drop if time-poor
 - [ ] T080 (P0) Send lecturer the open questions (PRD §15): Graphify distribution, deadline/zip format, in-place fix policy, sanctioned LLM providers
-- [ ] T081 (P0) Write `docs/PRD_graph_pipeline.md`: Graphify invocation contract, graph.json normalization spec, metrics list, diff semantics, I/O, test scenarios
+- [x] T081 (P0) Write `docs/PRD_graph_pipeline.md`: Graphify invocation contract, graph.json normalization spec, metrics list, diff semantics, I/O, test scenarios
 - [ ] T082 (P0) Write `docs/PRD_agent_orchestration.md`: roles, payload schemas, context-packing rules, loop interaction, failure modes
 - [ ] T083 (P0) Write `docs/PRD_defect_detection.md`: per-detector algorithm, thresholds (config), evidence-chain format, false-positive policy
 - [ ] T084 (P0) Write `docs/PRD_fix_loop.md`: planner I/O, applier safety (branch, revert), characterization tests, stop-condition truth table
