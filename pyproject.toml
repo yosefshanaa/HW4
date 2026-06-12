@@ -40,6 +40,8 @@ ignore = ["E501"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=src --cov-report=term-missing"
+# fixture repos carry their own pytest suites — ours must not collect them
+norecursedirs = ["tests/fixtures"]
 
 [tool.coverage.run]
 source = ["src"]
