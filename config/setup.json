@@ -66,6 +66,9 @@
       ".md",
       ".rst"
     ],
-    "max_mentions_per_doc": 50
+    "max_mentions_per_doc": 50,
+    "code_exclude_dirs": [
+      "docs"
+    ]
   }
 }

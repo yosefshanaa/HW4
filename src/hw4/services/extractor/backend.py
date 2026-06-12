@@ -22,10 +22,13 @@ def extract(root: Path | str, config: Config, iteration: int = 0) -> Graph:
     """Scan one repository tree into the PLAN §2.1 contract."""
     root = Path(root)
     exclude_dirs = set(config.get("graph.exclude_dirs"))
+    # build scripts / sphinx conf are not part of the analyzed package, but
+    # the same directories still hold the *.md docs we do want to scan
+    code_exclude = exclude_dirs | set(config.get("graph.code_exclude_dirs", default=[]))
     doc_suffixes = tuple(config.get("graph.doc_suffixes"))
     max_mentions = int(config.get("graph.max_mentions_per_doc"))
 
-    modules = python_ast.scan_modules(root, exclude_dirs)
+    modules = python_ast.scan_modules(root, code_exclude)
     by_name = {mod.name: mod for mod in modules}
 
     nodes: list[Node] = []

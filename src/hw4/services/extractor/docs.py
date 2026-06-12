@@ -88,17 +88,21 @@ def _candidates(text: str) -> list[str]:
 def _resolve(candidate: str, code_ids: set[str], top_packages: set[str]):
     if candidate in code_ids:
         return candidate, EdgeEvidence.INFERRED, 0.8
-    suffix_hits = [cid for cid in code_ids if cid.endswith("." + candidate.split(".")[-1])]
-    if candidate.split(".")[0] in top_packages:
-        full_hits = [cid for cid in code_ids if cid.endswith("." + candidate) or cid == candidate]
-        if len(full_hits) == 1:
-            return full_hits[0], EdgeEvidence.INFERRED, 0.6
-        if not full_hits:
-            return f"missing:{candidate}", EdgeEvidence.AMBIGUOUS, 0.4
-        return None  # several plausible targets — refuse to guess
-    if len(suffix_hits) == 1 and candidate.count(".") >= 1:
+    top, leaf = candidate.split(".")[0], candidate.split(".")[-1]
+    if top not in top_packages:
         return None  # external-looking dotted path; not ours to claim
-    return None
+    full_hits = [cid for cid in code_ids if cid.endswith("." + candidate)]
+    if len(full_hits) == 1:
+        return full_hits[0], EdgeEvidence.INFERRED, 0.6
+    if full_hits:
+        return None  # several plausible targets — refuse to guess
+    # re-export tier: docs cite `pkg.name` for symbols defined in pkg.sub.name
+    reexports = [c for c in code_ids if c.startswith(top + ".") and c.endswith("." + leaf)]
+    if len(reexports) == 1:
+        return reexports[0], EdgeEvidence.INFERRED, 0.6
+    if reexports:
+        return None
+    return f"missing:{candidate}", EdgeEvidence.AMBIGUOUS, 0.4
 
 
 def _dedupe_edges(edges: list[Edge]) -> list[Edge]:

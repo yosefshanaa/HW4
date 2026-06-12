@@ -102,3 +102,24 @@ class TestIsolationGroundTruth:
             if e.dst.startswith("orphan") and e.relation in ("imports", "calls")
         }
         assert not inbound
+
+
+class TestMentionResolution:
+    def test_reexport_mention_resolves_to_defining_module(self, graph):
+        from hw4.services.extractor.docs import _resolve
+
+        ids = {"click", "click.utils", "click.utils.echo", "click.core.Command"}
+        resolved = _resolve("click.echo", ids, {"click"})
+        assert resolved[0] == "click.utils.echo"
+        assert resolved[1] is EdgeEvidence.INFERRED
+
+    def test_external_dotted_names_ignored(self, graph):
+        from hw4.services.extractor.docs import _resolve
+
+        assert _resolve("docs.pytest.org", {"click.core"}, {"click"}) is None
+
+    def test_ambiguous_reexport_refused(self, graph):
+        from hw4.services.extractor.docs import _resolve
+
+        ids = {"click.utils.echo", "click.termui.echo"}
+        assert _resolve("click.echo", ids, {"click"}) is None
