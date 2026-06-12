@@ -1,0 +1,30 @@
+{
+ "iterations": [
+  {
+   "accepted": false,
+   "characterization_test": "",
+   "files_changed": [
+    "src/click/core.py",
+    "src/click/core.py"
+   ],
+   "finding_id": "F-003",
+   "graph_hash_after": "08f51e8a8bcbd048364764acfa48c9f7ec44dd632a52390dc370358914639ee8",
+   "graph_hash_before": "7c68cb7183d7019540ebb61750b3471951b568f62f2ee2131c078bec1fd435a3",
+   "iteration": 3,
+   "metric_deltas": {
+    "bottleneck_after": 0.5039,
+    "bottleneck_before": 0.4965,
+    "isolated_after": 778,
+    "isolated_before": 846
+   },
+   "recorded_utc": "2026-06-12T16:37:51.137728+00:00",
+   "stop_reason": "NO_SAFE_ACTION",
+   "strategy": "extract a cohesive group of helpers into a new module",
+   "tests_green": false,
+   "verdict": "regressed"
+  }
+ ],
+ "note": "",
+ "stop_reason": "NO_SAFE_ACTION",
+ "version": "1.00"
+}

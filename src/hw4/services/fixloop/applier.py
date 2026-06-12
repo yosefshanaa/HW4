@@ -25,11 +25,19 @@ BLOCK = re.compile(
     r"FILE:\s*(?P<file>\S+)\s*\n<{7} SEARCH\n(?P<search>.*?)\n={7}\n(?P<replace>.*?)\n>{7} REPLACE",
     re.DOTALL,
 )
+CREATE_BLOCK = re.compile(
+    r"FILE:\s*(?P<file>\S+)\s*\n<{7} CREATE\n(?P<content>.*?)\n>{7} CREATE",
+    re.DOTALL,
+)
 EDIT_SYSTEM = (
-    "You are applying one bounded refactor. Respond ONLY with edit blocks, format:\n"
+    "You are applying one bounded refactor. Respond ONLY with edit blocks.\n"
+    "To edit an existing listed file:\n"
     "FILE: <path>\n<<<<<<< SEARCH\n<exact existing lines>\n=======\n"
     "<replacement lines>\n>>>>>>> REPLACE\n"
-    "SEARCH must match the file byte-for-byte. Touch only the listed files."
+    "SEARCH must match the file byte-for-byte.\n"
+    "To create ONE new module (only in the same directory as a listed file):\n"
+    "FILE: <new path>\n<<<<<<< CREATE\n<full file content>\n>>>>>>> CREATE\n"
+    "Every import you reference must exist after your blocks are applied."
 )
 CHAR_SYSTEM = (
     "Write one complete pytest file that pins the CURRENT behavior of the "
@@ -73,10 +81,29 @@ def parse_blocks(text: str) -> list[EditBlock]:
     ]
 
 
-def apply_blocks(repo: Path, blocks: list[EditBlock], allowed: tuple[str, ...]) -> list[str]:
-    if not blocks:
+def parse_creates(text: str) -> list[EditBlock]:
+    """CREATE blocks reuse EditBlock with an empty search."""
+    return [
+        EditBlock(m.group("file"), "", m.group("content"))
+        for m in CREATE_BLOCK.finditer(text)
+    ]
+
+
+def apply_blocks(
+    repo: Path, blocks: list[EditBlock], creates: list[EditBlock], allowed: tuple[str, ...]
+) -> list[str]:
+    if not blocks and not creates:
         raise ApplyFailedError("no edit blocks found in the response")
     changed = []
+    allowed_dirs = {str(Path(name).parent) for name in allowed}
+    for block in creates:
+        if str(Path(block.file).parent) not in allowed_dirs:
+            raise ApplyFailedError(f"new file {block.file} outside the target directories")
+        path = repo / block.file
+        if path.exists():
+            raise ApplyFailedError(f"CREATE targets existing file {block.file}")
+        path.write_text(block.replace + "\n", encoding="utf-8")
+        changed.append(block.file)
     for block in blocks:
         if block.file not in allowed:
             raise ApplyFailedError(f"edit touches non-target file {block.file}")
@@ -86,7 +113,21 @@ def apply_blocks(repo: Path, blocks: list[EditBlock], allowed: tuple[str, ...]) 
             raise ApplyFailedError(f"SEARCH block does not match {block.file}")
         path.write_text(content.replace(block.search, block.replace, 1), encoding="utf-8")
         changed.append(block.file)
+    _assert_python_parses(repo, changed)
     return changed
+
+
+def _assert_python_parses(repo: Path, changed: list[str]) -> None:
+    """A refactor that breaks parsing is rejected as feedback, not a red run."""
+    import ast
+
+    for name in changed:
+        if not name.endswith(".py"):
+            continue
+        try:
+            ast.parse((repo / name).read_text(encoding="utf-8"))
+        except SyntaxError as exc:
+            raise ApplyFailedError(f"{name} no longer parses: {exc}") from exc
 
 
 class Applier:
@@ -108,8 +149,11 @@ class Applier:
         feedback = ""
         for _attempt in range(self._retries + 1):
             try:
-                blocks = parse_blocks(self._request_edits(plan, feedback))
-                changed = apply_blocks(self._repo, blocks, plan.target_files)
+                proposal = self._request_edits(plan, feedback)
+                changed = apply_blocks(
+                    self._repo, parse_blocks(proposal), parse_creates(proposal),
+                    plan.target_files,
+                )
                 return ApplyResult(branch, base_sha, tuple(changed), char_test)
             except ApplyFailedError as exc:
                 feedback = str(exc)
@@ -120,8 +164,10 @@ class Applier:
         return self._runner.run(self._test_command, cwd=self._repo).ok
 
     def revert(self, base_sha: str) -> None:
-        """One command back to the pre-fix tree; the branch stays for audit."""
+        """Back to the pre-fix tree, including created files; the branch
+        stays for audit and characterization tests are preserved."""
         self._git("reset", "--hard", base_sha)
+        self._git("clean", "-fd", "-e", "tests/test_characterization_*")
 
     def _characterize(self, plan: FixPlan) -> str:
         prompt = "Code to pin:\n" + self._file_sections(plan.target_files)

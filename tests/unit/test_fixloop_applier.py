@@ -9,6 +9,7 @@ from hw4.services.fixloop.applier import (
     ApplyFailedError,
     apply_blocks,
     parse_blocks,
+    parse_creates,
 )
 from hw4.services.fixloop.planner import FixPlan
 from hw4.shared.config import Config
@@ -87,7 +88,7 @@ class TestParsing:
 
     def test_apply_rejects_non_target_files(self, tmp_path):
         with pytest.raises(ApplyFailedError, match="non-target"):
-            apply_blocks(tmp_path, parse_blocks(GOOD_EDIT), allowed=("other.py",))
+            apply_blocks(tmp_path, parse_blocks(GOOD_EDIT), [], allowed=("other.py",))
 
 
 class TestApply:
@@ -147,3 +148,61 @@ class TestCharacterization:
     def test_suite_runner_reports_green(self, tmp_path):
         applier, _, _, _ = make_applier(tmp_path, [])
         assert applier.run_tests() is True
+
+
+CREATE_EDIT = """FILE: app/_helpers.py
+<<<<<<< CREATE
+def shared_helper():
+    return "extracted"
+>>>>>>> CREATE
+
+FILE: app/utils.py
+<<<<<<< SEARCH
+def slugify(text):
+    return "-".join(text.lower().split())
+=======
+from app._helpers import shared_helper
+
+
+def slugify(text):
+    return "-".join(text.lower().split())
+>>>>>>> REPLACE"""
+
+BROKEN_SYNTAX_EDIT = """FILE: app/utils.py
+<<<<<<< SEARCH
+def slugify(text):
+    return "-".join(text.lower().split())
+=======
+def slugify(text)
+    return "-".join(text.lower().split())
+>>>>>>> REPLACE"""
+
+
+class TestCreateBlocks:
+    def test_new_sibling_module_created_and_edit_applied(self, tmp_path):
+        applier, repo, _, _ = make_applier(tmp_path, [response(text=CREATE_EDIT)])
+        result = applier.apply(make_plan())
+        assert "app/_helpers.py" in result.files_changed
+        assert (repo / "app/_helpers.py").read_text().startswith("def shared_helper")
+        assert "shared_helper" in (repo / "app/utils.py").read_text()
+
+    def test_create_outside_target_dirs_rejected(self, tmp_path):
+        blocks = parse_creates("FILE: elsewhere/x.py\n<<<<<<< CREATE\nX = 1\n>>>>>>> CREATE")
+        with pytest.raises(ApplyFailedError, match="outside the target"):
+            apply_blocks(tmp_path, [], blocks, allowed=("app/utils.py",))
+
+    def test_revert_removes_created_files(self, tmp_path):
+        applier, repo, _, _ = make_applier(tmp_path, [response(text=CREATE_EDIT)])
+        result = applier.apply(make_plan())
+        applier.revert(result.base_sha)
+        assert not (repo / "app/_helpers.py").exists()
+
+
+class TestSyntaxGate:
+    def test_unparseable_result_is_feedback_not_red_run(self, tmp_path):
+        applier, repo, _, _ = make_applier(
+            tmp_path, [response(text=BROKEN_SYNTAX_EDIT), response(text=GOOD_EDIT)]
+        )
+        result = applier.apply(make_plan())  # retry path recovers
+        assert result.files_changed == ("app/utils.py",)
+        assert "normalized" in (repo / "app/utils.py").read_text()

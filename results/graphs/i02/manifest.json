@@ -1,0 +1,33 @@
+{
+ "backend": "ast_extractor/1.00",
+ "content_hash": "7c68cb7183d7019540ebb61750b3471951b568f62f2ee2131c078bec1fd435a3",
+ "created_utc": "2026-06-12T16:35:28.793872+00:00",
+ "duration_seconds": 37.457,
+ "edges": 2070,
+ "iteration": 2,
+ "nodes": 1226,
+ "repo_path": "workspace/target",
+ "scan_scope": {
+  "code_exclude_dirs": [
+   "docs"
+  ],
+  "doc_suffixes": [
+   ".md",
+   ".rst"
+  ],
+  "exclude_dirs": [
+   ".git",
+   "__pycache__",
+   ".venv",
+   "venv",
+   "build",
+   "dist",
+   "examples",
+   "artwork",
+   "requirements",
+   ".github",
+   "node_modules"
+  ]
+ },
+ "version": "1.00"
+}
