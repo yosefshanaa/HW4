@@ -16,9 +16,12 @@ context stuffing in a frozen A/B experiment.
 
 | Axis | State |
 |---|---|
-| Engineering | 338 tests green · coverage ≈96% (gate 85%) · ruff 0 · all files ≤150 code lines · `scripts/check_gates.py` GREEN |
+| Engineering | ~345 tests green · coverage ≈96% (gate 85%) · ruff 0 · all files ≤150 code lines · `scripts/check_gates.py` GREEN |
 | Analysis | target `pallets/click@8a1b1a3` graphed (1,226 nodes / 2,070 edges), **2 source-validated defects** (`results/FINDINGS.md`) |
-| Live LLM runs | wiki generation, agent narratives, A/B measurement, live fix loop — **pending `ANTHROPIC_API_KEY` in `.env`** (everything else proven with fake transports) |
+| Token experiment (LIVE) | **85.6% input-token savings** (median 87.8%, KPI ≥70% met); first run (50.9%, default caps) archived with failure analysis (`docs/PRD_token_experiment.md`) |
+| Fix loop (LIVE) | **honest NO_SAFE_ACTION**: 4 attempts, every behavior-breaking edit caught by the target's 1,672 tests and reverted, with embedded evidence (`results/FINDINGS.md` §8, `results/dashboard.md`) |
+| Vault & agents (LIVE) | 34 LLM wiki pages; crew narratives with findings identical to the direct path |
+| Cost | **$0.63** of the $10 budget firewall, 109 gated calls, all ledgered (provider: OpenAI gpt-4o-mini, config-switched — ADR-3 swappability proven live) |
 
 ## Installation
 
@@ -30,7 +33,8 @@ pinned Python automatically (developed on uv-managed CPython 3.12.13;
 ```bash
 git clone https://github.com/yosefshanaa/HW4 && cd HW4
 uv sync                 # full environment from uv.lock
-cp .env-example .env    # then put a real ANTHROPIC_API_KEY inside
+cp .env-example .env    # then put a real key for the configured provider
+                        # (llm.provider in config/setup.json; currently OPENAI_API_KEY)
 uv run pytest -q        # 338 tests, coverage gate 85%
 uv run python scripts/check_gates.py   # all submission gates
 ```

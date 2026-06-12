@@ -79,8 +79,8 @@ noted as future work).
   `src/click/core.py` in 10/10 cases — the naive condition's failure
   mode is itself corroboration of validated finding F-003 (whatever you
   ask about this codebase, grep hands you the god module first).
-- Live A/B execution: **blocked on `ANTHROPIC_API_KEY`** (.env); all
-  machinery tested with fake transports.
+- Live A/B execution: completed 2026-06-12 with the OpenAI provider
+  (config-switched); measured results below supersede the preflight.
 
 > **Dataset frozen 2026-06-12 (T266):** `data/questions.yaml` sha256
 > `fb0749ad7a3b55317071b17f0750215310ae4fa671145f4afa239bea9a0450b0` — 10 questions (3 locate / 4 path / 3 impact), every

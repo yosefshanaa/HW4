@@ -31,9 +31,9 @@ def code(source: str) -> None:
 md("""# HW4 — Research Notebook: graph-guided analysis of pallets/click
 
 Executes top-to-bottom from **committed artifacts** (`results/`,
-`config/`, `data/`). Cells that need live LLM measurements degrade to
-clearly-labeled estimates until `ANTHROPIC_API_KEY` runs land; nothing
-here invents numbers.
+`config/`, `data/`) — including the LIVE 2026-06-12 measurements
+(experiment comparison, fix-loop log). Cells degrade to clearly-labeled
+estimates if an artifact is absent; nothing here invents numbers.
 
 Grounding: Liu et al. 2024, *Lost in the Middle: How Language Models Use
 Long Contexts* (TACL) — the position-aware context assembly used by both
@@ -126,7 +126,7 @@ code("""if comparison:
     plt.show()
     print("totals:", comparison["totals"])
 else:
-    print("LIVE DATA PENDING (needs ANTHROPIC_API_KEY).")
+    print("LIVE DATA PENDING (no comparison.json found).")
     print("Falling through to offline ESTIMATES below — budget-guard grade,")
     print("clearly not the measurement (PLAN §4.4).")""")
 
@@ -238,19 +238,19 @@ print("strong tier only for code edits + experiment cells (ADR-3).")""")
 
 md("""## §7 Conclusions — KPI status vs PRD §3.2
 
-| KPI | Target | Status |
+| KPI | Target | Status (LIVE, 2026-06-12) |
 |---|---|---|
-| Token savings | ≥70% input tokens | machinery + frozen dataset ready; **live measurement pending API key** (offline projection in §3) |
+| Token savings | ≥70% input tokens | **met: 85.6%** overall (median 87.8%); run 1 (50.9%, default caps) archived with failure analysis; 1/10 questions below target (Q-08, explained) |
 | Validated defects | ≥2 | **met** — F-002 echo SPOF, F-003 core god module (source-validated) |
-| Auto-fix | ≥1 loop fix, tests green | loop proven on fakes end-to-end; **live run pending API key** |
-| Coverage | ≥85% | **met** — ~96–98% throughout |
-| Gates | ruff 0, ≤150 lines/file, no hardcodes/secrets | **met** — `scripts/check_gates.py` GREEN |
+| Auto-fix | ≥1 loop fix, tests green | **honest negative**: 4 live attempts, every behavior-breaking edit caught and reverted (FINDINGS §8); the loop mechanism itself is validated — incl. one accept path proven live before reclassification |
+| Coverage | ≥85% | **met** — ≈96% |
+| Gates | ruff 0, ≤150 lines/file, no hardcodes/secrets | **met** — check_gates GREEN |
 
-Honest misses: nothing failed; three KPIs are *pending live execution*,
-blocked only on the secret no repo may contain. Every pending cell in
-this notebook flips to measured data by re-running after
-`cp .env-example .env` + a real key + `uv run hw4 experiment && uv run
-hw4 fix F-003`.""")
+The auto-fix KPI is reported as an evidenced negative per T340: the
+god module resists safe automated extraction precisely because its
+concerns are entangled — the loop restated finding F-003 empirically.
+Blind quality scoring of the experiment answers (sheet + sealed key in
+results/experiment/) remains a human step before final submission.""")
 
 nb["cells"] = cells
 nb["metadata"]["kernelspec"] = {
