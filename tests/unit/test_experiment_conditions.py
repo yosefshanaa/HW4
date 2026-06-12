@@ -71,3 +71,14 @@ class TestNaiveBundle:
         assert bundle.truncated
         assert len(bundle.files) < 2
         assert bundle.token_estimate > 0
+
+    def test_partial_file_included_when_first_file_exceeds_cap(self, tmp_path):
+        repo = make_repo(tmp_path)
+        (repo / "pkg" / "engine.py").write_text(
+            "def run_pipeline():\n    'engine pipeline runs here'\n" * 400
+        )
+        bundle = naive_bundle(QUESTION, repo, make_config(tmp_path, cap=300))
+        assert bundle.truncated
+        assert any(f.endswith("(truncated)") for f in bundle.files)
+        assert "TRUNCATED at context cap" in bundle.text
+        assert bundle.token_estimate <= 320  # stays near the cap

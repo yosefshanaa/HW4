@@ -64,6 +64,24 @@ noted as future work).
   report analyzes *why* (this is a result, not a cover-up — honesty over
   vanity metrics).
 
+## As-run parameters (T274, T286 — updated 2026-06-12)
+
+- Condition A selection rule as implemented: grep question terms over
+  all non-excluded `.py` files, rank by raw hit count, paste whole
+  files; when the next file exceeds the cap, paste its head and mark
+  `[TRUNCATED at context cap]` (`experiment.naive_context_token_cap`
+  = 16,000). Repo file listing always included.
+- **Preflight (offline estimate, strong tier):** 20 cells (10 q × 2
+  reps), ≈321.5k input + ≈8k output tokens → **≈$1.08** — comfortably
+  inside the $10 budget firewall. Actual-vs-estimate to be recorded
+  after the live run.
+- Observed: ALL 10 naive bundles truncate (T291 ✅), and the cut file is
+  `src/click/core.py` in 10/10 cases — the naive condition's failure
+  mode is itself corroboration of validated finding F-003 (whatever you
+  ask about this codebase, grep hands you the god module first).
+- Live A/B execution: **blocked on `ANTHROPIC_API_KEY`** (.env); all
+  machinery tested with fake transports.
+
 > **Dataset frozen 2026-06-12 (T266):** `data/questions.yaml` sha256
 > `fb0749ad7a3b55317071b17f0750215310ae4fa671145f4afa239bea9a0450b0` — 10 questions (3 locate / 4 path / 3 impact), every
 > reference spot-checked against source at the pinned SHA. No post-hoc

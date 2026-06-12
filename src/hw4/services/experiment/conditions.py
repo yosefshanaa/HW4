@@ -24,6 +24,7 @@ from hw4.shared.config import Config
 from hw4.shared.logging_setup import get_logger, log_event
 
 WORD = re.compile(r"[a-z_][a-z0-9_]+")
+MIN_PARTIAL_CHARS = 200  # below this, a file fragment carries no signal
 EXPERIMENT_INSTRUCTIONS = (
     "Answer the question at the end using ONLY the material below. "
     "Cite the source files your answer relies on. "
@@ -54,19 +55,28 @@ def naive_bundle(question: Question, repo_root: Path | str, config: Config) -> N
     parts = [_file_listing(sources, repo_root)]
     included, truncated = [], False
     for path, _score in ranked:
+        rel = path.relative_to(repo_root).as_posix()
         content = path.read_text(encoding="utf-8", errors="replace")
-        section = f"### file: {path.relative_to(repo_root).as_posix()}\n{content}"
-        if estimate_tokens("\n\n".join([*parts, section])) > cap:
-            truncated = True
-            log_event(
-                get_logger("experiment"),
-                "condition A truncation",
-                question=question.id,
-                dropped_file=path.relative_to(repo_root).as_posix(),
-            )
-            break
-        parts.append(section)
-        included.append(path.relative_to(repo_root).as_posix())
+        section = f"### file: {rel}\n{content}"
+        if estimate_tokens("\n\n".join([*parts, section])) <= cap:
+            parts.append(section)
+            included.append(rel)
+            continue
+        # a developer pastes as much of the file as still fits — the cut
+        # lands mid-file (the classic lost-in-the-middle setup), and the
+        # truncation itself is a recorded result, not an error
+        budget_chars = (cap - estimate_tokens("\n\n".join(parts))) * 4
+        if budget_chars >= MIN_PARTIAL_CHARS:
+            parts.append(section[:budget_chars] + "\n### [TRUNCATED at context cap]")
+            included.append(f"{rel} (truncated)")
+        truncated = True
+        log_event(
+            get_logger("experiment"),
+            "condition A truncation",
+            question=question.id,
+            cut_file=rel,
+        )
+        break
     text = "\n\n".join(parts)
     return NaiveBundle(
         question=question.question,
