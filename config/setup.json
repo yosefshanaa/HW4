@@ -42,7 +42,8 @@
     "temperature": 0.0,
     "naive_context_token_cap": 16000,
     "shuffle_seed": 42,
-    "model_tier": "strong"
+    "model_tier": "strong",
+    "assumed_output_tokens": 400
   },
   "budget": {
     "max_usd": 10.0,

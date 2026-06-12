@@ -337,13 +337,13 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T268 (P0) TDD `experiment/conditions.py` Condition A builder: naive context = concatenate candidate files (selection rule documented: e.g., all files matching naive keyword grep, as a developer would) + skill-listing simulation per L07 §7
 - [ ] T269 (P0) Condition A truncation policy: if context exceeds model cap, truncate + LOG the truncation (it is itself a result)
 - [ ] T270 (P0) Tests: deterministic context assembly, truncation logging, token estimate
-- [ ] T271 (P0) TDD `experiment/runner.py`: for each question × condition × repetition → gatekeeper call (purpose `experiment.A`/`experiment.B`), persist answer + usage to results/experiment/
-- [ ] T272 (P0) Runner: temperature 0, fixed model (strong tier), randomized question order, cache-bypass flag ON (T210)
-- [ ] T273 (P0) Tests (mock LLM): pairing, repetition count, ledger rows per call, resume-on-crash (idempotent by run id)
+- [x] T271 (P0) TDD `experiment/runner.py`: for each question × condition × repetition → gatekeeper call (purpose `experiment.A`/`experiment.B`), persist answer + usage to results/experiment/
+- [x] T272 (P0) Runner: temperature 0, fixed model (strong tier), randomized question order, cache-bypass flag ON (T210)
+- [x] T273 (P0) Tests (mock LLM): pairing, repetition count, ledger rows per call, resume-on-crash (idempotent by run id)
 - [ ] T274 (P0) Cost preflight: estimate Condition A total cost from context sizes BEFORE running; confirm under budget; record estimate vs actual later
 - [ ] T275 (P0) RUN Condition A on target: N questions × 2 reps; archive raw outputs
 - [ ] T276 (P0) Verify ledger rows complete (tokens in/out from API metadata, not estimates) for every call; any gaps → rerun those cells
-- [ ] T277 (P0) TDD `experiment/scoring.py`: rubric scoring record (per answer: correctness, citation correctness, scorer id)
+- [x] T277 (P0) TDD `experiment/scoring.py`: rubric scoring record (per answer: correctness, citation correctness, scorer id)
 - [ ] T278 (P0) Blind-score Condition A answers (both teammates, adjudicate disagreements per protocol T092)
 - [ ] T279 (P1) Baseline table: per-question tokens + score; archive `results/experiment/condition_A.json`
 - [ ] T280 (P1) Sanity reflections: did naive condition hit Lost-in-the-Middle symptoms (right file present but answer wrong)? note instances — gold for the report
@@ -354,8 +354,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T285 (P1) Verify experiment artifacts contain zero secrets/keys (raw payload logs!)
 - [ ] T286 (P1) Update PRD_token_experiment.md with as-run parameters
 - [ ] T287 (P2) Dry-run one question through Condition B informally to confirm plumbing before Phase 10 (no recorded measurement)
-- [ ] T288 (P1) Coverage on experiment/ modules ≥85%
-- [ ] T289 (P1) Findings: file-length audit on experiment modules
+- [x] T288 (P1) Coverage on experiment/ modules ≥85%
+- [x] T289 (P1) Findings: file-length audit on experiment modules
 - [ ] T290 (P2) Back up results/ to second location (cheap insurance)
 - [ ] T291 (P0) Confirm question set includes ≥1 question whose naive condition exceeds context (demonstrates the bottleneck thesis) — if not, add an impact-tier question variant via documented amendment procedure
 - [ ] T292 (P1) Status sync
