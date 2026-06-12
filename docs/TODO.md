@@ -305,26 +305,26 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T242 (P1) Pre-fix metric baseline per finding (e.g., god node betweenness percentile) — the number the diff must improve
 
 ### wrap
-- [ ] T243 (P0) Gate check + commit; tag `m3-analysis`
+- [x] T243 (P0) Gate check + commit; tag `m3-analysis`
 - [ ] T244 (P1) Vault feedback: wiki pages for each validated finding (linked from index)
-- [ ] T245 (P1) PROMPTS.md update
-- [ ] T246 (P1) Update PRD_defect_detection.md with as-built thresholds
+- [x] T245 (P1) PROMPTS.md update
+- [x] T246 (P1) Update PRD_defect_detection.md with as-built thresholds
 - [ ] T247 (P1) Effort tracking update
 - [ ] T248 (P2) Optional: hyperedge note modeling requirement→module→test→WHY as one group-claim for the chosen path (Part-C hyperedge)
 - [ ] T249 (P1) Peer review: each teammate red-teams the other's findings for overclaiming (R8)
 - [ ] T250 (P1) Screenshot the target graph with findings highlighted → assets/
 - [ ] T251 (P2) Mini literature note in notebook: Lost in the Middle (Liu et al. 2024) citation + 2-sentence relevance (Part-B grounding)
 - [x] T252 (P0) Check: every FINDINGS.md conclusion sentence uses qualified language matching its evidence level (search for unqualified "is/must/always" near INFERRED claims)
-- [ ] T253 (P1) File-length audit; refactor any service >130 lines
+- [x] T253 (P1) File-length audit; refactor any service >130 lines
 - [x] T254 (P1) Coverage check on detectors ≥85%
 - [ ] T255 (P2) Export FINDINGS.md → vault wiki mirror
 - [x] T256 (P1) Confirm findings.json schema matches doc (T098) byte-for-byte (json schema validation test)
 - [ ] T257 (P2) Graph-literacy self-test: can each teammate explain every edge label used? (oral check, 10 min)
 - [x] T258 (P1) List AMBIGUOUS edges consumed anywhere in findings → must be zero or explicitly human-resolved
 - [x] T259 (P2) Record 2–3 "surprises" the graph revealed vs naive impression (T119) — strong report material
-- [ ] T260 (P1) Update block diagram / class scheme if detector results changed the picture
+- [x] T260 (P1) Update block diagram / class scheme if detector results changed the picture
 - [x] T261 (P0) Verify ≥2 validated defects exist — else loop back (this is a KPI)
-- [ ] T262 (P1) Status sync: TODO statuses, slippage check
+- [x] T262 (P1) Status sync: TODO statuses, slippage check
 
 ## Phase 7 — Token Experiment: Dataset & Baseline Condition A (Milestone M4)
 **Phase DoD:** question dataset locked; Condition A measured for all questions with ledger rows; baseline table archived.
@@ -640,7 +640,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
 | 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
 | 5 Vault & wiki | T173–T210 | 27/38 | code done; T184-185,T193-195 blocked on API key + Obsidian (user) | 2026-06-12 |
-| 6 RevEng & detection | T211–T262 | 0/52 | not started | |
+| 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
 | 7 Experiment baseline | T263–T292 | 0/30 | not started | |
 | 8 Agents | T293–T320 | 0/28 | not started | |
 | 9 Fix loop | T321–T352 | 0/32 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **189/515** | | |
+| **Total** | **515 tasks** | **249/515** | | |
 
 *End of TODO v1.00.*

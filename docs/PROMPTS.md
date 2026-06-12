@@ -76,4 +76,15 @@ any detector could consume bad edges. **Lesson:** validating extraction
 quality on the real target *before* building consumers is cheap
 insurance — AMBIGUOUS noise dropped 163→11 edges.
 
+## P-006 · 2026-06-12 · Detection & analysis (Phase 6)
+
+Detector TDD per P-pattern with one addition per detector: a mandatory
+false-positive test ("the healthy hub must NOT be flagged") written
+before the true-positive test. Target-run triage prompt: "for each
+hypothesis, complete the Part-C 5 steps; reject with a cited reason or
+validate with cited source lines." **Lesson:** the first live run was
+the real test — p98 percentile gate came from triage pain (55 false
+god nodes), not from foresight; budget a smoke-triage round into every
+detector's schedule.
+
 *Maintained continuously; see git history for the per-commit trail.*

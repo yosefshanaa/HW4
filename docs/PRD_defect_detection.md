@@ -49,6 +49,17 @@ fixed, blocked}`, `suggested_action`. Ranking: `confidence × impact`
 | Findings as data (JSON) | findings as prose | feeds fix loop, dashboard, and report from one source of truth |
 | Five fixed detectors | pluggable registry | scope control; ABC keeps extension cheap if needed |
 
+## 3.1 As-built thresholds (T246, updated 2026-06-12)
+
+`config/setup.json:detectors.*` — spof: mandatory ratio ≥0.3 within
+betweenness top-5; god_node: degree > max(2×median, **p98 of nonzero
+degrees**) AND fan_out ≥3 AND ≥2 communities (the percentile gate was
+added after the first target run flagged 55 nodes — call graphs are
+leaf-dominated, median multiples alone are meaningless); isolation:
+groups merged over ALL relations and must not touch the main component;
+duplication: pair confidence ≥0.5. Target result: 67 → 15 hypotheses,
+2 validated (results/FINDINGS.md).
+
 ## 4. Success criteria & test scenarios
 
 Each detector is fixture-tested on `tests/fixtures/mini_repo`'s graph with
