@@ -200,10 +200,10 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T150 (P0) Bottleneck rubric: betweenness rank × mandatory-path ratio + relation-type profile → structured evidence object (NOT a verdict) (Part-C)
 - [x] T151 (P0) Tests on planted fixture graph: god node ranks top betweenness; orphan detected; communities ≥2; bridge found
 - [x] T152 (P0) Metrics snapshot persisted: `results/graphs/<iter>/metrics.json` (versioned)
-- [ ] T153 (P0) TDD `services/graph_diff.py`: nodes/edges added/removed, per-node centrality deltas, modularity delta, isolated-count delta
-- [ ] T154 (P0) Diff verdict helper: `improved/regressed/neutral` vs config thresholds — feeds QA agent + dashboard
-- [ ] T155 (P0) Tests: synthetic before/after pairs for each verdict class
-- [ ] T156 (P1) Guard: diff must detect "bottleneck merely renamed/moved" (same topology, new node id) — at minimum document the limitation honestly if not solved
+- [x] T153 (P0) TDD `services/graph_diff.py`: nodes/edges added/removed, per-node centrality deltas, modularity delta, isolated-count delta
+- [x] T154 (P0) Diff verdict helper: `improved/regressed/neutral` vs config thresholds — feeds QA agent + dashboard
+- [x] T155 (P0) Tests: synthetic before/after pairs for each verdict class
+- [x] T156 (P1) Guard: diff must detect "bottleneck merely renamed/moved" (same topology, new node id) — at minimum document the limitation honestly if not solved
 
 ### execute on target
 - [ ] T157 (P0) Run pipeline on TARGET repo → iteration 0 artifacts under results/graphs/0/
