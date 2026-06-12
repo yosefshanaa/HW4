@@ -17,17 +17,23 @@ from .test_gatekeeper import FakeClock, make_gatekeeper
 
 
 class FakeTransport:
-    """Scripted transport: returns queued responses or raises queued errors."""
+    """Scripted transport: queued responses/errors, optional fill fallback."""
 
-    def __init__(self, script):
+    def __init__(self, script, fill=None):
         self.script = list(script)
+        self.fill = fill
         self.calls = []
 
     def send(self, model, messages, system, temperature, max_tokens):
         self.calls.append(
             {"model": model, "messages": messages, "system": system, "max_tokens": max_tokens}
         )
-        item = self.script.pop(0)
+        if self.script:
+            item = self.script.pop(0)
+        elif self.fill is not None:
+            item = self.fill
+        else:
+            raise AssertionError("FakeTransport script exhausted")
         if isinstance(item, Exception):
             raise item
         return item

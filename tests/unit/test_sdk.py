@@ -83,9 +83,7 @@ class TestNotReadyStubs:
     @pytest.mark.parametrize(
         "invoke",
         [
-            lambda sdk: sdk.build_vault("graph.json"),
             lambda sdk: sdk.analyze("graph.json"),
-            lambda sdk: sdk.ask("what is the entry point?"),
             lambda sdk: sdk.fix("F-001"),
             lambda sdk: sdk.run_experiment(),
             lambda sdk: sdk.report(),

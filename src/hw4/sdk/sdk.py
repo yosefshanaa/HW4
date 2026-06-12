@@ -16,6 +16,8 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
+from hw4.sdk import operations
+from hw4.sdk.errors import ServiceNotReadyError
 from hw4.services import graph_metrics
 from hw4.services.graph_models import Graph
 from hw4.services.graph_runner import BuildRecord, GraphRunner
@@ -24,9 +26,7 @@ from hw4.shared.gatekeeper import ApiGatekeeper
 from hw4.shared.ledger import Ledger
 from hw4.shared.llm_client import LlmClient, make_anthropic_transport
 
-
-class ServiceNotReadyError(NotImplementedError):
-    """The requested capability's service module has not landed yet."""
+__all__ = ["Hw4Sdk", "ServiceNotReadyError"]
 
 
 def _new_run_id() -> str:
@@ -57,6 +57,10 @@ class Hw4Sdk:
     @property
     def config(self) -> Config:
         return self._config
+
+    @property
+    def base_dir(self) -> Path:
+        return self._base_dir
 
     @property
     def run_id(self) -> str:
@@ -106,9 +110,9 @@ class Hw4Sdk:
         metrics.dump(record.graph_path.parent / "metrics.json")
         return record
 
-    def build_vault(self, graph_path: Path | str):
+    def build_vault(self, graph_path: Path | str | None = None):
         """Generate the Obsidian vault from a graph (FR-3)."""
-        raise self._not_ready("build_vault", "Phase 5")
+        return operations.build_vault(self, graph_path)
 
     def analyze(self, graph_path: Path | str):
         """Run all detectors, return ranked findings (FR-6)."""
@@ -116,7 +120,7 @@ class Hw4Sdk:
 
     def ask(self, question: str, *, mode: str = "graph"):
         """Answer a question about the repo, graph-guided or naive (FR-8)."""
-        raise self._not_ready("ask", "Phase 5")
+        return operations.ask(self, question, mode=mode)
 
     def fix(self, finding_id: str):
         """Run the test-guarded improvement loop on one finding (FR-7)."""

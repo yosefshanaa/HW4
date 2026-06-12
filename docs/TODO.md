@@ -243,9 +243,9 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T187 (P0) ContextBundle assembly enforces edge placement: instructions first, question last, evidence in middle kept SHORT (Part-B position-aware)
 - [x] T188 (P0) ContextBundle reports its own token estimate (tokenizer estimate OK here — it's a budget guard, not the experiment measurement)
 - [x] T189 (P0) Tests: matching, caps respected, bundle structure, token-estimate guard trips on oversize
-- [ ] T190 (P0) `Hw4Sdk.build_vault()` + CLI `hw4 vault`; integration test on mini_repo
-- [ ] T191 (P0) `Hw4Sdk.ask()` MVP: retrieval bundle → LLM → answer with cited node ids + source files (purpose tag `ask`)
-- [ ] T192 (P0) Tests (mock LLM): ask returns citations; refuses to answer without retrieval hits (no hallucinated context)
+- [x] T190 (P0) `Hw4Sdk.build_vault()` + CLI `hw4 vault`; integration test on mini_repo
+- [x] T191 (P0) `Hw4Sdk.ask()` MVP: retrieval bundle → LLM → answer with cited node ids + source files (purpose tag `ask`)
+- [x] T192 (P0) Tests (mock LLM): ask returns citations; refuses to answer without retrieval hits (no hallucinated context)
 - [ ] T193 (P1) Manual QA: ask 3 real questions about target; verify citations point at real files; note quality
 - [ ] T194 (P1) Vault wiki pages for: each detected community (after Phase 6 feeds back), top-5 hubs, the chosen critical path
 - [ ] T195 (P1) `30_Comparisons/` note comparing naive-vs-graph approaches (seeds the experiment narrative)
@@ -261,9 +261,9 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T205 (P2) Style pass: consistent note titles as routing descriptions (short, discriminative — skill-budget lesson applied to notes, Part-B 12)
 - [ ] T206 (P1) Review: any wiki page >40 lines? split (short pages re-retrieve better)
 - [ ] T207 (P1) Update PRD_graph_pipeline / agent PRDs with retrieval as-built details
-- [ ] T208 (P0) Sanity: ask() total context tokens for a typical question < configured cap (proves the savings mechanism exists before measuring it)
+- [x] T208 (P0) Sanity: ask() total context tokens for a typical question < configured cap (proves the savings mechanism exists before measuring it)
 - [ ] T209 (P2) Cache retrieval bundles keyed by question hash (saves money in repeated experiment runs — but careful: experiment must bypass cache; add flag)
-- [ ] T210 (P0) Experiment-bypass flag implemented + tested (cached results would invalidate the A/B science)
+- [x] T210 (P0) Experiment-bypass flag implemented + tested (cached results would invalidate the A/B science)
 
 ## Phase 6 — Reverse Engineering & Defect Detection (Milestone M3)
 **Phase DoD:** FINDINGS.md draft with evidence-labeled architecture analysis (macro/meso/micro), block diagram + OOP scheme exported, findings.json with ≥2 validated defects.

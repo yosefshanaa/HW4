@@ -32,7 +32,8 @@ def build_parser() -> argparse.ArgumentParser:
                        help="iteration number (default: next free)")
 
     vault = sub.add_parser("vault", help="generate the Obsidian vault from a graph (FR-3)")
-    vault.add_argument("graph_path", help="path to graph.json")
+    vault.add_argument("graph_path", nargs="?", default=None,
+                       help="path to graph.json (default: latest iteration)")
 
     analyze = sub.add_parser("analyze", help="run detectors, rank findings (FR-6)")
     analyze.add_argument("graph_path", help="path to graph.json")
