@@ -102,8 +102,6 @@ pages. **Lesson:** the first preflight shipped zero file content in A
 (top-ranked file alone blew the cap) — naive assemblers need the
 "paste as much as fits" rule or the baseline is a strawman.
 
-*Maintained continuously; see git history for the per-commit trail.*
-
 ## P-008 · 2026-06-12 · Fix loop (Phase 9)
 
 Applier prompts (verbatim, they are the fixer methodology): EDIT_SYSTEM
@@ -114,3 +112,25 @@ attempts are re-prompted once with the exact apply error as feedback.
 to reason about — scripted bad-then-good responses caught a tree-state
 bug (revert must happen before retry, or the second patch applies to a
 half-edited file).
+
+## P-009 · 2026-06-12 · Agents (Phase 8)
+
+Agent system prompts are data in `agents/roles.py` (role/goal/backstory
+per PLAN §3.1) — the analyst's goal embeds the careful-language rule and
+the focused-context discipline verbatim. The SKILL Procedure section is
+reloaded into every narrative prompt (anti-drift, asserted in tests).
+**Lesson:** the framework decision resolved itself empirically — crewai
+resolved cleanly under uv (ADR-1 trigger did not fire), and NFR-2 was
+preserved by subclassing BaseLLM rather than letting litellm talk to
+providers directly.
+
+## P-010 · 2026-06-12 · Notebook & dashboard (Phases 11/13)
+
+Notebook is GENERATED (scripts/build_notebook.py) so cells stay in
+lockstep with artifact schemas; executed headlessly via nbclient.
+**Lesson:** pending-live cells that degrade to labeled estimates beat
+empty placeholders — the offline projection (60.5%) exposed a possible
+sub-target savings figure early enough to study the retrieval-cap knobs
+(§4 sensitivity) before spending tokens.
+
+*Maintained continuously; see git history for the per-commit trail.*

@@ -58,3 +58,16 @@ dumps; loop history compacted between iterations. Cap:
   ledgered under `agent.*` tags.
 - **KPI (FR-5):** full loop run on the target repo with per-role token
   costs reported from the ledger; zero ungated LLM calls.
+
+## As-built notes (T313, 2026-06-12)
+
+- crewai 1.14.7 via uv (ADR-1 revisit trigger did not fire). Agent LLM
+  traffic flows through `GatedCrewLLM(BaseLLM)` -> our `LlmClient` ->
+  Gatekeeper; the bridge refuses anything but the gated client (tested).
+- analyze flow as designed: deterministic spine (graph build, detectors
+  — zero LLM) + LLM narratives; findings.json provably identical to the
+  direct SDK path (test_agents::TestAnalyzeFlow).
+- Compaction keeps the RULES block verbatim and reduced synthetic
+  history ≥50% (T300); budget firewall halts narrative generation
+  mid-flow without losing the deterministic results (T304).
+- Live kickoff demo + target narratives pending ANTHROPIC_API_KEY.

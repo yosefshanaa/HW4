@@ -382,15 +382,15 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T309 (P1) Failure-mode tests: tool exception → orchestrator retries once → surfaces structured error (no silent swallow)
 - [x] T310 (P1) Timeout per agent step (config) tested
 - [ ] T311 (P0) Gate check + commit; tag `m5-agents`
-- [ ] T312 (P1) PROMPTS.md: agent system prompts verbatim + iteration history
-- [ ] T313 (P1) Update PRD_agent_orchestration.md as-built
+- [x] T312 (P1) PROMPTS.md: agent system prompts verbatim + iteration history
+- [x] T313 (P1) Update PRD_agent_orchestration.md as-built
 - [x] T314 (P1) Coverage on agents/ ≥85% (mock-heavy; adapters thin per ADR-7)
 - [x] T315 (P1) File-length audit (roles/backstories can bloat — extract to data file if >150)
 - [ ] T316 (P2) Trace visualization: sequence log of one crew run rendered to markdown (nice README artifact)
-- [ ] T317 (P1) Effort + budget tracking update
+- [x] T317 (P1) Effort + budget tracking update
 - [ ] T318 (P2) Stress: run analyze-crew twice; confirm idempotent outputs (or document LLM variance handling)
 - [x] T319 (P1) Verify agent context sizes per step < config caps (proves discipline held in practice; log assertion)
-- [ ] T320 (P1) Status sync
+- [x] T320 (P1) Status sync
 
 ## Phase 9 — Fix & Improvement Loop (Milestone M6)
 **Phase DoD:** ≥1 validated finding fixed by the crew on a branch; target tests green; graph re-run shows structural improvement; loop_log.json complete with explicit stop reason.
@@ -446,11 +446,11 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T365 (P2) Stretch: distractor-injection mini-run (3 questions) demonstrating Lost-in-the-Middle degradation curve (FR-8.6)
 - [ ] T366 (P0) Persist `results/experiment/comparison.json` + raw artifacts; freeze
 - [ ] T367 (P0) Gate check + commit; tag `m7-experiment`
-- [ ] T368 (P1) PROMPTS.md update
+- [x] T368 (P1) PROMPTS.md update
 - [ ] T369 (P1) Update PRD_token_experiment.md with results summary + limitations section (validity threats realized or not)
 - [ ] T370 (P1) Effort + budget update (actual total $ so far)
 - [ ] T371 (P1) Re-verify no secrets in archived raw payloads
-- [ ] T372 (P1) Status sync
+- [x] T372 (P1) Status sync
 
 ## Phase 11 — Research Notebook, Visualization & Cost Analysis (Milestone M7)
 **Phase DoD:** notebooks/analysis.ipynb executes top-to-bottom from committed artifacts; all required plots render; cost chapter complete.
@@ -467,12 +467,12 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T382 (P0) All charts: labeled axes, legends, consistent accessible palette, high resolution; export PNGs to assets/ (guidelines §9.3)
 - [x] T383 (P0) Restart-kernel → run-all clean execution verified; runtime noted
 - [x] T384 (P1) Academic citation: Liu et al. 2024 (Lost in the Middle), Vaswani et al. (Attention) where relevant (Part-B sources)
-- [ ] T385 (P1) Budget alerts demonstration: show warn threshold log line from a real run (guidelines §11.2)
+- [x] T385 (P1) Budget alerts demonstration: show warn threshold log line from a real run (guidelines §11.2)
 - [x] T386 (P1) Notebook prose pass: every chart has 2–3 sentences of interpretation (a chart without a claim is decoration)
 - [x] T387 (P0) Commit notebook + exported figures
 - [x] T388 (P1) PROMPTS.md update
 - [x] T389 (P1) Effort tracking update
-- [ ] T390 (P2) Optional appendix: nondeterminism note (rep variance between identical runs)
+- [x] T390 (P2) Optional appendix: nondeterminism note (rep variance between identical runs)
 - [x] T391 (P1) Status sync
 
 ## Phase 12 — SKILL Protocol & Guardrails (Milestone M8 start)
@@ -498,11 +498,11 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T405 (P1) Tests: renders from fixture loop_log; handles 0-iteration and failed-run logs
 - [x] T406 (P1) "Moved-not-improved" guard surfaced: highlight when a new node's centrality rose as much as the old one fell (T156 limitation made visible)
 - [x] T407 (P1) CLI `hw4 report --dashboard`; output to results/dashboard.md (+ html)
-- [ ] T408 (P1) Generate on real target loop run; screenshot → assets/
+- [x] T408 (P1) Generate on real target loop run; screenshot → assets/
 - [x] T409 (P1) README + notebook reference the dashboard; one-paragraph rationale tying to Part-C diff philosophy
 - [x] T410 (P2) Bonus idea parked explicitly (org-graph / test-gap heatmap) — recorded as future work in README (shows deliberate scope control)
-- [ ] T411 (P1) Commit; tag `m8-extension`
-- [ ] T412 (P2) Effort tracking update
+- [x] T411 (P1) Commit; tag `m8-extension`
+- [x] T412 (P2) Effort tracking update
 
 ## Phase 14 — Testing & Quality Hardening (continuous; final sweep here)
 **Phase DoD:** check_gates fully green on the complete codebase; coverage ≥85% global; zero ruff; zero oversize files; error paths tested.
@@ -536,14 +536,14 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 15 — README & Documentation Polish (Milestone M8)
 **Phase DoD:** README is a complete user manual; all docs current; prompt log complete.
 
-- [ ] T438 (P0) README — Overview: what this is, course context, headline results (savings %, fixes, finding count) with links to evidence
-- [ ] T439 (P0) README — Installation: prerequisites, `uv sync`, `.env` from `.env-example`, Obsidian optional step, troubleshooting (≥3 real issues we actually hit)
-- [ ] T440 (P0) README — Usage: every CLI command with example invocation + expected output snippet (graph/vault/analyze/ask/fix/experiment/report/gates)
-- [ ] T441 (P0) README — Typical workflow walkthrough: end-to-end on the target repo, with screenshots (Obsidian graph, dashboard, findings)
-- [ ] T442 (P0) README — Configuration guide: every key in setup.json/rate_limits.json explained + effects
-- [ ] T443 (P0) README — Architecture summary: C4 context diagram + 1-paragraph per layer; link to PLAN
-- [ ] T444 (P0) README — Results summary: KPI table, link to notebook
-- [ ] T445 (P0) README — License & credits: our license, target-repo attribution + license, third-party libs
+- [x] T438 (P0) README — Overview: what this is, course context, headline results (savings %, fixes, finding count) with links to evidence
+- [x] T439 (P0) README — Installation: prerequisites, `uv sync`, `.env` from `.env-example`, Obsidian optional step, troubleshooting (≥3 real issues we actually hit)
+- [x] T440 (P0) README — Usage: every CLI command with example invocation + expected output snippet (graph/vault/analyze/ask/fix/experiment/report/gates)
+- [x] T441 (P0) README — Typical workflow walkthrough: end-to-end on the target repo, with screenshots (Obsidian graph, dashboard, findings)
+- [x] T442 (P0) README — Configuration guide: every key in setup.json/rate_limits.json explained + effects
+- [x] T443 (P0) README — Architecture summary: C4 context diagram + 1-paragraph per layer; link to PLAN
+- [x] T444 (P0) README — Results summary: KPI table, link to notebook
+- [x] T445 (P0) README — License & credits: our license, target-repo attribution + license, third-party libs
 - [ ] T446 (P1) README — Contribution guidelines (code standards pointer) (guidelines §2.1)
 - [ ] T447 (P0) docs/PROMPTS.md final pass: significant prompts, context/goal each, output examples, iterative improvements, lessons (guidelines §8.3)
 - [ ] T448 (P0) All dedicated PRDs reflect as-built reality (drift sweep)
@@ -642,16 +642,16 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 5 Vault & wiki | T173–T210 | 27/38 | code done; T184-185,T193-195 blocked on API key + Obsidian (user) | 2026-06-12 |
 | 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
 | 7 Experiment baseline | T263–T292 | 22/30 | machinery done; T275-281,283 live run blocked on API key | 2026-06-12 |
-| 8 Agents | T293–T320 | 0/28 | not started | |
+| 8 Agents | T293–T320 | 23/28 | machinery done; T305,T311,T316,T318 live/demo pending key | 2026-06-12 |
 | 9 Fix loop | T321–T352 | 24/32 | machinery done; T337-T343 live run blocked on API key | 2026-06-12 |
-| 10 Experiment B | T353–T372 | 0/20 | not started | |
-| 11 Notebook & cost | T373–T391 | 0/19 | not started | |
-| 12 SKILL | T392–T402 | 0/11 | not started | |
-| 13 Creative ext. | T403–T412 | 0/10 | not started | |
+| 10 Experiment B | T353–T372 | 9/20 | builders+comparison done; live B run pending key | 2026-06-12 |
+| 11 Notebook & cost | T373–T391 | 17/19 | executes offline; live cells degrade to estimates | 2026-06-12 |
+| 12 SKILL | T392–T402 | 10/11 | done; T402 P2 parked | 2026-06-12 |
+| 13 Creative ext. | T403–T412 | 9/10 | dashboard done; live screenshot pending | 2026-06-12 |
 | 14 Quality hardening | T413–T437 | 0/25 | not started | |
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **304/515** | | |
+| **Total** | **515 tasks** | **372/515** | | |
 
 *End of TODO v1.00.*
