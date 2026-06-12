@@ -88,7 +88,9 @@ def judge(delta: GraphDelta, config: Config) -> str:
 
 
 def _top_score(metrics: Metrics) -> float:
-    return metrics.bottlenecks[0].score if metrics.bottlenecks else 0.0
+    """Max bottleneck SCORE — the list is rank-ordered by betweenness, and
+    a rank-1 node with mandatory ratio 0 scores 0 (live bug, 2026-06-12)."""
+    return max((b.score for b in metrics.bottlenecks), default=0.0)
 
 
 def _neighbor_sets(graph: Graph) -> dict[str, frozenset]:

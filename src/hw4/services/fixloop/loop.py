@@ -85,6 +85,8 @@ class FixLoop:
                     FindingStatus.FIXED if verdict == IMPROVED else finding.status
                 )
                 graph, metrics = new_graph, new_metrics
+                if hasattr(self._applier, "commit_accepted"):
+                    self._applier.commit_accepted(finding.id)
             else:
                 self._applier.revert(apply_result.base_sha)
                 finding.status = FindingStatus.BLOCKED

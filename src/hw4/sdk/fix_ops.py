@@ -21,23 +21,31 @@ from hw4.shared.process_runner import ProcessRunner
 
 
 def fix(sdk, finding_id: str = "", auto: bool = False) -> dict:
-    """Test-guarded improvement loop over validated findings (FR-7)."""
+    """Test-guarded improvement loop over validated findings (FR-7).
+
+    The base graph is ALWAYS freshly extracted from the current tree —
+    basing on a stale iteration (e.g. one built from a previously
+    reverted attempt) contaminated a live verdict on 2026-06-12.
+    """
+    repo = target_repo_path(sdk)
     runner = GraphRunner(sdk.config, results_dir=sdk.results_dir)
-    base_iteration = runner.latest_iteration()
-    if base_iteration is None:
-        raise FileNotFoundError("no graph iterations built yet — run `hw4 graph` first")
-    graph = Graph.load(runner.graph_path(base_iteration))
+    latest = runner.latest_iteration()
+    base_iteration = 0 if latest is None else latest + 1
+    record = runner.build(repo, base_iteration)
+    graph = Graph.load(record.graph_path)
     metrics = graph_metrics.compute(graph, sdk.config)
+    metrics.dump(record.graph_path.parent / "metrics.json")
     findings = registry.run_all(graph, metrics, sdk.config)
     validated = _load_validations(sdk)
     for finding in findings:
-        if finding.id in validated:
+        # signature match (kind + anchor node), never positional ids —
+        # ids are stable within one graph, not across graphs
+        if (finding.kind.value, finding.nodes[0]) in validated:
             finding.status = FindingStatus.VALIDATED
     if not auto:
         findings = [f for f in findings if f.id == finding_id]
         if not findings:
             raise KeyError(f"finding {finding_id!r} not found in current analysis")
-    repo = target_repo_path(sdk)
     process_runner = ProcessRunner(
         timeout_seconds=float(sdk.config.get("loop.step_timeout_seconds"))
     )
@@ -60,11 +68,13 @@ def target_repo_path(sdk):
     )
 
 
-def _load_validations(sdk) -> dict:
+def _load_validations(sdk) -> set[tuple[str, str]]:
+    """(kind, anchor-node) signatures of human-validated findings."""
     path = sdk.results_dir / "validated.json"
     if not path.exists():
-        return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+        return set()
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    return {(v["kind"], v["anchor"]) for v in doc.get("validations", [])}
 
 
 def _graph_builder(sdk, runner: GraphRunner, repo):

@@ -147,15 +147,31 @@ class TestAnalyze:
 
 
 class TestFix:
-    def test_unknown_finding_id_fails_loud(self, tmp_path):
+    @staticmethod
+    def with_target(tmp_path):
+        import shutil
+
         sdk, _ = make_sdk(tmp_path)
+        shutil.copytree(MINI_REPO, tmp_path / "ws" / "target")
+        return sdk
+
+    def test_unknown_finding_id_fails_loud(self, tmp_path):
+        sdk = self.with_target(tmp_path)
         with pytest.raises(KeyError, match="F-999"):
             sdk.fix("F-999")
+
+    def test_base_graph_always_freshly_extracted(self, tmp_path):
+        """A stale iteration must never become the loop baseline."""
+        sdk = self.with_target(tmp_path)
+        before = len(list((tmp_path / "results" / "graphs").iterdir()))
+        sdk.fix(auto=True)
+        after = len(list((tmp_path / "results" / "graphs").iterdir()))
+        assert after == before + 1  # fresh base built from the current tree
 
     def test_auto_mode_on_mini_repo_is_honest_no_safe_action(self, tmp_path):
         """mini_repo's findings (trace gap, island) are human-only or carry
         AMBIGUOUS links — the loop must refuse them all and say so."""
-        sdk, _ = make_sdk(tmp_path)
+        sdk = self.with_target(tmp_path)
         report = sdk.fix(auto=True)
         assert report["stop_reason"] == "NO_SAFE_ACTION"
         assert report["iterations"] == []

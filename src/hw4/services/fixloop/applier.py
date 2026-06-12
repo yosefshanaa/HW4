@@ -163,6 +163,14 @@ class Applier:
     def run_tests(self) -> bool:
         return self._runner.run(self._test_command, cwd=self._repo).ok
 
+    def commit_accepted(self, finding_id: str) -> str:
+        """Persist an ACCEPTED change on the fix branch — the audit trail
+        must survive later checkouts (live gap found 2026-06-12)."""
+        self._git("add", "-A")
+        self._git("-c", "user.email=hw4@loop.local", "-c", "user.name=hw4-fixloop",
+                  "commit", "-q", "-m", f"fix({finding_id}): accepted by improvement loop")
+        return self._git("rev-parse", "HEAD").stdout.strip()
+
     def revert(self, base_sha: str) -> None:
         """Back to the pre-fix tree, including created files; the branch
         stays for audit and characterization tests are preserved."""

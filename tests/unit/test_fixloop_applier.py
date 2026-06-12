@@ -206,3 +206,13 @@ class TestSyntaxGate:
         result = applier.apply(make_plan())  # retry path recovers
         assert result.files_changed == ("app/utils.py",)
         assert "normalized" in (repo / "app/utils.py").read_text()
+
+
+class TestAcceptCommit:
+    def test_accepted_change_is_committed_on_branch(self, tmp_path):
+        applier, repo, runner, _ = make_applier(tmp_path, [response(text=GOOD_EDIT)])
+        result = applier.apply(make_plan())
+        sha = applier.commit_accepted("F-001")
+        assert sha != result.base_sha
+        message = git_out(runner, repo, "log", "-1", "--format=%s")
+        assert "accepted by improvement loop" in message

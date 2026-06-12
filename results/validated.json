@@ -1,4 +1,15 @@
 {
-  "F-002": "SPOF click.utils.echo — source-validated 2026-06-12; see results/FINDINGS.md §3 (no seam between 7 binding modules and the implementation)",
-  "F-003": "GOD_NODE click.core — source-validated 2026-06-12; see results/FINDINGS.md §3 (4 concerns confirmed at cited lines; pre-registered H1)"
+  "validations": [
+    {
+      "kind": "SPOF",
+      "anchor": "click.utils.echo",
+      "note": "source-validated 2026-06-12; FINDINGS.md §3 — no seam between 7 binding modules and the implementation"
+    },
+    {
+      "kind": "GOD_NODE",
+      "anchor": "click.core",
+      "note": "source-validated 2026-06-12; FINDINGS.md §3 — 4 concerns confirmed at cited lines (pre-registered H1)"
+    }
+  ],
+  "format_note": "signature matching (kind+anchor) replaced positional finding ids on 2026-06-12 after live ID drift authorized a triage-rejected finding (see loop_log iteration 4 annotation)"
 }

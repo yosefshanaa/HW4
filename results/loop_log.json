@@ -1,30 +1,31 @@
 {
  "iterations": [
   {
-   "accepted": false,
+   "accepted": true,
+   "annotation": "POST-HOC INTEGRITY ANNOTATION (2026-06-12): this acceptance is reclassified as EXPLORATORY, not the validated-fix KPI. Defects in the run: (1) baseline graph i03 came from a previously reverted broken tree; (2) finding id F-003 on that graph denoted the triage-REJECTED package-facade god node, not the validated core god module \u2014 id drift in the handover; (3) graph_diff._top_score read the rank-1 entry (score 0) instead of the max, fabricating 'goal reached'; (4) the accepted change was never committed on its branch. Honest re-evaluation vs clean i02: echo bottleneck 0.4965 -> 0.4185 (-15.7%), tests green (1672) \u2014 real but below-threshold, on a non-authorized target. Patch archived in results/patches/. All four defects fixed before the authorized re-run.",
    "characterization_test": "",
    "files_changed": [
-    "src/click/core.py",
-    "src/click/core.py"
+    "src/click/helpers.py",
+    "src/click/__init__.py"
    ],
    "finding_id": "F-003",
-   "graph_hash_after": "08f51e8a8bcbd048364764acfa48c9f7ec44dd632a52390dc370358914639ee8",
-   "graph_hash_before": "7c68cb7183d7019540ebb61750b3471951b568f62f2ee2131c078bec1fd435a3",
-   "iteration": 3,
+   "graph_hash_after": "a988595f33dd90d3e98ee523e7cb8a9bc1ffb2c87602d717f54d855245c7ec80",
+   "graph_hash_before": "08f51e8a8bcbd048364764acfa48c9f7ec44dd632a52390dc370358914639ee8",
+   "iteration": 4,
    "metric_deltas": {
-    "bottleneck_after": 0.5039,
-    "bottleneck_before": 0.4965,
-    "isolated_after": 778,
-    "isolated_before": 846
+    "bottleneck_after": 0.0,
+    "bottleneck_before": 0.5039,
+    "isolated_after": 846,
+    "isolated_before": 778
    },
-   "recorded_utc": "2026-06-12T16:37:51.137728+00:00",
-   "stop_reason": "NO_SAFE_ACTION",
+   "recorded_utc": "2026-06-12T16:52:37.069549+00:00",
+   "stop_reason": "GOAL_METRIC_REACHED",
    "strategy": "extract a cohesive group of helpers into a new module",
-   "tests_green": false,
-   "verdict": "regressed"
+   "tests_green": true,
+   "verdict": "improved"
   }
  ],
- "note": "",
- "stop_reason": "NO_SAFE_ACTION",
+ "note": "iteration 4 reclassified exploratory \u2014 see its annotation",
+ "stop_reason": "GOAL_METRIC_REACHED",
  "version": "1.00"
 }
