@@ -10,6 +10,10 @@
     "cheap": "claude-haiku-4-5-20251001",
     "strong": "claude-sonnet-4-6"
   },
+  "llm": {
+    "max_output_tokens": 4096,
+    "api_key_env": "ANTHROPIC_API_KEY"
+  },
   "pricing_per_mtok": {
     "claude-haiku-4-5-20251001": { "input": 1.0, "output": 5.0 },
     "claude-sonnet-4-6": { "input": 3.0, "output": 15.0 }
