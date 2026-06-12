@@ -30,8 +30,8 @@ class RecordingSdk:
     def fix(self, finding_id, *, auto=False):
         return self._record("fix", finding_id, auto=auto)
 
-    def run_experiment(self):
-        return self._record("run_experiment")
+    def run_experiment(self, *, condition="both"):
+        return self._record("run_experiment", condition=condition)
 
     def report(self):
         return self._record("report")
@@ -66,7 +66,8 @@ class TestDispatch:
             (["ask", "why?", "--mode", "naive"], ("ask", ("why?",), {"mode": "naive"})),
             (["fix", "F-001"], ("fix", ("F-001",), {"auto": False})),
             (["fix", "--auto"], ("fix", ("",), {"auto": True})),
-            (["experiment"], ("run_experiment", (), {})),
+            (["experiment"], ("run_experiment", (), {"condition": "both"})),
+            (["experiment", "--condition", "A"], ("run_experiment", (), {"condition": "A"})),
             (["report"], ("report", (), {})),
         ],
     )
@@ -77,6 +78,6 @@ class TestDispatch:
 
 
 class TestMain:
-    def test_unwired_command_exits_not_ready(self, capsys):
-        assert main(["report"]) == EXIT_NOT_READY
-        assert "Phase 9" in capsys.readouterr().err
+    def test_not_ready_capability_exits_2(self, capsys):
+        assert main(["ask", "q", "--mode", "naive"]) == EXIT_NOT_READY
+        assert "experiment" in capsys.readouterr().err

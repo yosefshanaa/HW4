@@ -38,6 +38,9 @@ FULL_SETUP = {
         "duplication": {"min_confidence": 0.5},
     },
     "repo": {"timeout_seconds": 60, "default_dirname": "target"},
+    "experiment": {"repetitions": 1, "temperature": 0.0, "model_tier": "cheap",
+                   "shuffle_seed": 42, "n_questions_min": 1,
+                   "naive_context_token_cap": 16000, "assumed_output_tokens": 100},
     "loop": {"max_iterations": 3, "metric_improvement_threshold": 0.1,
              "step_timeout_seconds": 120},
     "fixloop": {"branch_prefix": "fix/", "max_edit_retries": 1,
@@ -115,7 +118,7 @@ class TestAsk:
 
     def test_naive_mode_not_ready_yet(self, tmp_path):
         sdk, _ = make_sdk(tmp_path)
-        with pytest.raises(ServiceNotReadyError, match="Phase 7"):
+        with pytest.raises(ServiceNotReadyError, match="experiment"):
             sdk.ask("q", mode="naive")
 
 
@@ -156,6 +159,54 @@ class TestFix:
         assert report["stop_reason"] == "NO_SAFE_ACTION"
         assert report["iterations"] == []
         assert (tmp_path / "results" / "loop_log.json").exists()
+
+
+class TestExperimentAndReport:
+    DATASET = """\
+version: "1.00"
+questions:
+  - id: Q-01
+    tier: locate
+    question: "where does the engine run pipeline live?"
+    reference_answer: "app/engine.py"
+    reference_files: [app/engine.py]
+  - id: Q-02
+    tier: path
+    question: "how does run reach render?"
+    reference_answer: "run -> render"
+    reference_files: [app/engine.py, app/reports.py]
+  - id: Q-03
+    tier: impact
+    question: "what breaks if utils clamp changes?"
+    reference_answer: "engine and models"
+    reference_files: [app/utils.py]
+"""
+
+    def make_experiment_sdk(self, tmp_path):
+        import shutil
+
+        sdk, transport = make_sdk(tmp_path)
+        shutil.copytree(MINI_REPO, tmp_path / "ws" / "target")
+        (tmp_path / "data").mkdir()
+        (tmp_path / "data" / "questions.yaml").write_text(self.DATASET)
+        sdk.build_vault()
+        return sdk
+
+    def test_full_ab_run_produces_comparison(self, tmp_path):
+        sdk = self.make_experiment_sdk(tmp_path)
+        result = sdk.run_experiment()
+        assert "comparison" in result
+        assert (tmp_path / "results" / "experiment" / "comparison.json").exists()
+        tags = {e.purpose_tag for e in sdk.ledger.entries()}
+        assert "experiment.A.Q-01" in tags and "experiment.B.Q-03" in tags
+
+    def test_report_aggregates_all_artifacts(self, tmp_path):
+        sdk = self.make_experiment_sdk(tmp_path)
+        sdk.analyze()
+        sdk.run_experiment()
+        text = sdk.report().read_text()
+        for heading in ("## Findings", "## Token experiment", "## Cost"):
+            assert heading in text
 
 
 class TestContextBudgetSanity:

@@ -6,9 +6,8 @@ gatekeeper, llm client) is wired here exactly once, lazily, so every
 consumer shares one budget firewall and one audit trail per run.
 
 Constructor injection everywhere: pass a prebuilt Config or transport
-to substitute fakes in tests. Lifecycle methods that belong to later
-phases raise ServiceNotReadyError until their service module lands —
-the facade's surface is complete from day one, its depth grows.
+to substitute fakes in tests. Every lifecycle method is wired; the
+implementations live in operations/fix_ops/experiment_ops (§3.2 split).
 """
 
 from __future__ import annotations
@@ -16,7 +15,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
-from hw4.sdk import operations
+from hw4.sdk import experiment_ops, fix_ops, operations
 from hw4.sdk.errors import ServiceNotReadyError
 from hw4.services import graph_metrics
 from hw4.services.graph_models import Graph
@@ -90,11 +89,6 @@ class Hw4Sdk:
             self._llm = LlmClient(self._config, self.gatekeeper, transport)
         return self._llm
 
-    def _not_ready(self, capability: str, phase: str) -> ServiceNotReadyError:
-        return ServiceNotReadyError(
-            f"{capability} is wired in {phase} (docs/TODO.md); not available yet"
-        )
-
     def build_graph(self, repo_path: Path | str, iteration: int | None = None) -> BuildRecord:
         """Extract one immutable graph iteration + metrics snapshot (FR-2).
 
@@ -124,12 +118,12 @@ class Hw4Sdk:
 
     def fix(self, finding_id: str = "", *, auto: bool = False):
         """Run the test-guarded improvement loop (FR-7)."""
-        return operations.fix(self, finding_id, auto=auto)
+        return fix_ops.fix(self, finding_id, auto=auto)
 
-    def run_experiment(self):
+    def run_experiment(self, condition: str = "both"):
         """Token-savings A/B experiment over the question set (FR-8)."""
-        raise self._not_ready("run_experiment", "Phase 7")
+        return experiment_ops.run_experiment(self, condition)
 
     def report(self):
         """Aggregate findings, diffs, and ledger into the final report (FR-9)."""
-        raise self._not_ready("report", "Phase 9")
+        return experiment_ops.report(self)

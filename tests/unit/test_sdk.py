@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from hw4.constants import ModelTier
-from hw4.sdk.sdk import Hw4Sdk, ServiceNotReadyError
+from hw4.sdk.sdk import Hw4Sdk
 from hw4.shared.config import Config
 
 from .test_config import write_config_dir
@@ -77,20 +77,6 @@ class TestLlmWiring:
         sdk = make_sdk(tmp_path)  # environ={} -> no ANTHROPIC_API_KEY
         with pytest.raises(Exception, match="ANTHROPIC_API_KEY"):
             sdk.llm  # noqa: B018 - property access is the behaviour under test
-
-
-class TestNotReadyStubs:
-    @pytest.mark.parametrize(
-        "invoke",
-        [
-            lambda sdk: sdk.run_experiment(),
-            lambda sdk: sdk.report(),
-        ],
-    )
-    def test_unwired_capability_raises_with_phase_pointer(self, tmp_path, invoke):
-        sdk = make_sdk(tmp_path)
-        with pytest.raises(ServiceNotReadyError, match="Phase"):
-            invoke(sdk)
 
 
 class TestBuildGraph:

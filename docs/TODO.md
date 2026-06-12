@@ -431,9 +431,9 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 10 — Token Experiment: Condition B & Comparison (Milestone M7)
 **Phase DoD:** Condition B measured; per-question comparison table complete; savings KPI computed; failures analyzed in writing.
 
-- [ ] T353 (P0) TDD Condition B builder in `experiment/conditions.py`: graph-guided context = index + focused subgraph + 2–3 wiki pages (reuses retrieval.py; identical question wording)
-- [ ] T354 (P0) Tests: B-context determinism, caps, same-question parity with A records
-- [ ] T355 (P0) Preflight cost estimate for Condition B; confirm budget headroom
+- [x] T353 (P0) TDD Condition B builder in `experiment/conditions.py`: graph-guided context = index + focused subgraph + 2–3 wiki pages (reuses retrieval.py; identical question wording)
+- [x] T354 (P0) Tests: B-context determinism, caps, same-question parity with A records
+- [x] T355 (P0) Preflight cost estimate for Condition B; confirm budget headroom
 - [ ] T356 (P0) RUN Condition B: same N questions × 2 reps, same model/temp, cache bypass, randomized order
 - [ ] T357 (P0) Ledger completeness audit for B rows
 - [ ] T358 (P0) Blind-score Condition B answers per rubric (same protocol, same scorers)
@@ -441,7 +441,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T360 (P0) Compute headline KPIs: total input-token savings %, mean per-question savings, quality delta — check ≥70% target
 - [ ] T361 (P0) Per-question failure analysis for every question with savings <70% OR quality regression — root cause (retrieval miss? subgraph too large? question type?) (mandated by L07 §12)
 - [ ] T362 (P0) Honest-quality check: if B answers degraded vs A anywhere, say so prominently — savings with wrong answers is a failure mode, not a win
-- [ ] T363 (P1) FR-11 metrics from same runs: source-traceability rate, correct-file identification rate, correct-tool activation (from agent logs)
+- [x] T363 (P1) FR-11 metrics from same runs: source-traceability rate, correct-file identification rate, correct-tool activation (from agent logs)
 - [ ] T364 (P1) Effect of tiers: savings by question tier (locate vs path vs impact) — one chart
 - [ ] T365 (P2) Stretch: distractor-injection mini-run (3 questions) demonstrating Lost-in-the-Middle degradation curve (FR-8.6)
 - [ ] T366 (P0) Persist `results/experiment/comparison.json` + raw artifacts; freeze
