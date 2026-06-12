@@ -23,16 +23,21 @@ class GodNodeDetector(Detector):
 
     def detect(self, graph: Graph, metrics: Metrics, config: Config) -> list[Finding]:
         multiplier = float(config.get("detectors.god_node.degree_multiplier"))
+        percentile = float(config.get("detectors.god_node.percentile"))
         min_fan_out = int(config.get("detectors.god_node.min_fan_out"))
         min_communities = int(config.get("detectors.god_node.min_communities"))
-        degrees = [
+        degrees = sorted(
             metrics.fan_in[n] + metrics.fan_out[n]
             for n in metrics.fan_in
             if metrics.fan_in[n] + metrics.fan_out[n] > 0
-        ]
+        )
         if not degrees:
             return []
-        threshold = median(degrees) * multiplier
+        # call graphs are dominated by degree-1 leaves: a median multiple
+        # alone flags half the library, so an outlier must ALSO clear the
+        # configured percentile of the nonzero-degree distribution
+        cutoff = degrees[int(percentile * (len(degrees) - 1))]
+        threshold = max(median(degrees) * multiplier, cutoff)
         findings = []
         for node_id in metrics.fan_out:
             fan_in, fan_out = metrics.fan_in[node_id], metrics.fan_out[node_id]

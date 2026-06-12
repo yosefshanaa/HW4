@@ -31,7 +31,8 @@ FULL_SETUP = {
               "min_community_size": 3},
     "detectors": {
         "spof": {"min_mandatory_ratio": 0.3, "max_rank": 5},
-        "god_node": {"degree_multiplier": 2.0, "min_fan_out": 3, "min_communities": 2},
+        "god_node": {"degree_multiplier": 2.0, "percentile": 0.98,
+                     "min_fan_out": 3, "min_communities": 2},
         "isolation": {"min_size": 1},
         "traceability": {"report_undocumented": False},
         "duplication": {"min_confidence": 0.5},

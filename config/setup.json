@@ -98,7 +98,8 @@
     "god_node": {
       "degree_multiplier": 2.0,
       "min_fan_out": 3,
-      "min_communities": 2
+      "min_communities": 2,
+      "percentile": 0.98
     },
     "isolation": {
       "min_size": 1
