@@ -118,7 +118,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T081 (P0) Write `docs/PRD_graph_pipeline.md`: Graphify invocation contract, graph.json normalization spec, metrics list, diff semantics, I/O, test scenarios
 - [x] T082 (P0) Write `docs/PRD_agent_orchestration.md`: roles, payload schemas, context-packing rules, loop interaction, failure modes
 - [x] T083 (P0) Write `docs/PRD_defect_detection.md`: per-detector algorithm, thresholds (config), evidence-chain format, false-positive policy
-- [ ] T084 (P0) Write `docs/PRD_fix_loop.md`: planner I/O, applier safety (branch, revert), characterization tests, stop-condition truth table
+- [x] T084 (P0) Write `docs/PRD_fix_loop.md`: planner I/O, applier safety (branch, revert), characterization tests, stop-condition truth table
 - [ ] T085 (P0) Write `docs/PRD_token_experiment.md`: full methodology (PLAN §4), scoring rubric, validity threats, analysis plan
 - [x] T086 (P0) Write `docs/PRD_gatekeeper.md`: rate/queue/retry/ledger spec + sequence diagram
 - [ ] T087 (P0) Cross-check each dedicated PRD contains: detailed description+theory, I/O expectations, constraints+alternatives+chosen rationale, success criteria+test scenarios (guidelines §2.3)
