@@ -108,6 +108,10 @@ class FixLoop:
                 "verdict": verdict,
                 "accepted": outcome.accept,
                 "stop_reason": outcome.reason.value if outcome.reason else None,
+                "test_output_tail": (
+                    "" if tests_green
+                    else getattr(self._applier, "last_test_output", "")[-1200:]
+                ),
                 "recorded_utc": datetime.now(timezone.utc).isoformat(),
             })
             base_hash = new_hash if outcome.accept else base_hash

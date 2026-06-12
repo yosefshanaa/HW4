@@ -161,7 +161,10 @@ class Applier:
         raise ApplyFailedError(f"{plan.finding_id}: edits unappliable after retry: {feedback}")
 
     def run_tests(self) -> bool:
-        return self._runner.run(self._test_command, cwd=self._repo).ok
+        result = self._runner.run(self._test_command, cwd=self._repo)
+        # a red verdict must carry its evidence (live lesson 2026-06-12)
+        self.last_test_output = (result.stdout[-1500:] + "\n" + result.stderr[-1500:]).strip()
+        return result.ok
 
     def commit_accepted(self, finding_id: str) -> str:
         """Persist an ACCEPTED change on the fix branch — the audit trail
