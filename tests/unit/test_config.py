@@ -15,8 +15,16 @@ def write_config_dir(tmp_path, setup=None, rate_limits=None, logging_cfg=None):
     """Create a valid config dir, with optional overrides per file."""
     tmp_path.mkdir(parents=True, exist_ok=True)
     setup = setup or {"version": "1.00", "paths": {"results": "results"}, "budget": {"max_usd": 5}}
+    default_service = {
+        "requests_per_minute": 3,
+        "requests_per_hour": 100,
+        "concurrent_max": 5,
+        "retry_after_seconds": 30,
+        "max_retries": 2,
+        "queue_depth_max": 50,
+    }
     rate_limits = rate_limits or {
-        "rate_limits": {"version": "1.00", "services": {"default": {"requests_per_minute": 3}}}
+        "rate_limits": {"version": "1.00", "services": {"default": default_service}}
     }
     logging_cfg = logging_cfg or {"version": "1.00", "level": "INFO"}
     (tmp_path / "setup.json").write_text(json.dumps(setup))
