@@ -114,5 +114,21 @@
     "duplication": {
       "min_confidence": 0.5
     }
+  },
+  "fixloop": {
+    "branch_prefix": "fix/",
+    "max_edit_retries": 1,
+    "test_command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with-editable",
+      ".",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests"
+    ]
   }
 }
