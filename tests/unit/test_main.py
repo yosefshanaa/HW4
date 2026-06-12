@@ -36,8 +36,8 @@ class RecordingSdk:
     def run_experiment(self, *, condition="both"):
         return self._record("run_experiment", condition=condition)
 
-    def report(self):
-        return self._record("report")
+    def report(self, *, dashboard=False):
+        return self._record("report", dashboard=dashboard)
 
 
 class TestParser:
@@ -72,7 +72,8 @@ class TestDispatch:
             (["fix", "--auto"], ("fix", ("",), {"auto": True})),
             (["experiment"], ("run_experiment", (), {"condition": "both"})),
             (["experiment", "--condition", "A"], ("run_experiment", (), {"condition": "A"})),
-            (["report"], ("report", (), {})),
+            (["report"], ("report", (), {"dashboard": False})),
+            (["report", "--dashboard"], ("report", (), {"dashboard": True})),
         ],
     )
     def test_each_command_maps_to_one_sdk_call(self, argv, expected):

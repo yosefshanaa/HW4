@@ -52,7 +52,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     experiment = sub.add_parser("experiment", help="token-savings A/B experiment (FR-8)")
     experiment.add_argument("--condition", choices=("A", "B", "both"), default="both")
-    sub.add_parser("report", help="aggregate the final report (FR-9)")
+    report = sub.add_parser("report", help="aggregate the final report (FR-9)")
+    report.add_argument("--dashboard", action="store_true",
+                        help="also render the Refactor Truth Dashboard (ADR-6)")
     return parser
 
 
@@ -67,7 +69,7 @@ def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
         "ask": lambda: sdk.ask(args.question, mode=args.mode),
         "fix": lambda: sdk.fix(args.finding_id, auto=args.auto),
         "experiment": lambda: sdk.run_experiment(condition=args.condition),
-        "report": sdk.report,
+        "report": lambda: sdk.report(dashboard=args.dashboard),
     }
     return handlers[args.command]()
 

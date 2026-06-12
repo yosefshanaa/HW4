@@ -140,6 +140,11 @@ class Hw4Sdk:
         """Token-savings A/B experiment over the question set (FR-8)."""
         return experiment_ops.run_experiment(self, condition)
 
-    def report(self):
+    def report(self, *, dashboard: bool = False):
         """Aggregate findings, diffs, and ledger into the final report (FR-9)."""
-        return experiment_ops.report(self)
+        path = experiment_ops.report(self)
+        if dashboard:
+            from hw4.services.dashboard import generate
+
+            generate(self)
+        return path

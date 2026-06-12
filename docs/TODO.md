@@ -493,14 +493,14 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 13 — Creative Extension: Refactor Truth Dashboard (ADR-6)
 **Phase DoD:** dashboard artifact generated per loop run; answers "did structure improve or did the picture just change?" with numbers.
 
-- [ ] T403 (P1) Define dashboard content: per-iteration cards — bottleneck deltas (top-5 nodes), modularity delta, isolated-component delta, tests status, tokens spent, verdict
-- [ ] T404 (P1) TDD dashboard generator (markdown first; HTML if cheap): consumes loop_log.json + metrics snapshots only (no new analysis)
-- [ ] T405 (P1) Tests: renders from fixture loop_log; handles 0-iteration and failed-run logs
-- [ ] T406 (P1) "Moved-not-improved" guard surfaced: highlight when a new node's centrality rose as much as the old one fell (T156 limitation made visible)
-- [ ] T407 (P1) CLI `hw4 report --dashboard`; output to results/dashboard.md (+ html)
+- [x] T403 (P1) Define dashboard content: per-iteration cards — bottleneck deltas (top-5 nodes), modularity delta, isolated-component delta, tests status, tokens spent, verdict
+- [x] T404 (P1) TDD dashboard generator (markdown first; HTML if cheap): consumes loop_log.json + metrics snapshots only (no new analysis)
+- [x] T405 (P1) Tests: renders from fixture loop_log; handles 0-iteration and failed-run logs
+- [x] T406 (P1) "Moved-not-improved" guard surfaced: highlight when a new node's centrality rose as much as the old one fell (T156 limitation made visible)
+- [x] T407 (P1) CLI `hw4 report --dashboard`; output to results/dashboard.md (+ html)
 - [ ] T408 (P1) Generate on real target loop run; screenshot → assets/
-- [ ] T409 (P1) README + notebook reference the dashboard; one-paragraph rationale tying to Part-C diff philosophy
-- [ ] T410 (P2) Bonus idea parked explicitly (org-graph / test-gap heatmap) — recorded as future work in README (shows deliberate scope control)
+- [x] T409 (P1) README + notebook reference the dashboard; one-paragraph rationale tying to Part-C diff philosophy
+- [x] T410 (P2) Bonus idea parked explicitly (org-graph / test-gap heatmap) — recorded as future work in README (shows deliberate scope control)
 - [ ] T411 (P1) Commit; tag `m8-extension`
 - [ ] T412 (P2) Effort tracking update
 
