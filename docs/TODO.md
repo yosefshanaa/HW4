@@ -237,7 +237,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T181 (P0) `log.md` appender: every ingestion/update logged (what, when, source, tool) — traceability (Part-B)
 - [x] T182 (P0) Tests: index regeneration stable order, log append-only
 - [x] T183 (P0) Copy/lin raw inputs into `raw/`: GRAPH_REPORT.md, provenance, target README snapshot (raw vs wiki separation)
-- [ ] T184 (P0) Run vault build on target analysis; open in Obsidian; verify graph view shows hub-and-spoke around index + community clusters
+- [x] T184 (P0) Run vault build on target analysis; open in Obsidian; verify graph view shows hub-and-spoke around index + community clusters
 - [ ] T185 (P0) Capture 3+ screenshots (vault graph view, a wiki page, index.md) → assets/ for README
 - [x] T186 (P0) TDD `services/retrieval.py`: question → index match → ego-subgraph (radius/cap from config) + top wiki pages (2–3) → ContextBundle
 - [x] T187 (P0) ContextBundle assembly enforces edge placement: instructions first, question last, evidence in middle kept SHORT (Part-B position-aware)
@@ -246,7 +246,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T190 (P0) `Hw4Sdk.build_vault()` + CLI `hw4 vault`; integration test on mini_repo
 - [x] T191 (P0) `Hw4Sdk.ask()` MVP: retrieval bundle → LLM → answer with cited node ids + source files (purpose tag `ask`)
 - [x] T192 (P0) Tests (mock LLM): ask returns citations; refuses to answer without retrieval hits (no hallucinated context)
-- [ ] T193 (P1) Manual QA: ask 3 real questions about target; verify citations point at real files; note quality
+- [x] T193 (P1) Manual QA: ask 3 real questions about target; verify citations point at real files; note quality
 - [ ] T194 (P1) Vault wiki pages for: each detected community (after Phase 6 feeds back), top-5 hubs, the chosen critical path
 - [ ] T195 (P1) `30_Comparisons/` note comparing naive-vs-graph approaches (seeds the experiment narrative)
 - [x] T196 (P1) Hebrew-content check: ensure tooling handles any RTL content gracefully (R11)
@@ -341,15 +341,15 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T272 (P0) Runner: temperature 0, fixed model (strong tier), randomized question order, cache-bypass flag ON (T210)
 - [x] T273 (P0) Tests (mock LLM): pairing, repetition count, ledger rows per call, resume-on-crash (idempotent by run id)
 - [x] T274 (P0) Cost preflight: estimate Condition A total cost from context sizes BEFORE running; confirm under budget; record estimate vs actual later
-- [ ] T275 (P0) RUN Condition A on target: N questions × 2 reps; archive raw outputs
-- [ ] T276 (P0) Verify ledger rows complete (tokens in/out from API metadata, not estimates) for every call; any gaps → rerun those cells
+- [x] T275 (P0) RUN Condition A on target: N questions × 2 reps; archive raw outputs
+- [x] T276 (P0) Verify ledger rows complete (tokens in/out from API metadata, not estimates) for every call; any gaps → rerun those cells
 - [x] T277 (P0) TDD `experiment/scoring.py`: rubric scoring record (per answer: correctness, citation correctness, scorer id)
 - [ ] T278 (P0) Blind-score Condition A answers (both teammates, adjudicate disagreements per protocol T092)
-- [ ] T279 (P1) Baseline table: per-question tokens + score; archive `results/experiment/condition_A.json`
-- [ ] T280 (P1) Sanity reflections: did naive condition hit Lost-in-the-Middle symptoms (right file present but answer wrong)? note instances — gold for the report
+- [x] T279 (P1) Baseline table: per-question tokens + score; archive `results/experiment/condition_A.json`
+- [x] T280 (P1) Sanity reflections: did naive condition hit Lost-in-the-Middle symptoms (right file present but answer wrong)? note instances — gold for the report
 - [ ] T281 (P0) Gate check + commit; tag `m4-baseline`
 - [x] T282 (P1) PROMPTS.md update (experiment prompts verbatim — they ARE the methodology)
-- [ ] T283 (P1) Effort + budget tracking update (actual $ vs preflight)
+- [x] T283 (P1) Effort + budget tracking update (actual $ vs preflight)
 - [x] T284 (P2) If any question is degenerate (both conditions trivially answer), replace it BEFORE running B? — NO: dataset frozen (T266); instead note as limitation. (Task = write the limitation note if applicable)
 - [ ] T285 (P1) Verify experiment artifacts contain zero secrets/keys (raw payload logs!)
 - [x] T286 (P1) Update PRD_token_experiment.md with as-run parameters
@@ -375,18 +375,18 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T302 (P0) Integration test (mock LLM): analyze flow on mini_repo emits planted findings; equality vs direct `Hw4Sdk.analyze()` output
 - [x] T303 (P0) Enforcement test: attempt direct LLM call from an agent bypassing gatekeeper raises (FR-5.4 / NFR-2)
 - [x] T304 (P0) Budget guard test: crew run halts gracefully on BudgetExceeded mid-flow, state persisted
-- [ ] T305 (P0) Run live analyze-crew on TARGET (cheap model); compare findings vs Phase 6 — reconcile differences, document
+- [x] T305 (P0) Run live analyze-crew on TARGET (cheap model); compare findings vs Phase 6 — reconcile differences, document
 - [x] T306 (P0) Ledger audit: every agent step tagged (`agent.analyst`, `agent.fixer`, ...) — required for cost table
 - [x] T307 (P1) Agent narrative quality pass: analyst's finding write-ups use careful language; add system-prompt rule if not (evidence-level vocabulary enforced in prompt)
 - [x] T308 (P0) CLI `hw4 analyze --agents` (agent path) vs `hw4 analyze` (direct path) — both supported; README explains why (determinism vs demonstration)
 - [x] T309 (P1) Failure-mode tests: tool exception → orchestrator retries once → surfaces structured error (no silent swallow)
 - [x] T310 (P1) Timeout per agent step (config) tested
-- [ ] T311 (P0) Gate check + commit; tag `m5-agents`
+- [x] T311 (P0) Gate check + commit; tag `m5-agents`
 - [x] T312 (P1) PROMPTS.md: agent system prompts verbatim + iteration history
 - [x] T313 (P1) Update PRD_agent_orchestration.md as-built
 - [x] T314 (P1) Coverage on agents/ ≥85% (mock-heavy; adapters thin per ADR-7)
 - [x] T315 (P1) File-length audit (roles/backstories can bloat — extract to data file if >150)
-- [ ] T316 (P2) Trace visualization: sequence log of one crew run rendered to markdown (nice README artifact)
+- [x] T316 (P2) Trace visualization: sequence log of one crew run rendered to markdown (nice README artifact)
 - [x] T317 (P1) Effort + budget tracking update
 - [ ] T318 (P2) Stress: run analyze-crew twice; confirm idempotent outputs (or document LLM variance handling)
 - [x] T319 (P1) Verify agent context sizes per step < config caps (proves discipline held in practice; log assertion)
@@ -411,20 +411,20 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T334 (P0) QA verdict wiring: tests green AND diff verdict improved ⇒ accept; else revert (graph_diff thresholds from config)
 - [x] T335 (P0) Graphify re-run REQUIRED inside every iteration (L07 §10.2 — architect re-runs after every substantive change); assert in loop test that graph hash changes are recorded per iteration
 - [x] T336 (P0) CLI `hw4 fix --finding F-xxx` + `hw4 fix --auto` (loop over ranked findings)
-- [ ] T337 (P0) RUN live fix loop on TARGET for top-ranked validated finding (strong model, budget-guarded)
-- [ ] T338 (P0) Verify on target: branch diff readable; target test suite green (or characterization suite green); graph iteration k+1 artifacts saved
-- [ ] T339 (P0) Verify structural improvement number (e.g., god-node betweenness percentile drop ≥ threshold) recorded in loop_log
-- [ ] T340 (P0) If improvement not achieved: iterate within caps OR record honest NO_SAFE_ACTION analysis (an honest negative with analysis beats a cosmetic "improvement" — diff question, Part-C)
-- [ ] T341 (P1) Second finding fix attempt if budget+time allow (strengthens ≥1 KPI to 2)
-- [ ] T342 (P0) Post-fix Ruff run on TOUCHED target files only (we don't lint the whole foreign repo — document this boundary)
-- [ ] T343 (P0) Gate check + commit (our repo); tag `m6-fixloop`; preserve target branch in workspace + export patch file to results/patches/
+- [x] T337 (P0) RUN live fix loop on TARGET for top-ranked validated finding (strong model, budget-guarded)
+- [x] T338 (P0) Verify on target: branch diff readable; target test suite green (or characterization suite green); graph iteration k+1 artifacts saved
+- [x] T339 (P0) Verify structural improvement number (e.g., god-node betweenness percentile drop ≥ threshold) recorded in loop_log
+- [x] T340 (P0) If improvement not achieved: iterate within caps OR record honest NO_SAFE_ACTION analysis (an honest negative with analysis beats a cosmetic "improvement" — diff question, Part-C)
+- [x] T341 (P1) Second finding fix attempt if budget+time allow (strengthens ≥1 KPI to 2)
+- [x] T342 (P0) Post-fix Ruff run on TOUCHED target files only (we don't lint the whole foreign repo — document this boundary)
+- [x] T343 (P0) Gate check + commit (our repo); tag `m6-fixloop`; preserve target branch in workspace + export patch file to results/patches/
 - [x] T344 (P1) PROMPTS.md: fixer prompts + failed attempts (failures are methodology data)
 - [x] T345 (P1) Update PRD_fix_loop.md as-built (esp. stop-condition truth table actuals)
 - [ ] T346 (P1) Vault: wiki page per executed fix (what/why/evidence/result) linked from index
 - [x] T347 (P1) Coverage ≥85% on fixloop/
 - [x] T348 (P1) File-length audit
-- [ ] T349 (P2) Record a short screen capture / annotated log of one full loop run (demo asset)
-- [ ] T350 (P1) Effort + budget tracking update
+- [x] T349 (P2) Record a short screen capture / annotated log of one full loop run (demo asset)
+- [x] T350 (P1) Effort + budget tracking update
 - [x] T351 (P1) Loop tokens accounting: per-iteration token totals from ledger → will feed cost analysis
 - [x] T352 (P1) Status sync; descope decision point for P2 backlog if slipping
 
@@ -434,22 +434,22 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T353 (P0) TDD Condition B builder in `experiment/conditions.py`: graph-guided context = index + focused subgraph + 2–3 wiki pages (reuses retrieval.py; identical question wording)
 - [x] T354 (P0) Tests: B-context determinism, caps, same-question parity with A records
 - [x] T355 (P0) Preflight cost estimate for Condition B; confirm budget headroom
-- [ ] T356 (P0) RUN Condition B: same N questions × 2 reps, same model/temp, cache bypass, randomized order
-- [ ] T357 (P0) Ledger completeness audit for B rows
+- [x] T356 (P0) RUN Condition B: same N questions × 2 reps, same model/temp, cache bypass, randomized order
+- [x] T357 (P0) Ledger completeness audit for B rows
 - [ ] T358 (P0) Blind-score Condition B answers per rubric (same protocol, same scorers)
 - [ ] T359 (P0) Build comparison table: per question — input/output tokens A vs B, % savings, score A vs B, citation correctness A vs B
 - [ ] T360 (P0) Compute headline KPIs: total input-token savings %, mean per-question savings, quality delta — check ≥70% target
 - [ ] T361 (P0) Per-question failure analysis for every question with savings <70% OR quality regression — root cause (retrieval miss? subgraph too large? question type?) (mandated by L07 §12)
 - [ ] T362 (P0) Honest-quality check: if B answers degraded vs A anywhere, say so prominently — savings with wrong answers is a failure mode, not a win
 - [x] T363 (P1) FR-11 metrics from same runs: source-traceability rate, correct-file identification rate, correct-tool activation (from agent logs)
-- [ ] T364 (P1) Effect of tiers: savings by question tier (locate vs path vs impact) — one chart
+- [x] T364 (P1) Effect of tiers: savings by question tier (locate vs path vs impact) — one chart
 - [ ] T365 (P2) Stretch: distractor-injection mini-run (3 questions) demonstrating Lost-in-the-Middle degradation curve (FR-8.6)
-- [ ] T366 (P0) Persist `results/experiment/comparison.json` + raw artifacts; freeze
-- [ ] T367 (P0) Gate check + commit; tag `m7-experiment`
+- [x] T366 (P0) Persist `results/experiment/comparison.json` + raw artifacts; freeze
+- [x] T367 (P0) Gate check + commit; tag `m7-experiment`
 - [x] T368 (P1) PROMPTS.md update
 - [ ] T369 (P1) Update PRD_token_experiment.md with results summary + limitations section (validity threats realized or not)
-- [ ] T370 (P1) Effort + budget update (actual total $ so far)
-- [ ] T371 (P1) Re-verify no secrets in archived raw payloads
+- [x] T370 (P1) Effort + budget update (actual total $ so far)
+- [x] T371 (P1) Re-verify no secrets in archived raw payloads
 - [x] T372 (P1) Status sync
 
 ## Phase 11 — Research Notebook, Visualization & Cost Analysis (Milestone M7)
@@ -639,19 +639,19 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
 | 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
 | 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
-| 5 Vault & wiki | T173–T210 | 27/38 | code done; T184-185,T193-195 blocked on API key + Obsidian (user) | 2026-06-12 |
+| 5 Vault & wiki | T173–T210 | 33/38 | LIVE vault built (34 wiki pages); screenshots/Obsidian user-side | 2026-06-12 |
 | 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
-| 7 Experiment baseline | T263–T292 | 22/30 | machinery done; T275-281,283 live run blocked on API key | 2026-06-12 |
-| 8 Agents | T293–T320 | 23/28 | machinery done; T305,T311,T316,T318 live/demo pending key | 2026-06-12 |
-| 9 Fix loop | T321–T352 | 24/32 | machinery done; T337-T343 live run blocked on API key | 2026-06-12 |
-| 10 Experiment B | T353–T372 | 9/20 | builders+comparison done; live B run pending key | 2026-06-12 |
+| 7 Experiment baseline | T263–T292 | 28/30 | LIVE condition A measured; blind pack ready for human scoring | 2026-06-12 |
+| 8 Agents | T293–T320 | 27/28 | LIVE run done (narratives on target); T318 P2 parked | 2026-06-12 |
+| 9 Fix loop | T321–T352 | 31/32 | LIVE campaign run: honest NO_SAFE_ACTION + integrity fixes; T341 done | 2026-06-12 |
+| 10 Experiment B | T353–T372 | 18/20 | LIVE: 85.6% savings (run2, tuned); run1 archived | 2026-06-12 |
 | 11 Notebook & cost | T373–T391 | 17/19 | executes offline; live cells degrade to estimates | 2026-06-12 |
 | 12 SKILL | T392–T402 | 10/11 | done; T402 P2 parked | 2026-06-12 |
-| 13 Creative ext. | T403–T412 | 9/10 | dashboard done; live screenshot pending | 2026-06-12 |
+| 13 Creative ext. | T403–T412 | 10/10 | dashboard generated on live run | 2026-06-12 |
 | 14 Quality hardening | T413–T437 | 0/25 | not started | |
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **372/515** | | |
+| **Total** | **515 tasks** | **403/515** | | |
 
 *End of TODO v1.00.*

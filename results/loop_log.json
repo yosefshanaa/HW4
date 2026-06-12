@@ -3,44 +3,24 @@
   {
    "accepted": false,
    "characterization_test": "",
-   "error": "F-002: edits unappliable after retry: no edit blocks found in the response",
-   "files_changed": [],
-   "finding_id": "F-002",
-   "graph_hash_after": "",
-   "graph_hash_before": "",
-   "iteration": 9,
-   "metric_deltas": {
-    "bottleneck_after": 0,
-    "bottleneck_before": 0,
-    "isolated_after": 0,
-    "isolated_before": 0
-   },
-   "recorded_utc": "2026-06-12T17:14:01.058991+00:00",
-   "stop_reason": null,
-   "strategy": "introduce an injectable seam in front of the bottleneck",
-   "tests_green": false,
-   "verdict": "unappliable"
-  },
-  {
-   "accepted": false,
-   "characterization_test": "",
    "files_changed": [
     "src/click/_helpers.py",
     "src/click/core.py"
    ],
    "finding_id": "F-003",
-   "graph_hash_after": "4b1c71b7b4730f1f6a8f3ec0c061551002dc3d41d87be1acff2b67b0efb74f08",
-   "graph_hash_before": "7f511f86f394dc7d42870fcf2b0ed4f1b22a5ac533fef4e0756c10f68ea8b4f8",
-   "iteration": 10,
+   "graph_hash_after": "193ad5c9c4dc9a045979eaca9c03cf1ef2bc099bdd5052e9b8f7f2dd5feb8a30",
+   "graph_hash_before": "bc4f17d43c3714861d97c1ef205b5c14f60619c5fb04bc605f4c6fddf4e2c5a9",
+   "iteration": 12,
    "metric_deltas": {
     "bottleneck_after": 0.4948,
     "bottleneck_before": 0.4965,
     "isolated_after": 848,
     "isolated_before": 846
    },
-   "recorded_utc": "2026-06-12T17:15:33.178380+00:00",
+   "recorded_utc": "2026-06-12T17:21:00.998655+00:00",
    "stop_reason": "NO_SAFE_ACTION",
    "strategy": "extract the SMALLEST cohesive group of private module-level helper functions (e.g. formatting/label helpers) into one new sibling module; move ONLY functions with no class/state dependencies, import them back by name so every existing reference keeps working; do not move classes, do not touch the public API, do not reorder anything else",
+   "test_output_tail": "ing[choices3-[BOOLEAN]]\nFAILED tests/test_options.py::test_choice_usage_rendering[choices4-[TEXT|INTEGER]]\nFAILED tests/test_options.py::test_choice_usage_rendering[HashType-[HASHTYPE]]\nFAILED tests/test_options.py::test_choice_usage_rendering[Number-[NUMBER]] - ...\nFAILED tests/test_options.py::test_choice_usage_rendering[Letter-[LETTER]] - ...\nFAILED tests/test_options.py::test_choice_usage_rendering[Color-[COLOR]] - as...\nFAILED tests/test_options.py::test_choice_usage_rendering[ColorInt-[COLORINT]]\nFAILED tests/test_options.py::test_flag_group_competition_duplicate_option_name\nFAILED tests/test_stream_lifecycle.py::test_exception_does_not_corrupt_next_invoke\nFAILED tests/test_termui.py::test_flag_value_prompt[--flag/--no-flag-opt_params14-args14-None-None-MissingParameter]\nFAILED tests/test_termui.py::test_flag_value_prompt[--flag/--no-flag-opt_params20-args20-None-None-BadParameter]\nFAILED tests/test_testing.py::test_catch_exceptions - assert False\nFAILED tests/test_testing.py::test_catch_exceptions_cli_runner - assert False\nFAILED tests/test_testing.py::test_exit_code_and_output_from_sys_exit - Asser...\n70 failed, 1602 passed, 24 skipped, 31000 deselected, 1 xfailed in 15.92s",
    "tests_green": false,
    "verdict": "regressed"
   }

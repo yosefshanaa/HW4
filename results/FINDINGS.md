@@ -147,3 +147,30 @@ across the core/shell_completion module boundary (c3 membership).
 
 Both validated findings rest on EXTRACTED-only chains → fix-loop
 eligible (FR-6.3). KPI T261: **2 validated defects ✅.**
+
+## 8. Live fix-loop campaign (2026-06-12) — honest outcome
+
+Four authorized attempts on the validated findings (gpt-4o fixer,
+test-guarded, branch-isolated); full per-iteration evidence in
+`results/loop_log.json` and `results/dashboard.md`:
+
+| # | Target | Outcome | Evidence |
+|---|---|---|---|
+| 1 | F-003 core (mini fixer) | edit broke imports → suite red → **reverted** | loop_log it.1 |
+| 2 | F-003 core | structural gain 0.4965→0.4492 (−9.5%) but **70/1,672 tests failed** → reverted | loop_log it.7/12, test tail embedded |
+| 3 | F-002 echo seam | model produced no applicable edit blocks twice → **blocked unappliable** | loop_log it.6/9 |
+| 4 | exploratory facade extract | tests green, real echo reduction −15.7%, but target was the triage-REJECTED facade + verdict computed on contaminated baseline → **reclassified exploratory**, patch in `results/patches/` | loop_log it.4 annotation |
+
+**Final loop verdict: NO_SAFE_ACTION** — no change met both axes
+(behavior green AND structural improvement) on an authorized target.
+Per Part-C and T340 this is reported as a first-class result: the
+guard worked four times; the codebase's god module resists safe
+automated extraction precisely because its concerns are entangled —
+which is the finding (F-003) restated by the loop itself.
+
+Integrity incident worth grading attention: attempt 4 was initially
+auto-accepted on three measurement defects (stale baseline, finding-id
+drift, max-vs-rank-1 score bug) plus one audit defect (no branch
+commit). All four were detected by post-hoc verification, fixed with
+tests, and the acceptance was reclassified — the full trail is in the
+commit history and the loop_log annotation.
