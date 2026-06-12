@@ -63,3 +63,8 @@ noted as future work).
   savings with answer quality in B ≥ A; if the threshold is missed, the
   report analyzes *why* (this is a result, not a cover-up — honesty over
   vanity metrics).
+
+> **Dataset frozen 2026-06-12 (T266):** `data/questions.yaml` sha256
+> `fb0749ad7a3b55317071b17f0750215310ae4fa671145f4afa239bea9a0450b0` — 10 questions (3 locate / 4 path / 3 impact), every
+> reference spot-checked against source at the pinned SHA. No post-hoc
+> edits permitted; amendments require a documented procedure note.

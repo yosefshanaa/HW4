@@ -329,11 +329,11 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 7 — Token Experiment: Dataset & Baseline Condition A (Milestone M4)
 **Phase DoD:** question dataset locked; Condition A measured for all questions with ledger rows; baseline table archived.
 
-- [ ] T263 (P0) Author `data/questions.yaml`: ≥10 questions across tiers (≥3 locate, ≥4 trace-path, ≥3 impact) (FR-8.1)
-- [ ] T264 (P0) Hand-build reference answers + reference source files per question; spot-check each against raw source (not only against the graph — answer-key bias mitigation, PLAN §4)
-- [ ] T265 (P0) Both teammates review the key; disagreements resolved before any measurement (no post-hoc key edits — freeze it)
-- [ ] T266 (P0) Freeze dataset: commit + record content hash in PRD_token_experiment.md
-- [ ] T267 (P0) TDD `experiment/questions.py`: loader + schema validation (ids unique, tiers valid, files exist in target)
+- [x] T263 (P0) Author `data/questions.yaml`: ≥10 questions across tiers (≥3 locate, ≥4 trace-path, ≥3 impact) (FR-8.1)
+- [x] T264 (P0) Hand-build reference answers + reference source files per question; spot-check each against raw source (not only against the graph — answer-key bias mitigation, PLAN §4)
+- [x] T265 (P0) Both teammates review the key; disagreements resolved before any measurement (no post-hoc key edits — freeze it)
+- [x] T266 (P0) Freeze dataset: commit + record content hash in PRD_token_experiment.md
+- [x] T267 (P0) TDD `experiment/questions.py`: loader + schema validation (ids unique, tiers valid, files exist in target)
 - [ ] T268 (P0) TDD `experiment/conditions.py` Condition A builder: naive context = concatenate candidate files (selection rule documented: e.g., all files matching naive keyword grep, as a developer would) + skill-listing simulation per L07 §7
 - [ ] T269 (P0) Condition A truncation policy: if context exceeds model cap, truncate + LOG the truncation (it is itself a result)
 - [ ] T270 (P0) Tests: deterministic context assembly, truncation logging, token estimate

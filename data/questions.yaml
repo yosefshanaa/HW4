@@ -1,0 +1,123 @@
+# Token-experiment dataset (FR-8.1, T263-T266) — FROZEN at commit time.
+# Built from the validated i00 graph, every reference spot-checked against
+# raw source at the pinned SHA (answer-key bias mitigation, PLAN §4.1).
+# Tiers: 3 locate / 4 path / 3 impact.
+
+version: "1.00"
+target_repo_sha: "8a1b1a33d739be05b7e91251e3c0dde77c5e152f"
+
+questions:
+  - id: Q-01
+    tier: locate
+    question: "Where is the echo function implemented, and what responsibilities does it bundle?"
+    reference_answer: >
+      src/click/utils.py (def echo, line ~245, ~99 lines). It bundles message
+      serialization (str/bytes), newline handling, color stripping/ANSI
+      wrapping, and output-stream selection (stdout/stderr/custom file).
+    reference_files:
+      - src/click/utils.py
+
+  - id: Q-02
+    tier: locate
+    question: "Where are the built-in parameter types such as INT, STRING and UNPROCESSED defined?"
+    reference_answer: >
+      src/click/types.py — ParamType subclasses plus module-level singleton
+      instances near the file end (e.g. UNPROCESSED at ~line 1348).
+    reference_files:
+      - src/click/types.py
+
+  - id: Q-03
+    tier: locate
+    question: "Which module implements the CliRunner used to test click applications?"
+    reference_answer: >
+      src/click/testing.py defines CliRunner (plus EchoingStdin/Result
+      helpers); the test suite's main door into the library.
+    reference_files:
+      - src/click/testing.py
+
+  - id: Q-04
+    tier: path
+    question: "How does a function decorated with @click.command become an executable Command object?"
+    reference_answer: >
+      click.decorators.command() wraps the function and constructs
+      click.core.Command (decorators imports core); execution then flows
+      Command.main -> Context creation -> Command.invoke which calls the
+      original callback.
+    reference_files:
+      - src/click/decorators.py
+      - src/click/core.py
+
+  - id: Q-05
+    tier: path
+    question: "Trace how a raw command-line parameter string is converted into a Python value."
+    reference_answer: >
+      core.Command.main -> Context -> Parameter.process_value (core.py) ->
+      ParamType.convert in types.py (per-type subclass); failures raise
+      exceptions.BadParameter.
+    reference_files:
+      - src/click/core.py
+      - src/click/types.py
+      - src/click/exceptions.py
+
+  - id: Q-06
+    tier: path
+    question: "Through what chain does click.echo end up writing correctly to a Windows console?"
+    reference_answer: >
+      utils.echo -> _compat stream shims (_force_correct_text_stream /
+      auto_wrap_for_ansi) -> _winconsole's Windows console writer.
+    reference_files:
+      - src/click/utils.py
+      - src/click/_compat.py
+      - src/click/_winconsole.py
+
+  - id: Q-07
+    tier: path
+    question: "How do usage errors raised during parsing reach the user's terminal?"
+    reference_answer: >
+      Parsing raises exceptions.UsageError; UsageError.show() formats the
+      message and writes it via utils.echo to stderr; Command.main catches
+      and exits with the error's exit_code.
+    reference_files:
+      - src/click/exceptions.py
+      - src/click/utils.py
+      - src/click/core.py
+
+  - id: Q-08
+    tier: impact
+    question: "What breaks if click.utils.echo changes its signature or behavior?"
+    reference_answer: >
+      Every output path: termui (6 call sites), exceptions.show, core,
+      decorators, shell_completion, _termui_impl bind echo directly (no
+      seam — validated SPOF F-002), plus the test suite's output
+      assertions via CliRunner.
+    reference_files:
+      - src/click/utils.py
+      - src/click/termui.py
+      - src/click/exceptions.py
+
+  - id: Q-09
+    tier: impact
+    question: "Which parts of the codebase are affected by modifying the Context class in core.py?"
+    reference_answer: >
+      core.py itself (Command.main/invoke, Parameter handling),
+      decorators (pass_context/pass_obj), globals.get_current_context,
+      shell_completion (completion contexts), termui prompts via context
+      settings — effectively community c2 (god module F-003 blast radius).
+    reference_files:
+      - src/click/core.py
+      - src/click/decorators.py
+      - src/click/globals.py
+      - src/click/shell_completion.py
+
+  - id: Q-10
+    tier: impact
+    question: "If the _compat module were removed, which user-facing features would degrade?"
+    reference_answer: >
+      Encoding-correct echo output, ANSI color handling on Windows,
+      pager support in _termui_impl, and File/LazyFile stream opening in
+      types.py — the platform anti-corruption layer (community c4).
+    reference_files:
+      - src/click/_compat.py
+      - src/click/utils.py
+      - src/click/_termui_impl.py
+      - src/click/types.py
