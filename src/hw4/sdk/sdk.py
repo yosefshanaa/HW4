@@ -23,7 +23,8 @@ from hw4.services.graph_runner import BuildRecord, GraphRunner
 from hw4.shared.config import Config
 from hw4.shared.gatekeeper import ApiGatekeeper
 from hw4.shared.ledger import Ledger
-from hw4.shared.llm_client import LlmClient, make_anthropic_transport
+from hw4.shared.llm_client import LlmClient
+from hw4.shared.transports import make_transport
 
 __all__ = ["Hw4Sdk", "ServiceNotReadyError"]
 
@@ -83,9 +84,9 @@ class Hw4Sdk:
 
     @property
     def llm(self) -> LlmClient:
-        """Gated LLM client; real Anthropic transport unless one was injected."""
+        """Gated LLM client; the configured provider unless one was injected."""
         if self._llm is None:
-            transport = self._transport or make_anthropic_transport(self._config)
+            transport = self._transport or make_transport(self._config)
             self._llm = LlmClient(self._config, self.gatekeeper, transport)
         return self._llm
 

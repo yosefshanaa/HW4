@@ -7,12 +7,13 @@
     "data": "data"
   },
   "models": {
-    "cheap": "claude-haiku-4-5-20251001",
-    "strong": "claude-sonnet-4-6"
+    "cheap": "gpt-4o-mini",
+    "strong": "gpt-4o-mini"
   },
   "llm": {
     "max_output_tokens": 4096,
-    "api_key_env": "ANTHROPIC_API_KEY"
+    "api_key_env": "OPENAI_API_KEY",
+    "provider": "openai"
   },
   "pricing_per_mtok": {
     "claude-haiku-4-5-20251001": {
@@ -22,6 +23,14 @@
     "claude-sonnet-4-6": {
       "input": 3.0,
       "output": 15.0
+    },
+    "gpt-4o-mini": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "gpt-4o": {
+      "input": 2.5,
+      "output": 10.0
     }
   },
   "retrieval": {

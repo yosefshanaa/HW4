@@ -15,7 +15,8 @@ SETUP = {
     "version": "1.00",
     "paths": {"results": "results"},
     "models": {"cheap": "model-cheap", "strong": "model-strong"},
-    "llm": {"max_output_tokens": 64, "api_key_env": "ANTHROPIC_API_KEY"},
+    "llm": {"max_output_tokens": 64, "provider": "anthropic",
+            "api_key_env": "ANTHROPIC_API_KEY"},
     "pricing_per_mtok": {"model-cheap": {"input": 1.0, "output": 1.0}},
     "budget": {"max_usd": 10.0, "warn_usd": 10.0},
 }

@@ -1,0 +1,1 @@
+{"ts": "2026-06-12T16:05:40.403707+00:00", "purpose_tag": "smoke.live", "model": "gpt-4o-mini", "input_tokens": 12, "output_tokens": 1, "cost_usd": 2e-06, "latency_ms": 47914, "status": "ok"}
