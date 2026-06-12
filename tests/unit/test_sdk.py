@@ -1,5 +1,7 @@
 """Tests for hw4.sdk.sdk — wiring, lazy singletons, injection, stubs."""
 
+from pathlib import Path
+
 import pytest
 
 from hw4.constants import ModelTier
@@ -81,7 +83,6 @@ class TestNotReadyStubs:
     @pytest.mark.parametrize(
         "invoke",
         [
-            lambda sdk: sdk.build_graph("repo"),
             lambda sdk: sdk.build_vault("graph.json"),
             lambda sdk: sdk.analyze("graph.json"),
             lambda sdk: sdk.ask("what is the entry point?"),
@@ -94,3 +95,31 @@ class TestNotReadyStubs:
         sdk = make_sdk(tmp_path)
         with pytest.raises(ServiceNotReadyError, match="Phase"):
             invoke(sdk)
+
+
+class TestBuildGraph:
+    MINI_REPO = Path(__file__).resolve().parents[1] / "fixtures" / "mini_repo"
+
+    def make_graph_sdk(self, tmp_path):
+        setup = dict(SETUP)
+        setup["paths"] = {"results": "results"}
+        setup["graph"] = {
+            "exclude_dirs": [".git", "__pycache__"],
+            "doc_suffixes": [".md"],
+            "max_mentions_per_doc": 50,
+        }
+        setup["metrics"] = {"relations": ["imports", "calls"], "top_k_bottlenecks": 5}
+        write_config_dir(tmp_path / "config", setup=setup)
+        return Hw4Sdk(config_dir="config", environ={}, base_dir=tmp_path)
+
+    def test_builds_iteration_zero_with_metrics(self, tmp_path):
+        sdk = self.make_graph_sdk(tmp_path)
+        record = sdk.build_graph(self.MINI_REPO)
+        assert record.iteration == 0
+        assert record.graph_path.exists()
+        assert (record.graph_path.parent / "metrics.json").exists()
+
+    def test_next_call_auto_increments_iteration(self, tmp_path):
+        sdk = self.make_graph_sdk(tmp_path)
+        sdk.build_graph(self.MINI_REPO)
+        assert sdk.build_graph(self.MINI_REPO).iteration == 1

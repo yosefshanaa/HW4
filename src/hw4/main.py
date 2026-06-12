@@ -28,6 +28,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     graph = sub.add_parser("graph", help="build the knowledge graph from a repo (FR-2)")
     graph.add_argument("repo_path", help="path to the target repository")
+    graph.add_argument("--iteration", type=int, default=None,
+                       help="iteration number (default: next free)")
 
     vault = sub.add_parser("vault", help="generate the Obsidian vault from a graph (FR-3)")
     vault.add_argument("graph_path", help="path to graph.json")
@@ -50,7 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
 def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
     """Route one parsed command to its SDK method — nothing else."""
     handlers = {
-        "graph": lambda: sdk.build_graph(args.repo_path),
+        "graph": lambda: sdk.build_graph(args.repo_path, iteration=args.iteration),
         "vault": lambda: sdk.build_vault(args.graph_path),
         "analyze": lambda: sdk.analyze(args.graph_path),
         "ask": lambda: sdk.ask(args.question, mode=args.mode),

@@ -212,7 +212,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T160 (P0) List all AMBIGUOUS edges; triage which require human check during analysis (Part-C: ambiguous = stop flag)
 - [ ] T161 (P0) Open graph.html (or our rendering) — visual sanity: communities visible, no rendering explosion
 - [ ] T162 (P0) Read GRAPH_REPORT.md (if produced) — note claims to verify, never trust as-is (Part-C: report gives narrative, JSON gives evidence)
-- [ ] T163 (P0) Wire `Hw4Sdk.build_graph()` + CLI `hw4 graph --iteration N`; integration test on mini_repo
+- [x] T163 (P0) Wire `Hw4Sdk.build_graph()` + CLI `hw4 graph --iteration N`; integration test on mini_repo
 - [ ] T164 (P1) Record graph stats table (nodes by type, edges by relation, evidence distribution) → goes in README + notebook
 - [ ] T165 (P1) Time the full pipeline; verify NFR-18 (<10 min non-LLM)
 - [x] T166 (P1) Re-run pipeline twice; confirm deterministic hash (or document nondeterminism source)

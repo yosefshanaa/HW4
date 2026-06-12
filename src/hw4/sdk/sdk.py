@@ -16,6 +16,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
+from hw4.services import graph_metrics
+from hw4.services.graph_models import Graph
+from hw4.services.graph_runner import BuildRecord, GraphRunner
 from hw4.shared.config import Config
 from hw4.shared.gatekeeper import ApiGatekeeper
 from hw4.shared.ledger import Ledger
@@ -88,9 +91,20 @@ class Hw4Sdk:
             f"{capability} is wired in {phase} (docs/TODO.md); not available yet"
         )
 
-    def build_graph(self, repo_path: Path | str):
-        """Run graphify/fallback extractor on the target repo (FR-2)."""
-        raise self._not_ready("build_graph", "Phase 4")
+    def build_graph(self, repo_path: Path | str, iteration: int | None = None) -> BuildRecord:
+        """Extract one immutable graph iteration + metrics snapshot (FR-2).
+
+        iteration defaults to the next free number, so the loop's
+        re-graph step is just another call to this method.
+        """
+        runner = GraphRunner(self._config, results_dir=self.results_dir)
+        if iteration is None:
+            latest = runner.latest_iteration()
+            iteration = 0 if latest is None else latest + 1
+        record = runner.build(repo_path, iteration)
+        metrics = graph_metrics.compute(Graph.load(record.graph_path), self._config)
+        metrics.dump(record.graph_path.parent / "metrics.json")
+        return record
 
     def build_vault(self, graph_path: Path | str):
         """Generate the Obsidian vault from a graph (FR-3)."""

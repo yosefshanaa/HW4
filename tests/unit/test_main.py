@@ -15,8 +15,8 @@ class RecordingSdk:
         self.calls.append((name, args, kwargs))
         return f"{name}-done"
 
-    def build_graph(self, repo_path):
-        return self._record("build_graph", repo_path)
+    def build_graph(self, repo_path, *, iteration=None):
+        return self._record("build_graph", repo_path, iteration=iteration)
 
     def build_vault(self, graph_path):
         return self._record("build_vault", graph_path)
@@ -57,7 +57,8 @@ class TestDispatch:
     @pytest.mark.parametrize(
         ("argv", "expected"),
         [
-            (["graph", "repo/"], ("build_graph", ("repo/",), {})),
+            (["graph", "repo/"], ("build_graph", ("repo/",), {"iteration": None})),
+            (["graph", "repo/", "--iteration", "2"], ("build_graph", ("repo/",), {"iteration": 2})),
             (["vault", "g.json"], ("build_vault", ("g.json",), {})),
             (["analyze", "g.json"], ("analyze", ("g.json",), {})),
             (["ask", "why?"], ("ask", ("why?",), {"mode": "graph"})),
