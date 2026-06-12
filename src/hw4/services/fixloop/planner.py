@@ -21,7 +21,11 @@ class PlanRefusedError(RuntimeError):
 
 STRATEGIES = {
     FindingKind.GOD_NODE: (
-        "extract a cohesive group of helpers into a new module",
+        "extract the SMALLEST cohesive group of private module-level helper "
+        "functions (e.g. formatting/label helpers) into one new sibling module; "
+        "move ONLY functions with no class/state dependencies, import them back "
+        "by name so every existing reference keeps working; do not move classes, "
+        "do not touch the public API, do not reorder anything else",
         "fan_out and degree of the god node decrease; no public API change",
     ),
     FindingKind.SPOF: (

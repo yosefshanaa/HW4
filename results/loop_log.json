@@ -1,31 +1,51 @@
 {
  "iterations": [
   {
-   "accepted": true,
-   "annotation": "POST-HOC INTEGRITY ANNOTATION (2026-06-12): this acceptance is reclassified as EXPLORATORY, not the validated-fix KPI. Defects in the run: (1) baseline graph i03 came from a previously reverted broken tree; (2) finding id F-003 on that graph denoted the triage-REJECTED package-facade god node, not the validated core god module \u2014 id drift in the handover; (3) graph_diff._top_score read the rank-1 entry (score 0) instead of the max, fabricating 'goal reached'; (4) the accepted change was never committed on its branch. Honest re-evaluation vs clean i02: echo bottleneck 0.4965 -> 0.4185 (-15.7%), tests green (1672) \u2014 real but below-threshold, on a non-authorized target. Patch archived in results/patches/. All four defects fixed before the authorized re-run.",
+   "accepted": false,
+   "characterization_test": "",
+   "error": "F-002: edits unappliable after retry: no edit blocks found in the response",
+   "files_changed": [],
+   "finding_id": "F-002",
+   "graph_hash_after": "",
+   "graph_hash_before": "",
+   "iteration": 6,
+   "metric_deltas": {
+    "bottleneck_after": 0,
+    "bottleneck_before": 0,
+    "isolated_after": 0,
+    "isolated_before": 0
+   },
+   "recorded_utc": "2026-06-12T17:07:45.914870+00:00",
+   "stop_reason": null,
+   "strategy": "introduce an injectable seam in front of the bottleneck",
+   "tests_green": false,
+   "verdict": "unappliable"
+  },
+  {
+   "accepted": false,
    "characterization_test": "",
    "files_changed": [
     "src/click/helpers.py",
-    "src/click/__init__.py"
+    "src/click/core.py"
    ],
    "finding_id": "F-003",
-   "graph_hash_after": "a988595f33dd90d3e98ee523e7cb8a9bc1ffb2c87602d717f54d855245c7ec80",
-   "graph_hash_before": "08f51e8a8bcbd048364764acfa48c9f7ec44dd632a52390dc370358914639ee8",
-   "iteration": 4,
+   "graph_hash_after": "622263e6fb11ff0c7ab9d220c03fc55ac53c74ed7c57f196dce9e93319765208",
+   "graph_hash_before": "c453338f9da3092f7a347e2ab4ff0f3028687006bc6f00f159798878168e8bc8",
+   "iteration": 7,
    "metric_deltas": {
-    "bottleneck_after": 0.0,
-    "bottleneck_before": 0.5039,
+    "bottleneck_after": 0.4492,
+    "bottleneck_before": 0.4965,
     "isolated_after": 846,
-    "isolated_before": 778
+    "isolated_before": 846
    },
-   "recorded_utc": "2026-06-12T16:52:37.069549+00:00",
-   "stop_reason": "GOAL_METRIC_REACHED",
+   "recorded_utc": "2026-06-12T17:10:04.364088+00:00",
+   "stop_reason": "NO_SAFE_ACTION",
    "strategy": "extract a cohesive group of helpers into a new module",
-   "tests_green": true,
-   "verdict": "improved"
+   "tests_green": false,
+   "verdict": "regressed"
   }
  ],
- "note": "iteration 4 reclassified exploratory \u2014 see its annotation",
- "stop_reason": "GOAL_METRIC_REACHED",
+ "note": "",
+ "stop_reason": "NO_SAFE_ACTION",
  "version": "1.00"
 }
