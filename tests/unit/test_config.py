@@ -13,6 +13,7 @@ REPO_CONFIG = Path(__file__).resolve().parents[2] / "config"
 
 def write_config_dir(tmp_path, setup=None, rate_limits=None, logging_cfg=None):
     """Create a valid config dir, with optional overrides per file."""
+    tmp_path.mkdir(parents=True, exist_ok=True)
     setup = setup or {"version": "1.00", "paths": {"results": "results"}, "budget": {"max_usd": 5}}
     rate_limits = rate_limits or {
         "rate_limits": {"version": "1.00", "services": {"default": {"requests_per_minute": 3}}}
