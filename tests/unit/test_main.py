@@ -27,8 +27,8 @@ class RecordingSdk:
     def ask(self, question, *, mode):
         return self._record("ask", question, mode=mode)
 
-    def fix(self, finding_id):
-        return self._record("fix", finding_id)
+    def fix(self, finding_id, *, auto=False):
+        return self._record("fix", finding_id, auto=auto)
 
     def run_experiment(self):
         return self._record("run_experiment")
@@ -64,7 +64,8 @@ class TestDispatch:
             (["analyze"], ("analyze", (None,), {})),
             (["ask", "why?"], ("ask", ("why?",), {"mode": "graph"})),
             (["ask", "why?", "--mode", "naive"], ("ask", ("why?",), {"mode": "naive"})),
-            (["fix", "F-001"], ("fix", ("F-001",), {})),
+            (["fix", "F-001"], ("fix", ("F-001",), {"auto": False})),
+            (["fix", "--auto"], ("fix", ("",), {"auto": True})),
             (["experiment"], ("run_experiment", (), {})),
             (["report"], ("report", (), {})),
         ],

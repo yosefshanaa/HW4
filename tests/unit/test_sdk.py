@@ -83,7 +83,6 @@ class TestNotReadyStubs:
     @pytest.mark.parametrize(
         "invoke",
         [
-            lambda sdk: sdk.fix("F-001"),
             lambda sdk: sdk.run_experiment(),
             lambda sdk: sdk.report(),
         ],

@@ -37,6 +37,11 @@ FULL_SETUP = {
         "traceability": {"report_undocumented": False},
         "duplication": {"min_confidence": 0.5},
     },
+    "repo": {"timeout_seconds": 60, "default_dirname": "target"},
+    "loop": {"max_iterations": 3, "metric_improvement_threshold": 0.1,
+             "step_timeout_seconds": 120},
+    "fixloop": {"branch_prefix": "fix/", "max_edit_retries": 1,
+                "test_command": ["python", "-m", "pytest", "-q", "tests"]},
 }
 
 
@@ -135,6 +140,22 @@ class TestAnalyze:
         findings = sdk.analyze()
         assert findings, "mini_repo must produce findings"
         assert [f.id for f in findings] == [f"F-{i:03d}" for i in range(1, len(findings) + 1)]
+
+
+class TestFix:
+    def test_unknown_finding_id_fails_loud(self, tmp_path):
+        sdk, _ = make_sdk(tmp_path)
+        with pytest.raises(KeyError, match="F-999"):
+            sdk.fix("F-999")
+
+    def test_auto_mode_on_mini_repo_is_honest_no_safe_action(self, tmp_path):
+        """mini_repo's findings (trace gap, island) are human-only or carry
+        AMBIGUOUS links — the loop must refuse them all and say so."""
+        sdk, _ = make_sdk(tmp_path)
+        report = sdk.fix(auto=True)
+        assert report["stop_reason"] == "NO_SAFE_ACTION"
+        assert report["iterations"] == []
+        assert (tmp_path / "results" / "loop_log.json").exists()
 
 
 class TestContextBudgetSanity:

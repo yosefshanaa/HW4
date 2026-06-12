@@ -1,0 +1,4 @@
+{
+  "F-002": "SPOF click.utils.echo — source-validated 2026-06-12; see results/FINDINGS.md §3 (no seam between 7 binding modules and the implementation)",
+  "F-003": "GOD_NODE click.core — source-validated 2026-06-12; see results/FINDINGS.md §3 (4 concerns confirmed at cited lines; pre-registered H1)"
+}

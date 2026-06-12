@@ -122,9 +122,9 @@ class Hw4Sdk:
         """Answer a question about the repo, graph-guided or naive (FR-8)."""
         return operations.ask(self, question, mode=mode)
 
-    def fix(self, finding_id: str):
-        """Run the test-guarded improvement loop on one finding (FR-7)."""
-        raise self._not_ready("fix", "Phase 8")
+    def fix(self, finding_id: str = "", *, auto: bool = False):
+        """Run the test-guarded improvement loop (FR-7)."""
+        return operations.fix(self, finding_id, auto=auto)
 
     def run_experiment(self):
         """Token-savings A/B experiment over the question set (FR-8)."""

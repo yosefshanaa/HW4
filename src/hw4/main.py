@@ -44,7 +44,9 @@ def build_parser() -> argparse.ArgumentParser:
     ask.add_argument("--mode", choices=("graph", "naive"), default="graph")
 
     fix = sub.add_parser("fix", help="run the test-guarded fix loop on a finding (FR-7)")
-    fix.add_argument("finding_id")
+    fix.add_argument("finding_id", nargs="?", default="")
+    fix.add_argument("--auto", action="store_true",
+                     help="loop over all validated findings in rank order")
 
     sub.add_parser("experiment", help="token-savings A/B experiment (FR-8)")
     sub.add_parser("report", help="aggregate the final report (FR-9)")
@@ -58,7 +60,7 @@ def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
         "vault": lambda: sdk.build_vault(args.graph_path),
         "analyze": lambda: sdk.analyze(args.graph_path),
         "ask": lambda: sdk.ask(args.question, mode=args.mode),
-        "fix": lambda: sdk.fix(args.finding_id),
+        "fix": lambda: sdk.fix(args.finding_id, auto=args.auto),
         "experiment": sdk.run_experiment,
         "report": sdk.report,
     }

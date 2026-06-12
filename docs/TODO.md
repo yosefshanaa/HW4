@@ -404,13 +404,13 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T327 (P0) Characterization-test generator: for uncovered touched code, generate pinning tests FIRST, run them green on ORIGINAL code before any edit (red-green discipline applied to the fix)
 - [ ] T328 (P0) Tests: characterization flow on mini_repo's uncovered module
 - [ ] T329 (P0) TDD `fixloop/stop.py`: evaluate StopReason truth table from {iteration, tests, metric delta, budget, remaining findings} (FR-7.2) — pure function, exhaustive unit tests
-- [ ] T330 (P0) TDD `fixloop/loop.py`: full iteration per PLAN §3.3 pseudocode; every iteration appends loop_log.json entry {finding, diff stats, tests, graph hashes, metric deltas, tokens, verdict, stop_reason}
-- [ ] T331 (P0) Loop integration test on mini_repo (mock LLM with scripted good fix): 1 iteration → improved verdict → GOAL_METRIC_REACHED stop
-- [ ] T332 (P0) Loop integration test: scripted bad fix → tests red → revert → finding marked blocked → NO_SAFE_ACTION or next finding
-- [ ] T333 (P0) Loop integration test: MAX_ITERATIONS path
-- [ ] T334 (P0) QA verdict wiring: tests green AND diff verdict improved ⇒ accept; else revert (graph_diff thresholds from config)
-- [ ] T335 (P0) Graphify re-run REQUIRED inside every iteration (L07 §10.2 — architect re-runs after every substantive change); assert in loop test that graph hash changes are recorded per iteration
-- [ ] T336 (P0) CLI `hw4 fix --finding F-xxx` + `hw4 fix --auto` (loop over ranked findings)
+- [x] T330 (P0) TDD `fixloop/loop.py`: full iteration per PLAN §3.3 pseudocode; every iteration appends loop_log.json entry {finding, diff stats, tests, graph hashes, metric deltas, tokens, verdict, stop_reason}
+- [x] T331 (P0) Loop integration test on mini_repo (mock LLM with scripted good fix): 1 iteration → improved verdict → GOAL_METRIC_REACHED stop
+- [x] T332 (P0) Loop integration test: scripted bad fix → tests red → revert → finding marked blocked → NO_SAFE_ACTION or next finding
+- [x] T333 (P0) Loop integration test: MAX_ITERATIONS path
+- [x] T334 (P0) QA verdict wiring: tests green AND diff verdict improved ⇒ accept; else revert (graph_diff thresholds from config)
+- [x] T335 (P0) Graphify re-run REQUIRED inside every iteration (L07 §10.2 — architect re-runs after every substantive change); assert in loop test that graph hash changes are recorded per iteration
+- [x] T336 (P0) CLI `hw4 fix --finding F-xxx` + `hw4 fix --auto` (loop over ranked findings)
 - [ ] T337 (P0) RUN live fix loop on TARGET for top-ranked validated finding (strong model, budget-guarded)
 - [ ] T338 (P0) Verify on target: branch diff readable; target test suite green (or characterization suite green); graph iteration k+1 artifacts saved
 - [ ] T339 (P0) Verify structural improvement number (e.g., god-node betweenness percentile drop ≥ threshold) recorded in loop_log
@@ -421,8 +421,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T344 (P1) PROMPTS.md: fixer prompts + failed attempts (failures are methodology data)
 - [ ] T345 (P1) Update PRD_fix_loop.md as-built (esp. stop-condition truth table actuals)
 - [ ] T346 (P1) Vault: wiki page per executed fix (what/why/evidence/result) linked from index
-- [ ] T347 (P1) Coverage ≥85% on fixloop/
-- [ ] T348 (P1) File-length audit
+- [x] T347 (P1) Coverage ≥85% on fixloop/
+- [x] T348 (P1) File-length audit
 - [ ] T349 (P2) Record a short screen capture / annotated log of one full loop run (demo asset)
 - [ ] T350 (P1) Effort + budget tracking update
 - [ ] T351 (P1) Loop tokens accounting: per-iteration token totals from ledger → will feed cost analysis
