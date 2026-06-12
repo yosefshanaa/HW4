@@ -39,7 +39,10 @@
   "experiment": {
     "n_questions_min": 10,
     "repetitions": 2,
-    "temperature": 0.0
+    "temperature": 0.0,
+    "naive_context_token_cap": 16000,
+    "shuffle_seed": 42,
+    "model_tier": "strong"
   },
   "budget": {
     "max_usd": 10.0,
