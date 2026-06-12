@@ -455,25 +455,25 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 11 — Research Notebook, Visualization & Cost Analysis (Milestone M7)
 **Phase DoD:** notebooks/analysis.ipynb executes top-to-bottom from committed artifacts; all required plots render; cost chapter complete.
 
-- [ ] T373 (P0) Notebook section 1 — Setup: load comparison.json, ledger, loop_log, metrics snapshots (paths from config; no hardcoded paths)
-- [ ] T374 (P0) Section 2 — Graph overview: nodes/edges/evidence distribution table + community size bar chart
-- [ ] T375 (P0) Section 3 — Token experiment: per-question grouped bar (A vs B input tokens), savings % bar, quality comparison table
-- [ ] T376 (P0) Section 4 — Savings statistics: totals, mean/median savings, savings-by-tier; LaTeX formula for savings metric definition (guidelines §9.2 expects professional formulas)
-- [ ] T377 (P0) Section 5 — Fix loop: per-iteration metric deltas chart (e.g., betweenness percentile before/after), loop_log table render
-- [ ] T378 (P0) Section 6 — Parameter sensitivity study (NFR-12): vary retrieval k ∈ {1,2,3 pages} and ego radius ∈ {1,2} on a 3-question subsample; chart tokens vs quality (OAT approach, guidelines §9.1)
-- [ ] T379 (P0) Section 7 — Cost analysis (guidelines §11): per-model input/output tokens + $ table from ledger purpose tags; cost per phase (wiki-gen / agents / fixloop / experiment); optimization strategies discussion (cheap-vs-strong tiering results)
-- [ ] T380 (P0) Section 8 — FR-11 metrics: traceability rate, correct-file rate, tool-activation correctness
-- [ ] T381 (P0) Section 9 — Conclusions: KPI table vs PRD §3.2 targets; honest misses + reasons
-- [ ] T382 (P0) All charts: labeled axes, legends, consistent accessible palette, high resolution; export PNGs to assets/ (guidelines §9.3)
-- [ ] T383 (P0) Restart-kernel → run-all clean execution verified; runtime noted
-- [ ] T384 (P1) Academic citation: Liu et al. 2024 (Lost in the Middle), Vaswani et al. (Attention) where relevant (Part-B sources)
+- [x] T373 (P0) Notebook section 1 — Setup: load comparison.json, ledger, loop_log, metrics snapshots (paths from config; no hardcoded paths)
+- [x] T374 (P0) Section 2 — Graph overview: nodes/edges/evidence distribution table + community size bar chart
+- [x] T375 (P0) Section 3 — Token experiment: per-question grouped bar (A vs B input tokens), savings % bar, quality comparison table
+- [x] T376 (P0) Section 4 — Savings statistics: totals, mean/median savings, savings-by-tier; LaTeX formula for savings metric definition (guidelines §9.2 expects professional formulas)
+- [x] T377 (P0) Section 5 — Fix loop: per-iteration metric deltas chart (e.g., betweenness percentile before/after), loop_log table render
+- [x] T378 (P0) Section 6 — Parameter sensitivity study (NFR-12): vary retrieval k ∈ {1,2,3 pages} and ego radius ∈ {1,2} on a 3-question subsample; chart tokens vs quality (OAT approach, guidelines §9.1)
+- [x] T379 (P0) Section 7 — Cost analysis (guidelines §11): per-model input/output tokens + $ table from ledger purpose tags; cost per phase (wiki-gen / agents / fixloop / experiment); optimization strategies discussion (cheap-vs-strong tiering results)
+- [x] T380 (P0) Section 8 — FR-11 metrics: traceability rate, correct-file rate, tool-activation correctness
+- [x] T381 (P0) Section 9 — Conclusions: KPI table vs PRD §3.2 targets; honest misses + reasons
+- [x] T382 (P0) All charts: labeled axes, legends, consistent accessible palette, high resolution; export PNGs to assets/ (guidelines §9.3)
+- [x] T383 (P0) Restart-kernel → run-all clean execution verified; runtime noted
+- [x] T384 (P1) Academic citation: Liu et al. 2024 (Lost in the Middle), Vaswani et al. (Attention) where relevant (Part-B sources)
 - [ ] T385 (P1) Budget alerts demonstration: show warn threshold log line from a real run (guidelines §11.2)
-- [ ] T386 (P1) Notebook prose pass: every chart has 2–3 sentences of interpretation (a chart without a claim is decoration)
-- [ ] T387 (P0) Commit notebook + exported figures
-- [ ] T388 (P1) PROMPTS.md update
-- [ ] T389 (P1) Effort tracking update
+- [x] T386 (P1) Notebook prose pass: every chart has 2–3 sentences of interpretation (a chart without a claim is decoration)
+- [x] T387 (P0) Commit notebook + exported figures
+- [x] T388 (P1) PROMPTS.md update
+- [x] T389 (P1) Effort tracking update
 - [ ] T390 (P2) Optional appendix: nondeterminism note (rep variance between identical runs)
-- [ ] T391 (P1) Status sync
+- [x] T391 (P1) Status sync
 
 ## Phase 12 — SKILL Protocol & Guardrails (Milestone M8 start)
 **Phase DoD:** SKILL.md complete (frontmatter, procedure, guardrails), copied into vault, referenced by agents; guardrail behavior demonstrably enforced.
