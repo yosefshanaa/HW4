@@ -87,6 +87,35 @@ def naive_bundle(question: Question, repo_root: Path | str, config: Config) -> N
     )
 
 
+def naive_prompt_builder(repo_root: Path | str, config: Config):
+    """PromptBuilder for Condition A (runner-compatible factory)."""
+
+    def build(question: Question) -> tuple[str, dict]:
+        bundle = naive_bundle(question, repo_root, config)
+        return bundle.assemble(), {
+            "prompt_token_estimate": bundle.token_estimate,
+            "truncated": bundle.truncated,
+            "files": bundle.files,
+        }
+
+    return build
+
+
+def graph_prompt_builder(retriever, graph):
+    """PromptBuilder for Condition B — same instructions, same placement;
+    only the middle differs (index + focused subgraph + wiki pages)."""
+
+    def build(question: Question) -> tuple[str, dict]:
+        bundle = retriever.retrieve(question.question, graph)
+        return bundle.assemble(EXPERIMENT_INSTRUCTIONS), {
+            "prompt_token_estimate": bundle.token_estimate,
+            "truncated": bundle.truncated,
+            "matched_nodes": bundle.matched_nodes,
+        }
+
+    return build
+
+
 def _python_sources(repo_root: Path, exclude_dirs: set[str]) -> list[Path]:
     return [
         path
