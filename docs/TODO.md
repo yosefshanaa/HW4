@@ -188,12 +188,12 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T140 (P0) TDD `services/graph_runner.py`: invoke backend via ProcessRunner; output dir `results/graphs/<iteration>/`; never overwrite previous iterations (FR-2.6)
 - [ ] T141 (P0) graph_runner records: backend id+version, command, duration, scan scope, content hash of graph.json
 - [ ] T142 (P0) Tests: output versioning, hash stability on identical input, failure surfaces cleanly
-- [ ] T143 (P0) TDD `services/graph_models.py`: Node/Edge/Graph dataclasses per PLAN §2.1 contract; `from_json`/`to_json`; schema validation with precise error messages
-- [ ] T144 (P0) Normalizer: map real Graphify output fields → our contract; unknown relation types preserved verbatim + logged
-- [ ] T145 (P0) Evidence enum enforced on every edge; missing evidence → AMBIGUOUS + warning (conservative default, Part-C)
-- [ ] T146 (P0) Tests: round-trip, malformed json, unknown fields tolerated, evidence default, large-graph load time sanity
-- [ ] T147 (P0) Graph convenience queries: neighbors(), ego_subgraph(node, radius, cap), nodes_by_type(), edges_by_evidence()
-- [ ] T148 (P0) Tests for queries incl. cap behavior (retrieval depends on caps)
+- [x] T143 (P0) TDD `services/graph_models.py`: Node/Edge/Graph dataclasses per PLAN §2.1 contract; `from_json`/`to_json`; schema validation with precise error messages
+- [x] T144 (P0) Normalizer: map real Graphify output fields → our contract; unknown relation types preserved verbatim + logged
+- [x] T145 (P0) Evidence enum enforced on every edge; missing evidence → AMBIGUOUS + warning (conservative default, Part-C)
+- [x] T146 (P0) Tests: round-trip, malformed json, unknown fields tolerated, evidence default, large-graph load time sanity
+- [x] T147 (P0) Graph convenience queries: neighbors(), ego_subgraph(node, radius, cap), nodes_by_type(), edges_by_evidence()
+- [x] T148 (P0) Tests for queries incl. cap behavior (retrieval depends on caps)
 
 ### metrics + diff
 - [ ] T149 (P0) TDD `services/graph_metrics.py`: degree, fan-in/out, betweenness (networkx), communities (greedy modularity), bridges, isolated components

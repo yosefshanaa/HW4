@@ -23,10 +23,19 @@ than to recompute but must be marked (`INFERRED`); anything uncertain is a
 flag for human review (`AMBIGUOUS`) and **never** feeds automated fixes.
 Evidence is a first-class enum so no consumer can drop it accidentally.
 
-Primary extractor is **Graphify** (course tool) run via `ProcessRunner`;
-if it is unavailable/broken inside the 2h discovery timebox, ADR-4's
-fallback — a minimal `ast`-based extractor emitting the *identical*
-contract — keeps every downstream component unchanged.
+Primary extractor was planned as **Graphify** (course tool) run via
+`ProcessRunner`; ADR-4 reserved a minimal `ast`-based fallback emitting
+the *identical* contract.
+
+> **ADR-4 gate closed 2026-06-12 (T131–T136):** discovery spike found no
+> obtainable Graphify distribution (PyPI 404 for `graphify`/
+> `graphify-cli`; course materials contain only the Part-C PDF describing
+> its outputs, not the tool). **Fallback activated:** in-repo
+> `ast_extractor` backend — module/class/function nodes; `imports`/
+> `calls` edges as EXTRACTED; doc-mention edges as INFERRED; fuzzy
+> matches as AMBIGUOUS; docstrings/TODO comments become `rationale`
+> nodes (T137–T139). Backend id is recorded in every graph artifact so a
+> later real-Graphify run slots in without downstream change.
 
 ## 2. Interfaces & I/O
 
