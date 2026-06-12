@@ -196,10 +196,10 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T148 (P0) Tests for queries incl. cap behavior (retrieval depends on caps)
 
 ### metrics + diff
-- [ ] T149 (P0) TDD `services/graph_metrics.py`: degree, fan-in/out, betweenness (networkx), communities (greedy modularity), bridges, isolated components
-- [ ] T150 (P0) Bottleneck rubric: betweenness rank × mandatory-path ratio + relation-type profile → structured evidence object (NOT a verdict) (Part-C)
-- [ ] T151 (P0) Tests on planted fixture graph: god node ranks top betweenness; orphan detected; communities ≥2; bridge found
-- [ ] T152 (P0) Metrics snapshot persisted: `results/graphs/<iter>/metrics.json` (versioned)
+- [x] T149 (P0) TDD `services/graph_metrics.py`: degree, fan-in/out, betweenness (networkx), communities (greedy modularity), bridges, isolated components
+- [x] T150 (P0) Bottleneck rubric: betweenness rank × mandatory-path ratio + relation-type profile → structured evidence object (NOT a verdict) (Part-C)
+- [x] T151 (P0) Tests on planted fixture graph: god node ranks top betweenness; orphan detected; communities ≥2; bridge found
+- [x] T152 (P0) Metrics snapshot persisted: `results/graphs/<iter>/metrics.json` (versioned)
 - [ ] T153 (P0) TDD `services/graph_diff.py`: nodes/edges added/removed, per-node centrality deltas, modularity delta, isolated-count delta
 - [ ] T154 (P0) Diff verdict helper: `improved/regressed/neutral` vs config thresholds — feeds QA agent + dashboard
 - [ ] T155 (P0) Tests: synthetic before/after pairs for each verdict class

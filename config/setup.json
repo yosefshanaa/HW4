@@ -70,5 +70,12 @@
     "code_exclude_dirs": [
       "docs"
     ]
+  },
+  "metrics": {
+    "relations": [
+      "imports",
+      "calls"
+    ],
+    "top_k_bottlenecks": 10
   }
 }
