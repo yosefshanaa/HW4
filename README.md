@@ -46,6 +46,10 @@ Target repo (locked, see `docs/TARGET_REPO.md`): **pallets/click** pinned at
 `8a1b1a3`. Regenerate the workspace anytime: `rm -rf workspace/target`, then
 re-clone via `RepoService.clone(url, commit=<SHA>)` — never edit it on `main`.
 
+Vault rebuild (one command, after `hw4 graph workspace/target`):
+`uv run hw4 vault` — regenerates skeleton + raw snapshots + LLM wiki pages +
+index. Requires `ANTHROPIC_API_KEY` in `.env` for the wiki-page prose.
+
 ## License
 
 MIT — see `pyproject.toml`. Target-repository attribution will be recorded

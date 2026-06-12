@@ -91,6 +91,21 @@ def check_secrets() -> list[str]:
     return failures
 
 
+def check_wikilinks() -> list[str]:
+    """Gate (T201): every [[wikilink]] in vault/ resolves to an existing note."""
+    vault = ROOT / "vault"
+    if not vault.is_dir():
+        return []
+    stems = {p.stem for p in vault.rglob("*.md")}
+    link = re.compile(r"\[\[([^\]|#]+)")
+    failures = []
+    for path in sorted(vault.rglob("*.md")):
+        for target in link.findall(path.read_text(encoding="utf-8", errors="replace")):
+            if target.strip() not in stems:
+                failures.append(f"{path.relative_to(ROOT)}: broken link [[{target.strip()}]]")
+    return failures
+
+
 def run_tool(name: str, cmd: list[str]) -> bool:
     """Run an external gate (ruff/pytest); show output only on failure."""
     result = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
@@ -113,6 +128,7 @@ def main(argv: list[str]) -> int:
         ("file-length<=150", check_file_lengths()),
         ("no-hardcodes", check_hardcodes()),
         ("no-secrets", check_secrets()),
+        ("vault-wikilinks", check_wikilinks()),
     ]:
         if failures:
             ok = False

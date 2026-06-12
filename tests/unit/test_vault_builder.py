@@ -86,3 +86,15 @@ class TestLog:
         lines = [ln for ln in builder.log_path.read_text().splitlines() if ln.startswith("- ")]
         assert len(lines) == 2
         assert "graph i00 ingested" in lines[0] and "wiki page core" in lines[1]
+
+
+class TestRtlSafety:
+    def test_hebrew_content_round_trips(self, tmp_path):
+        """R11/T196: RTL content must survive write/read without mangling."""
+        builder = make_builder(tmp_path)
+        builder.build_skeleton()
+        hebrew = "גרף הידע מציג צוואר בקבוק"
+        (builder.wiki_dir / "rtl-note.md").write_text(f"# note\n{hebrew}\n", encoding="utf-8")
+        builder.append_log(f"ingested {hebrew}", "manual", "test")
+        assert hebrew in (builder.wiki_dir / "rtl-note.md").read_text(encoding="utf-8")
+        assert hebrew in builder.log_path.read_text(encoding="utf-8")

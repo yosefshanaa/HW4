@@ -236,7 +236,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T180 (P0) `index.md` generator: compact navigation map — communities → key pages; reads in <1 screen (index-first rule, Part-B)
 - [x] T181 (P0) `log.md` appender: every ingestion/update logged (what, when, source, tool) — traceability (Part-B)
 - [x] T182 (P0) Tests: index regeneration stable order, log append-only
-- [ ] T183 (P0) Copy/lin raw inputs into `raw/`: GRAPH_REPORT.md, provenance, target README snapshot (raw vs wiki separation)
+- [x] T183 (P0) Copy/lin raw inputs into `raw/`: GRAPH_REPORT.md, provenance, target README snapshot (raw vs wiki separation)
 - [ ] T184 (P0) Run vault build on target analysis; open in Obsidian; verify graph view shows hub-and-spoke around index + community clusters
 - [ ] T185 (P0) Capture 3+ screenshots (vault graph view, a wiki page, index.md) → assets/ for README
 - [x] T186 (P0) TDD `services/retrieval.py`: question → index match → ego-subgraph (radius/cap from config) + top wiki pages (2–3) → ContextBundle
@@ -249,17 +249,17 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T193 (P1) Manual QA: ask 3 real questions about target; verify citations point at real files; note quality
 - [ ] T194 (P1) Vault wiki pages for: each detected community (after Phase 6 feeds back), top-5 hubs, the chosen critical path
 - [ ] T195 (P1) `30_Comparisons/` note comparing naive-vs-graph approaches (seeds the experiment narrative)
-- [ ] T196 (P1) Hebrew-content check: ensure tooling handles any RTL content gracefully (R11)
+- [x] T196 (P1) Hebrew-content check: ensure tooling handles any RTL content gracefully (R11)
 - [ ] T197 (P0) Gate check + commit; tag `m3-vault`
 - [ ] T198 (P1) PROMPTS.md update (wiki-gen prompts + iterations)
 - [ ] T199 (P2) Obsidian hotkeys/canvas exploration for nicer screenshots
 - [ ] T200 (P1) Effort tracking update
-- [ ] T201 (P1) Wikilink lint: script verifying zero broken `[[links]]` in vault (becomes part of check_gates P1)
+- [x] T201 (P1) Wikilink lint: script verifying zero broken `[[links]]` in vault (becomes part of check_gates P1)
 - [ ] T202 (P2) Auto-generate Mermaid overview inside index.md (communities as subgraphs)
-- [ ] T203 (P1) Verify vault contains the PRD/PLAN/TODO links under 20_Projects (the system that documents itself appears in its own graph — L07 §13.1)
-- [ ] T204 (P1) Doc: vault rebuild instructions in README (one command)
-- [ ] T205 (P2) Style pass: consistent note titles as routing descriptions (short, discriminative — skill-budget lesson applied to notes, Part-B 12)
-- [ ] T206 (P1) Review: any wiki page >40 lines? split (short pages re-retrieve better)
+- [x] T203 (P1) Verify vault contains the PRD/PLAN/TODO links under 20_Projects (the system that documents itself appears in its own graph — L07 §13.1)
+- [x] T204 (P1) Doc: vault rebuild instructions in README (one command)
+- [x] T205 (P2) Style pass: consistent note titles as routing descriptions (short, discriminative — skill-budget lesson applied to notes, Part-B 12)
+- [x] T206 (P1) Review: any wiki page >40 lines? split (short pages re-retrieve better)
 - [ ] T207 (P1) Update PRD_graph_pipeline / agent PRDs with retrieval as-built details
 - [x] T208 (P0) Sanity: ask() total context tokens for a typical question < configured cap (proves the savings mechanism exists before measuring it)
 - [ ] T209 (P2) Cache retrieval bundles keyed by question hash (saves money in repeated experiment runs — but careful: experiment must bypass cache; add flag)
@@ -639,7 +639,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
 | 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
 | 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
-| 5 Vault & wiki | T173–T210 | 0/38 | not started | |
+| 5 Vault & wiki | T173–T210 | 27/38 | code done; T184-185,T193-195 blocked on API key + Obsidian (user) | 2026-06-12 |
 | 6 RevEng & detection | T211–T262 | 0/52 | not started | |
 | 7 Experiment baseline | T263–T292 | 0/30 | not started | |
 | 8 Agents | T293–T320 | 0/28 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **157/515** | | |
+| **Total** | **515 tasks** | **189/515** | | |
 
 *End of TODO v1.00.*
