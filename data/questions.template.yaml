@@ -1,0 +1,37 @@
+# questions.template.yaml — token-experiment dataset schema (T091, FR-8)
+# The real data/questions.yaml follows this schema exactly; it is built in
+# Phase 7 from the validated graph and spot-checked against raw source.
+# Validation rules: ids unique (Q-NN); tier in {locate, path, impact};
+# >= experiment.n_questions_min questions overall, every tier represented;
+# reference_files paths must exist at the pinned target SHA.
+
+version: "1.00"
+target_repo_sha: "tbd — must match docs/TARGET_REPO.md"
+
+questions:
+  - id: Q-01
+    tier: locate            # find a single definition/responsibility
+    question: "Where is <behavior X> implemented?"
+    reference_answer: >
+      One-paragraph ground truth, written from the validated graph and
+      verified against source.
+    reference_files:
+      - path/to/expected/file.py
+
+  - id: Q-02
+    tier: path              # trace a call/import chain across modules
+    question: "How does <entry point A> reach <effect B>?"
+    reference_answer: >
+      The chain A -> m1.f -> m2.g -> B, with the relation type per hop.
+    reference_files:
+      - path/one.py
+      - path/two.py
+
+  - id: Q-03
+    tier: impact            # change-impact analysis
+    question: "What breaks if <node N>'s interface changes?"
+    reference_answer: >
+      Affected modules/tests and why; severity ordering.
+    reference_files:
+      - path/affected_a.py
+      - path/affected_b.py

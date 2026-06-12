@@ -121,25 +121,25 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T084 (P0) Write `docs/PRD_fix_loop.md`: planner I/O, applier safety (branch, revert), characterization tests, stop-condition truth table
 - [x] T085 (P0) Write `docs/PRD_token_experiment.md`: full methodology (PLAN §4), scoring rubric, validity threats, analysis plan
 - [x] T086 (P0) Write `docs/PRD_gatekeeper.md`: rate/queue/retry/ledger spec + sequence diagram
-- [ ] T087 (P0) Cross-check each dedicated PRD contains: detailed description+theory, I/O expectations, constraints+alternatives+chosen rationale, success criteria+test scenarios (guidelines §2.3)
-- [ ] T088 (P0) Approve all dedicated PRDs (initials + date in header) — implementation of that mechanism may not start before its PRD is approved (guidelines §2.5)
-- [ ] T089 (P1) Create `docs/TARGET_REPO.md` template: provenance fields, unfamiliarity attestation, license, decision trail
-- [ ] T090 (P1) Create findings template `results/FINDINGS.template.md` with Part-C careful-language formula: source → qualified conclusion → confidence → finding → relation type
-- [ ] T091 (P1) Create `data/questions.template.yaml` schema: id, tier(locate/path/impact), question, reference_answer, reference_files[]
-- [ ] T092 (P0) Define answer-scoring rubric doc (correct/partial/wrong + citation correctness criteria, blind-scoring protocol)
-- [ ] T093 (P1) Decide vault language policy (English; Hebrew only where pedagogically needed) — note in PLAN
-- [ ] T094 (P1) Add ADR index section check: ADR-1..7 present in PLAN, each with revisit-trigger
-- [ ] T095 (P0) Re-read Part-C 5-step inference pipeline; paste it verbatim into FINDINGS.template.md as mandatory section headers (Observation/Relation/Confidence/Context/Source-validation)
-- [ ] T096 (P1) Define diagram tooling for block diagram + class scheme (mermaid in markdown, exported PNG to assets/) — verify mermaid renders
-- [ ] T097 (P1) Define loop_log.json schema doc (iteration, finding_id, diff_stats, tests, graph_hash_before/after, metric_deltas, tokens, verdict, stop_reason)
-- [ ] T098 (P1) Define findings.json schema doc (id, kind, nodes[], evidence_chain[], confidence, status{hypothesis,validated,rejected,fixed,blocked})
+- [x] T087 (P0) Cross-check each dedicated PRD contains: detailed description+theory, I/O expectations, constraints+alternatives+chosen rationale, success criteria+test scenarios (guidelines §2.3)
+- [x] T088 (P0) Approve all dedicated PRDs (initials + date in header) — implementation of that mechanism may not start before its PRD is approved (guidelines §2.5)
+- [x] T089 (P1) Create `docs/TARGET_REPO.md` template: provenance fields, unfamiliarity attestation, license, decision trail
+- [x] T090 (P1) Create findings template `results/FINDINGS.template.md` with Part-C careful-language formula: source → qualified conclusion → confidence → finding → relation type
+- [x] T091 (P1) Create `data/questions.template.yaml` schema: id, tier(locate/path/impact), question, reference_answer, reference_files[]
+- [x] T092 (P0) Define answer-scoring rubric doc (correct/partial/wrong + citation correctness criteria, blind-scoring protocol)
+- [x] T093 (P1) Decide vault language policy (English; Hebrew only where pedagogically needed) — note in PLAN
+- [x] T094 (P1) Add ADR index section check: ADR-1..7 present in PLAN, each with revisit-trigger
+- [x] T095 (P0) Re-read Part-C 5-step inference pipeline; paste it verbatim into FINDINGS.template.md as mandatory section headers (Observation/Relation/Confidence/Context/Source-validation)
+- [x] T096 (P1) Define diagram tooling for block diagram + class scheme (mermaid in markdown, exported PNG to assets/) — verify mermaid renders
+- [x] T097 (P1) Define loop_log.json schema doc (iteration, finding_id, diff_stats, tests, graph_hash_before/after, metric_deltas, tokens, verdict, stop_reason)
+- [x] T098 (P1) Define findings.json schema doc (id, kind, nodes[], evidence_chain[], confidence, status{hypothesis,validated,rejected,fixed,blocked})
 - [ ] T099 (P2) Glossary page in vault: hub, bridge, community, betweenness, SPOF, evidence classes (reused later as wiki seed)
 - [ ] T100 (P0) Commit docs suite; tag `m0-docs-approved`
 - [x] T101 (P1) Log doc-authoring prompts to PROMPTS.md
 - [ ] T102 (P1) Calendar check: confirm submission deadline; back-plan milestones M2–M8 with dates; write into PLAN §12
 - [ ] T103 (P2) Set up shared scratchpad for pair notes (decisions made verbally must land in ADRs same day)
-- [ ] T104 (P0) Verify no implementation code (beyond Phase-1 infra) exists before this gate — honest check
-- [ ] T105 (P1) Risk review: walk PRD §12 register; anything new? add R13+ if so
+- [x] T104 (P0) Verify no implementation code (beyond Phase-1 infra) exists before this gate — honest check
+- [x] T105 (P1) Risk review: walk PRD §12 register; anything new? add R13+ if so
 
 ## Phase 3 — Target Repository Selection & Acquisition (Milestone M2 start)
 **Phase DoD:** TARGET_REPO.md locked: one repo chosen, cloned into workspace/, provenance + license recorded, sanity gate passed.
