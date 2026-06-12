@@ -18,6 +18,7 @@ from pathlib import Path
 from hw4.constants import FindingStatus, StopReason
 from hw4.services.detectors.base import Finding
 from hw4.services.fixloop import stop
+from hw4.services.fixloop.applier import ApplyFailedError
 from hw4.services.fixloop.planner import PlanRefusedError, plan
 from hw4.services.graph_diff import IMPROVED, REGRESSED, diff, judge
 from hw4.shared.config import Config
@@ -55,7 +56,18 @@ class FixLoop:
         iteration = base_iteration
         for index, (finding, fix_plan) in enumerate(queue):
             iteration += 1
-            apply_result = self._applier.apply(fix_plan)
+            try:
+                apply_result = self._applier.apply(fix_plan)
+            except ApplyFailedError as exc:
+                # unappliable edits are a blocked finding, not a crash —
+                # the applier already restored the tree
+                finding.status = FindingStatus.BLOCKED
+                entries.append(self._blocked_entry(iteration, finding, fix_plan, str(exc)))
+                remaining = len(queue) - index - 1
+                if remaining <= 0:
+                    return self._finish(entries, StopReason.NO_SAFE_ACTION)
+                self._write_log(entries, None)
+                continue
             tests_green = self._applier.run_tests()
             new_graph, new_metrics, new_hash = self._build_graph(iteration)
             delta = diff(graph, new_graph, metrics, new_metrics)
@@ -111,6 +123,26 @@ class FixLoop:
             except PlanRefusedError:
                 continue  # refusals are by design; they stay hypotheses
         return queue
+
+    @staticmethod
+    def _blocked_entry(iteration: int, finding, fix_plan, error: str) -> dict:
+        return {
+            "iteration": iteration,
+            "finding_id": finding.id,
+            "strategy": fix_plan.strategy,
+            "files_changed": [],
+            "characterization_test": "",
+            "tests_green": False,
+            "graph_hash_before": "",
+            "graph_hash_after": "",
+            "metric_deltas": {"bottleneck_before": 0, "bottleneck_after": 0,
+                              "isolated_before": 0, "isolated_after": 0},
+            "verdict": "unappliable",
+            "accepted": False,
+            "stop_reason": None,
+            "error": error,
+            "recorded_utc": datetime.now(timezone.utc).isoformat(),
+        }
 
     def _finish(self, entries: list[dict], reason: StopReason, note: str = "") -> dict:
         report = {

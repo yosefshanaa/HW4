@@ -125,3 +125,20 @@ class TestLogDiscipline:
         deltas = report["iterations"][0]["metric_deltas"]
         assert deltas == {"bottleneck_before": 1.0, "bottleneck_after": 0.5,
                           "isolated_before": 0, "isolated_after": 0}
+
+
+class TestUnappliableEdits:
+    def test_apply_failure_blocks_finding_instead_of_crashing(self, tmp_path):
+        from hw4.services.fixloop.applier import ApplyFailedError
+
+        class FailingApplier(FakeApplier):
+            def apply(self, fix_plan):
+                raise ApplyFailedError("SEARCH block does not match")
+
+        finding = make_finding()
+        loop = make_loop(tmp_path, FailingApplier([]), scores=[1.0])
+        report = loop.run([finding], base_iteration=0)
+        assert report["stop_reason"] == StopReason.NO_SAFE_ACTION.value
+        assert finding.status is FindingStatus.BLOCKED
+        assert report["iterations"][0]["verdict"] == "unappliable"
+        assert "SEARCH block" in report["iterations"][0]["error"]
