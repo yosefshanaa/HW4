@@ -77,5 +77,15 @@
       "calls"
     ],
     "top_k_bottlenecks": 10
+  },
+  "vault": {
+    "project": "click-analysis",
+    "domains": [
+      "python",
+      "cli-frameworks"
+    ],
+    "top_hub_pages": 5,
+    "wiki_page_max_lines": 40,
+    "index_max_entries_per_section": 8
   }
 }
