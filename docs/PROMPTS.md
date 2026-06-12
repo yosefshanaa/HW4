@@ -55,4 +55,14 @@ against the coding agent:
 fixed in 6ca3398). The gates script — not ad-hoc pipes — is now the
 pre-commit check of record.
 
+## P-004 · 2026-06-12 · Target repo vetting (Phase 3)
+
+Self-directed under P-003's standing instruction. Shortlist prompt
+pattern: "vet {click, starlette, dateutil} against ADR-2 criteria using
+our own RepoService.loc_stats; run each candidate's test suite in an
+ephemeral uv env; timebox BugsInPy and abandon on interpreter-pinning
+friction with evidence." Decision and table recorded in
+`docs/TARGET_REPO.md`. **Lesson:** dogfooding `loc_stats` for vetting
+caught the `core.py` god-node hypothesis before any graph existed.
+
 *Maintained continuously; see git history for the per-commit trail.*

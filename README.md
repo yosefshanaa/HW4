@@ -42,6 +42,10 @@ uv run ruff check       # lint (zero violations policy)
 | `results/` | Graph iterations, findings, experiment data, figures |
 | `workspace/` | Cloned target repository (gitignored, regenerable) |
 
+Target repo (locked, see `docs/TARGET_REPO.md`): **pallets/click** pinned at
+`8a1b1a3`. Regenerate the workspace anytime: `rm -rf workspace/target`, then
+re-clone via `RepoService.clone(url, commit=<SHA>)` — never edit it on `main`.
+
 ## License
 
 MIT — see `pyproject.toml`. Target-repository attribution will be recorded

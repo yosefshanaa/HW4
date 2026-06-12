@@ -144,31 +144,31 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 3 — Target Repository Selection & Acquisition (Milestone M2 start)
 **Phase DoD:** TARGET_REPO.md locked: one repo chosen, cloned into workspace/, provenance + license recorded, sanity gate passed.
 
-- [ ] T106 (P0) Build candidate shortlist (≥3 repos) meeting criteria: pure(ish) Python, 3k–40k LOC, pytest suite present, imports on py3.10+, permissive license, genuinely unfamiliar to both teammates
-- [ ] T107 (P0) Candidate vetting table: LOC (cloc/`wc`), file count, test command, install friction estimate, license — 15 min per candidate max
-- [ ] T108 (P0) BugsInPy timebox attempt (≤90 min hard stop): clone framework, try ONE project env setup; if friction → abandon without guilt (lecturer-sanctioned, L07 §11.2)
-- [ ] T109 (P0) Decision meeting: pick primary repo + named fallback; record decision trail + reasons in TARGET_REPO.md (ADR-2 instantiation)
+- [x] T106 (P0) Build candidate shortlist (≥3 repos) meeting criteria: pure(ish) Python, 3k–40k LOC, pytest suite present, imports on py3.10+, permissive license, genuinely unfamiliar to both teammates
+- [x] T107 (P0) Candidate vetting table: LOC (cloc/`wc`), file count, test command, install friction estimate, license — 15 min per candidate max
+- [x] T108 (P0) BugsInPy timebox attempt (≤90 min hard stop): clone framework, try ONE project env setup; if friction → abandon without guilt (lecturer-sanctioned, L07 §11.2)
+- [x] T109 (P0) Decision meeting: pick primary repo + named fallback; record decision trail + reasons in TARGET_REPO.md (ADR-2 instantiation)
 - [ ] T110 (P0) If personal codebase chosen instead — obtain explicit lecturer approval BEFORE proceeding (L07 §11.1.1); archive the approval message
 - [x] T111 (P0) TDD `services/repo_service.py`: clone(url, dest), checkout(commit), provenance() → {url, commit_hash, branch, license, loc, files}
 - [x] T112 (P0) repo_service: LOC counter (code lines per file, totals) — reused later by file-length checks on target analysis
 - [x] T113 (P0) Tests: clone into tmp (use local fixture repo, not network), provenance fields, checkout behavior, error on dirty workspace
-- [ ] T114 (P0) Clone chosen repo into `workspace/target/` (gitignored); pin to specific commit hash
-- [ ] T115 (P0) Record provenance into TARGET_REPO.md: URL, commit, license text reference, LOC, file count, date
+- [x] T114 (P0) Clone chosen repo into `workspace/target/` (gitignored); pin to specific commit hash
+- [x] T115 (P0) Record provenance into TARGET_REPO.md: URL, commit, license text reference, LOC, file count, date
 - [ ] T116 (P0) Unfamiliarity attestation signed by both teammates in TARGET_REPO.md
-- [ ] T117 (P0) Verify target test suite runs: `uv run` (or repo's own runner) — record baseline pass/fail counts + runtime
+- [x] T117 (P0) Verify target test suite runs: `uv run` (or repo's own runner) — record baseline pass/fail counts + runtime
 - [ ] T118 (P0) If target tests cannot run at all: document why + plan characterization-test strategy (feeds FR-7.5); reconsider fallback repo if coverage is zero around everything
-- [ ] T119 (P1) Snapshot target repo metrics baseline: top-10 largest files, package layout sketch (1 paragraph, pre-graph naive impression — useful contrast for the report)
-- [ ] T120 (P1) Identify target repo's own docs (README/docs/) for FR-4.7 traceability check later
-- [ ] T121 (P1) License compliance note: confirm educational modification permitted; cite clause
-- [ ] T122 (P0) Define `workspace/` lifecycle: never committed; regeneration command documented in README
+- [x] T119 (P1) Snapshot target repo metrics baseline: top-10 largest files, package layout sketch (1 paragraph, pre-graph naive impression — useful contrast for the report)
+- [x] T120 (P1) Identify target repo's own docs (README/docs/) for FR-4.7 traceability check later
+- [x] T121 (P1) License compliance note: confirm educational modification permitted; cite clause
+- [x] T122 (P0) Define `workspace/` lifecycle: never committed; regeneration command documented in README
 - [ ] T123 (P1) Create tiny synthetic fixture repo under `tests/fixtures/mini_repo/` (≤10 files: 2 packages, planted god-node module, an orphan module, a docs file referencing nonexistent module) — powers ALL unit/integration tests without network
 - [x] T124 (P0) Tests using mini_repo: repo_service provenance + LOC on fixture
 - [ ] T125 (P1) Mini_repo includes a tiny pytest suite (3 tests) so fix-loop integration tests can run real pytest cheaply
-- [ ] T126 (P1) Commit Phase 3 (without workspace/)
-- [ ] T127 (P1) PROMPTS.md update
-- [ ] T128 (P2) Note interesting first impressions/questions about target for the question dataset (Phase 7 seed)
-- [ ] T129 (P0) Gate check: ruff/coverage/length still green
-- [ ] T130 (P1) Update TODO statuses; flag slippage vs PLAN §12 budget
+- [x] T126 (P1) Commit Phase 3 (without workspace/)
+- [x] T127 (P1) PROMPTS.md update
+- [x] T128 (P2) Note interesting first impressions/questions about target for the question dataset (Phase 7 seed)
+- [x] T129 (P0) Gate check: ruff/coverage/length still green
+- [x] T130 (P1) Update TODO statuses; flag slippage vs PLAN §12 budget
 
 ## Phase 4 — Graph Generation Pipeline (Milestone M2)
 **Phase DoD:** `uv run hw4 graph` produces versioned graph artifacts for iteration 0; graph.json parsed into validated models; metrics computed; ADR-4 decision (real Graphify vs fallback) closed.
@@ -637,7 +637,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 0 Environment | T001–T030 | 27/30 | in progress (T007 user .env, T023 Obsidian, T028 editor pending) | |
 | 1 Shared infra & SDK | T031–T075 | 40/45 | done core; T042,T061,T071,T072,T074 open | 2026-06-12 |
 | 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
-| 3 Target repo | T106–T130 | 0/25 | not started | |
+| 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
 | 4 Graph pipeline | T131–T172 | 0/42 | not started | |
 | 5 Vault & wiki | T173–T210 | 0/38 | not started | |
 | 6 RevEng & detection | T211–T262 | 0/52 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **91/515** | | |
+| **Total** | **515 tasks** | **117/515** | | |
 
 *End of TODO v1.00.*
