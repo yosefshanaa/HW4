@@ -206,22 +206,22 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T156 (P1) Guard: diff must detect "bottleneck merely renamed/moved" (same topology, new node id) — at minimum document the limitation honestly if not solved
 
 ### execute on target
-- [ ] T157 (P0) Run pipeline on TARGET repo → iteration 0 artifacts under results/graphs/0/
-- [ ] T158 (P0) Validate parsed graph: node/edge counts plausible vs LOC; spot-check 10 random EXTRACTED edges against source files (open the file, confirm the call/import exists)
-- [ ] T159 (P0) Spot-check 5 INFERRED edges — classify each as plausible/wrong; record precision impression in FINDINGS notes
-- [ ] T160 (P0) List all AMBIGUOUS edges; triage which require human check during analysis (Part-C: ambiguous = stop flag)
-- [ ] T161 (P0) Open graph.html (or our rendering) — visual sanity: communities visible, no rendering explosion
-- [ ] T162 (P0) Read GRAPH_REPORT.md (if produced) — note claims to verify, never trust as-is (Part-C: report gives narrative, JSON gives evidence)
+- [x] T157 (P0) Run pipeline on TARGET repo → iteration 0 artifacts under results/graphs/0/
+- [x] T158 (P0) Validate parsed graph: node/edge counts plausible vs LOC; spot-check 10 random EXTRACTED edges against source files (open the file, confirm the call/import exists)
+- [x] T159 (P0) Spot-check 5 INFERRED edges — classify each as plausible/wrong; record precision impression in FINDINGS notes
+- [x] T160 (P0) List all AMBIGUOUS edges; triage which require human check during analysis (Part-C: ambiguous = stop flag)
+- [x] T161 (P0) Open graph.html (or our rendering) — visual sanity: communities visible, no rendering explosion
+- [x] T162 (P0) Read GRAPH_REPORT.md (if produced) — note claims to verify, never trust as-is (Part-C: report gives narrative, JSON gives evidence)
 - [x] T163 (P0) Wire `Hw4Sdk.build_graph()` + CLI `hw4 graph --iteration N`; integration test on mini_repo
-- [ ] T164 (P1) Record graph stats table (nodes by type, edges by relation, evidence distribution) → goes in README + notebook
-- [ ] T165 (P1) Time the full pipeline; verify NFR-18 (<10 min non-LLM)
+- [x] T164 (P1) Record graph stats table (nodes by type, edges by relation, evidence distribution) → goes in README + notebook
+- [x] T165 (P1) Time the full pipeline; verify NFR-18 (<10 min non-LLM)
 - [x] T166 (P1) Re-run pipeline twice; confirm deterministic hash (or document nondeterminism source)
-- [ ] T167 (P0) Gate check + commit; tag `m2-graph`
-- [ ] T168 (P1) PROMPTS.md update
+- [x] T167 (P0) Gate check + commit; tag `m2-graph`
+- [x] T168 (P1) PROMPTS.md update
 - [ ] T169 (P2) Performance: cache parsed Graph object keyed by file hash (only if load >2s)
-- [ ] T170 (P1) Update PRD_graph_pipeline.md with as-built facts (doc drift kills credibility)
-- [ ] T171 (P1) File-length audit on new modules; split if any >130 lines (early margin)
-- [ ] T172 (P1) Effort tracking update vs PLAN budget
+- [x] T170 (P1) Update PRD_graph_pipeline.md with as-built facts (doc drift kills credibility)
+- [x] T171 (P1) File-length audit on new modules; split if any >130 lines (early margin)
+- [x] T172 (P1) Effort tracking update vs PLAN budget
 
 ## Phase 5 — Obsidian Vault & LLM Wiki (Milestone M3 start)
 **Phase DoD:** vault opens in Obsidian, taxonomy + index-first navigation works, wiki pages generated for key entities, retrieval returns focused context under caps.
@@ -638,7 +638,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 1 Shared infra & SDK | T031–T075 | 40/45 | done core; T042,T061,T071,T072,T074 open | 2026-06-12 |
 | 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
 | 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
-| 4 Graph pipeline | T131–T172 | 0/42 | not started | |
+| 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
 | 5 Vault & wiki | T173–T210 | 0/38 | not started | |
 | 6 RevEng & detection | T211–T262 | 0/52 | not started | |
 | 7 Experiment baseline | T263–T292 | 0/30 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **117/515** | | |
+| **Total** | **515 tasks** | **157/515** | | |
 
 *End of TODO v1.00.*

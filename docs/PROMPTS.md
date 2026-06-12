@@ -65,4 +65,15 @@ friction with evidence." Decision and table recorded in
 `docs/TARGET_REPO.md`. **Lesson:** dogfooding `loc_stats` for vetting
 caught the `core.py` god-node hypothesis before any graph existed.
 
+## P-005 · 2026-06-12 · Graph pipeline (Phase 4)
+
+Per-module TDD prompts per P-pattern (models → queries → extractor →
+runner → metrics → diff → SDK/CLI wiring). One extra prompt class:
+*smoke-then-fix* — "run the extractor on the real target, list evidence
+distribution and missing:* nodes, diagnose false gaps." That run drove
+two resolution fixes (re-export tier; code/doc scan-scope split) before
+any detector could consume bad edges. **Lesson:** validating extraction
+quality on the real target *before* building consumers is cheap
+insurance — AMBIGUOUS noise dropped 163→11 edges.
+
 *Maintained continuously; see git history for the per-commit trail.*
