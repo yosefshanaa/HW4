@@ -348,17 +348,17 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T279 (P1) Baseline table: per-question tokens + score; archive `results/experiment/condition_A.json`
 - [ ] T280 (P1) Sanity reflections: did naive condition hit Lost-in-the-Middle symptoms (right file present but answer wrong)? note instances — gold for the report
 - [ ] T281 (P0) Gate check + commit; tag `m4-baseline`
-- [ ] T282 (P1) PROMPTS.md update (experiment prompts verbatim — they ARE the methodology)
+- [x] T282 (P1) PROMPTS.md update (experiment prompts verbatim — they ARE the methodology)
 - [ ] T283 (P1) Effort + budget tracking update (actual $ vs preflight)
-- [ ] T284 (P2) If any question is degenerate (both conditions trivially answer), replace it BEFORE running B? — NO: dataset frozen (T266); instead note as limitation. (Task = write the limitation note if applicable)
+- [x] T284 (P2) If any question is degenerate (both conditions trivially answer), replace it BEFORE running B? — NO: dataset frozen (T266); instead note as limitation. (Task = write the limitation note if applicable)
 - [ ] T285 (P1) Verify experiment artifacts contain zero secrets/keys (raw payload logs!)
 - [x] T286 (P1) Update PRD_token_experiment.md with as-run parameters
-- [ ] T287 (P2) Dry-run one question through Condition B informally to confirm plumbing before Phase 10 (no recorded measurement)
+- [x] T287 (P2) Dry-run one question through Condition B informally to confirm plumbing before Phase 10 (no recorded measurement)
 - [x] T288 (P1) Coverage on experiment/ modules ≥85%
 - [x] T289 (P1) Findings: file-length audit on experiment modules
 - [ ] T290 (P2) Back up results/ to second location (cheap insurance)
 - [x] T291 (P0) Confirm question set includes ≥1 question whose naive condition exceeds context (demonstrates the bottleneck thesis) — if not, add an impact-tier question variant via documented amendment procedure
-- [ ] T292 (P1) Status sync
+- [x] T292 (P1) Status sync
 
 ## Phase 8 — Multi-Agent System (Milestone M5)
 **Phase DoD:** crew (Repo, GraphAnalyst, ArchitectFixer, QA + orchestrator) runs analyze→detect end-to-end on mini_repo with mocked LLM in tests and on target live; all LLM traffic via gatekeeper; findings.json produced by agents matches direct-SDK output.
@@ -641,7 +641,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
 | 5 Vault & wiki | T173–T210 | 27/38 | code done; T184-185,T193-195 blocked on API key + Obsidian (user) | 2026-06-12 |
 | 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
-| 7 Experiment baseline | T263–T292 | 0/30 | not started | |
+| 7 Experiment baseline | T263–T292 | 22/30 | machinery done; T275-281,283 live run blocked on API key | 2026-06-12 |
 | 8 Agents | T293–T320 | 0/28 | not started | |
 | 9 Fix loop | T321–T352 | 0/32 | not started | |
 | 10 Experiment B | T353–T372 | 0/20 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **249/515** | | |
+| **Total** | **515 tasks** | **271/515** | | |
 
 *End of TODO v1.00.*

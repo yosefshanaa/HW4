@@ -87,4 +87,19 @@ the real test — p98 percentile gate came from triage pain (55 false
 god nodes), not from foresight; budget a smoke-triage round into every
 detector's schedule.
 
+## P-007 · 2026-06-12 · Experiment machinery (Phase 7)
+
+The experiment prompt (verbatim, both conditions — it IS the
+methodology): system-less user message of
+`EXPERIMENT_INSTRUCTIONS + "\n\n" + <condition middle> + "\n\nQUESTION: <q>"`
+where instructions =
+"Answer the question at the end using ONLY the material below. Cite the
+source files your answer relies on. If the material is insufficient,
+say exactly that instead of guessing."
+Condition A middle = repo file listing + grep-ranked whole/partial
+files; Condition B middle = index.md + focused subgraph + top wiki
+pages. **Lesson:** the first preflight shipped zero file content in A
+(top-ranked file alone blew the cap) — naive assemblers need the
+"paste as much as fits" rule or the baseline is a strawman.
+
 *Maintained continuously; see git history for the per-commit trail.*
