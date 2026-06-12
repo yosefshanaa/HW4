@@ -1,0 +1,32 @@
+# Secrets — never committed
+.env
+*.pem
+*.key
+credentials.json
+
+# Target repo workspace (regenerated via `uv run hw4 graph`)
+workspace/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# Tooling caches
+.coverage
+htmlcov/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Run artifacts (regenerable)
+results/logs/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
