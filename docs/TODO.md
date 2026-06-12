@@ -239,10 +239,10 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T183 (P0) Copy/lin raw inputs into `raw/`: GRAPH_REPORT.md, provenance, target README snapshot (raw vs wiki separation)
 - [ ] T184 (P0) Run vault build on target analysis; open in Obsidian; verify graph view shows hub-and-spoke around index + community clusters
 - [ ] T185 (P0) Capture 3+ screenshots (vault graph view, a wiki page, index.md) → assets/ for README
-- [ ] T186 (P0) TDD `services/retrieval.py`: question → index match → ego-subgraph (radius/cap from config) + top wiki pages (2–3) → ContextBundle
-- [ ] T187 (P0) ContextBundle assembly enforces edge placement: instructions first, question last, evidence in middle kept SHORT (Part-B position-aware)
-- [ ] T188 (P0) ContextBundle reports its own token estimate (tokenizer estimate OK here — it's a budget guard, not the experiment measurement)
-- [ ] T189 (P0) Tests: matching, caps respected, bundle structure, token-estimate guard trips on oversize
+- [x] T186 (P0) TDD `services/retrieval.py`: question → index match → ego-subgraph (radius/cap from config) + top wiki pages (2–3) → ContextBundle
+- [x] T187 (P0) ContextBundle assembly enforces edge placement: instructions first, question last, evidence in middle kept SHORT (Part-B position-aware)
+- [x] T188 (P0) ContextBundle reports its own token estimate (tokenizer estimate OK here — it's a budget guard, not the experiment measurement)
+- [x] T189 (P0) Tests: matching, caps respected, bundle structure, token-estimate guard trips on oversize
 - [ ] T190 (P0) `Hw4Sdk.build_vault()` + CLI `hw4 vault`; integration test on mini_repo
 - [ ] T191 (P0) `Hw4Sdk.ask()` MVP: retrieval bundle → LLM → answer with cited node ids + source files (purpose tag `ask`)
 - [ ] T192 (P0) Tests (mock LLM): ask returns citations; refuses to answer without retrieval hits (no hallucinated context)

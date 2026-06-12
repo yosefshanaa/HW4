@@ -28,7 +28,8 @@
     "k_pages": 3,
     "ego_radius": 2,
     "max_nodes": 40,
-    "context_token_cap": 12000
+    "context_token_cap": 12000,
+    "max_seeds": 3
   },
   "loop": {
     "max_iterations": 3,
