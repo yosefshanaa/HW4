@@ -269,18 +269,18 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 **Phase DoD:** FINDINGS.md draft with evidence-labeled architecture analysis (macro/meso/micro), block diagram + OOP scheme exported, findings.json with ≥2 validated defects.
 
 ### macro / meso / micro analysis (human-led, graph-assisted)
-- [ ] T211 (P0) Macro pass on iteration-0 graph: list communities + sizes; identify hubs, bridges, isolated areas (Part-C three-level reading)
-- [ ] T212 (P0) "Who against whom" sketch: client/server/CLI/library boundaries from community structure (L07 §10)
-- [ ] T213 (P0) Meso pass: for each major community write 2–3 sentence interpretation (what holds it: domain/layer/docs) — community ≠ folder check explicitly (Part-C)
-- [ ] T214 (P0) Micro pass: for every claim that will appear in FINDINGS, perform 5-step inference (Observe→Relation→Confidence→Context→Source-validate) and record each step
-- [ ] T215 (P0) Choose ≥1 critical flow; read it as a PATH (entry → controller → state → persistence → policy), labeling each edge's relation+evidence (Part-C path reading)
-- [ ] T216 (P0) Hub-vs-bottleneck adjudication for top-3 central nodes using rubric (T150) + manual relation review; cautious verdict sentences
-- [ ] T217 (P0) Draw system block diagram (mermaid → PNG in assets/): layers, communities, key flows — derived from graph, annotated with evidence levels
-- [ ] T218 (P0) Draw OOP class scheme for the core community: key classes, inheritance/composition, responsibilities (mermaid classDiagram → assets/)
-- [ ] T219 (P0) Cross-check both diagrams contain ≥3 claims NOT present in the target's own docs (the "extraction of understanding" requirement, L07 §11.1.3) — mark them
-- [ ] T220 (P0) Target-docs traceability check (FR-4.7): docs claims ↔ graph nodes; list documented-but-unlinked features and undocumented modules
-- [ ] T221 (P1) Rationale harvest: WHY/TODO/NOTE comments near central nodes; add as context to findings (Part-C rationale layer)
-- [ ] T222 (P0) Write FINDINGS.md architecture chapters (macro/meso/micro/path) using template + careful language formula
+- [x] T211 (P0) Macro pass on iteration-0 graph: list communities + sizes; identify hubs, bridges, isolated areas (Part-C three-level reading)
+- [x] T212 (P0) "Who against whom" sketch: client/server/CLI/library boundaries from community structure (L07 §10)
+- [x] T213 (P0) Meso pass: for each major community write 2–3 sentence interpretation (what holds it: domain/layer/docs) — community ≠ folder check explicitly (Part-C)
+- [x] T214 (P0) Micro pass: for every claim that will appear in FINDINGS, perform 5-step inference (Observe→Relation→Confidence→Context→Source-validate) and record each step
+- [x] T215 (P0) Choose ≥1 critical flow; read it as a PATH (entry → controller → state → persistence → policy), labeling each edge's relation+evidence (Part-C path reading)
+- [x] T216 (P0) Hub-vs-bottleneck adjudication for top-3 central nodes using rubric (T150) + manual relation review; cautious verdict sentences
+- [x] T217 (P0) Draw system block diagram (mermaid → PNG in assets/): layers, communities, key flows — derived from graph, annotated with evidence levels
+- [x] T218 (P0) Draw OOP class scheme for the core community: key classes, inheritance/composition, responsibilities (mermaid classDiagram → assets/)
+- [x] T219 (P0) Cross-check both diagrams contain ≥3 claims NOT present in the target's own docs (the "extraction of understanding" requirement, L07 §11.1.3) — mark them
+- [x] T220 (P0) Target-docs traceability check (FR-4.7): docs claims ↔ graph nodes; list documented-but-unlinked features and undocumented modules
+- [x] T221 (P1) Rationale harvest: WHY/TODO/NOTE comments near central nodes; add as context to findings (Part-C rationale layer)
+- [x] T222 (P0) Write FINDINGS.md architecture chapters (macro/meso/micro/path) using template + careful language formula
 
 ### detectors (automated, fixture-tested)
 - [x] T223 (P0) TDD `detectors/base.py`: Detector ABC `detect(graph, metrics) -> list[Finding]`; Finding carries kind, nodes, evidence_chain (each link: relation, evidence class, confidence, source_file), status=hypothesis
@@ -297,12 +297,12 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T234 (P1) Tests: similar pair emitted as hypothesis with checklist fields
 - [x] T235 (P0) Detector registry + `Hw4Sdk.analyze()` runs all detectors → findings.json; CLI `hw4 analyze`
 - [x] T236 (P0) Integration test: analyze(mini_repo graph) yields planted findings exactly
-- [ ] T237 (P0) Run analyze on TARGET iteration-0 graph; triage every hypothesis manually
-- [ ] T238 (P0) For ≥2 findings: complete source validation to EXTRACTED-backed status=validated (open files, confirm) — fix loop may only consume validated findings (FR-6.3)
-- [ ] T239 (P0) For each rejected hypothesis: record why (false-positive analysis is part of the report's credibility)
-- [ ] T240 (P0) Merge automated findings into FINDINGS.md with evidence chains + confidence + careful phrasing
-- [ ] T241 (P1) Rank validated findings by (impact, fix safety, test coverage around area) → pick fix-loop target order
-- [ ] T242 (P1) Pre-fix metric baseline per finding (e.g., god node betweenness percentile) — the number the diff must improve
+- [x] T237 (P0) Run analyze on TARGET iteration-0 graph; triage every hypothesis manually
+- [x] T238 (P0) For ≥2 findings: complete source validation to EXTRACTED-backed status=validated (open files, confirm) — fix loop may only consume validated findings (FR-6.3)
+- [x] T239 (P0) For each rejected hypothesis: record why (false-positive analysis is part of the report's credibility)
+- [x] T240 (P0) Merge automated findings into FINDINGS.md with evidence chains + confidence + careful phrasing
+- [x] T241 (P1) Rank validated findings by (impact, fix safety, test coverage around area) → pick fix-loop target order
+- [x] T242 (P1) Pre-fix metric baseline per finding (e.g., god node betweenness percentile) — the number the diff must improve
 
 ### wrap
 - [ ] T243 (P0) Gate check + commit; tag `m3-analysis`
@@ -314,16 +314,16 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T249 (P1) Peer review: each teammate red-teams the other's findings for overclaiming (R8)
 - [ ] T250 (P1) Screenshot the target graph with findings highlighted → assets/
 - [ ] T251 (P2) Mini literature note in notebook: Lost in the Middle (Liu et al. 2024) citation + 2-sentence relevance (Part-B grounding)
-- [ ] T252 (P0) Check: every FINDINGS.md conclusion sentence uses qualified language matching its evidence level (search for unqualified "is/must/always" near INFERRED claims)
+- [x] T252 (P0) Check: every FINDINGS.md conclusion sentence uses qualified language matching its evidence level (search for unqualified "is/must/always" near INFERRED claims)
 - [ ] T253 (P1) File-length audit; refactor any service >130 lines
 - [x] T254 (P1) Coverage check on detectors ≥85%
 - [ ] T255 (P2) Export FINDINGS.md → vault wiki mirror
 - [x] T256 (P1) Confirm findings.json schema matches doc (T098) byte-for-byte (json schema validation test)
 - [ ] T257 (P2) Graph-literacy self-test: can each teammate explain every edge label used? (oral check, 10 min)
-- [ ] T258 (P1) List AMBIGUOUS edges consumed anywhere in findings → must be zero or explicitly human-resolved
-- [ ] T259 (P2) Record 2–3 "surprises" the graph revealed vs naive impression (T119) — strong report material
+- [x] T258 (P1) List AMBIGUOUS edges consumed anywhere in findings → must be zero or explicitly human-resolved
+- [x] T259 (P2) Record 2–3 "surprises" the graph revealed vs naive impression (T119) — strong report material
 - [ ] T260 (P1) Update block diagram / class scheme if detector results changed the picture
-- [ ] T261 (P0) Verify ≥2 validated defects exist — else loop back (this is a KPI)
+- [x] T261 (P0) Verify ≥2 validated defects exist — else loop back (this is a KPI)
 - [ ] T262 (P1) Status sync: TODO statuses, slippage check
 
 ## Phase 7 — Token Experiment: Dataset & Baseline Condition A (Milestone M4)
