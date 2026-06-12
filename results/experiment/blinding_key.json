@@ -1,0 +1,162 @@
+{
+ "A-001": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-002": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-003": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-004": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-005": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-006": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-007": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-008": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-009": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-010": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-011": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-012": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-013": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-014": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-015": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-016": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-017": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-018": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-019": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-020": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-021": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-022": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-023": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-024": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-025": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-026": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-027": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-028": {
+  "condition": "B",
+  "repetition": 2
+ },
+ "A-029": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-030": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-031": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-032": {
+  "condition": "B",
+  "repetition": 1
+ },
+ "A-033": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-034": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-035": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-036": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-037": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-038": {
+  "condition": "A",
+  "repetition": 1
+ },
+ "A-039": {
+  "condition": "A",
+  "repetition": 2
+ },
+ "A-040": {
+  "condition": "A",
+  "repetition": 1
+ }
+}

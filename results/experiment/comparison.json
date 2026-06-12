@@ -1,0 +1,130 @@
+{
+ "below_target": [
+  "Q-08"
+ ],
+ "by_tier": {
+  "impact": 0.8017,
+  "locate": 0.8776,
+  "path": 0.8814
+ },
+ "per_question": [
+  {
+   "input_tokens_A": 27510,
+   "input_tokens_B": 4390,
+   "output_tokens_A": 118,
+   "output_tokens_B": 455,
+   "question_id": "Q-01",
+   "savings": 0.8404,
+   "tier": "locate",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27520,
+   "input_tokens_B": 3184,
+   "output_tokens_A": 78,
+   "output_tokens_B": 155,
+   "question_id": "Q-02",
+   "savings": 0.8843,
+   "tier": "locate",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27506,
+   "input_tokens_B": 2524,
+   "output_tokens_A": 48,
+   "output_tokens_B": 64,
+   "question_id": "Q-03",
+   "savings": 0.9082,
+   "tier": "locate",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27512,
+   "input_tokens_B": 3526,
+   "output_tokens_A": 80,
+   "output_tokens_B": 76,
+   "question_id": "Q-04",
+   "savings": 0.8718,
+   "tier": "path",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27512,
+   "input_tokens_B": 2386,
+   "output_tokens_A": 920,
+   "output_tokens_B": 170,
+   "question_id": "Q-05",
+   "savings": 0.9133,
+   "tier": "path",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27512,
+   "input_tokens_B": 4462,
+   "output_tokens_A": 234,
+   "output_tokens_B": 635,
+   "question_id": "Q-06",
+   "savings": 0.8378,
+   "tier": "path",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27506,
+   "input_tokens_B": 2680,
+   "output_tokens_A": 299,
+   "output_tokens_B": 64,
+   "question_id": "Q-07",
+   "savings": 0.9026,
+   "tier": "path",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27506,
+   "input_tokens_B": 10188,
+   "output_tokens_A": 91,
+   "output_tokens_B": 298,
+   "question_id": "Q-08",
+   "savings": 0.6296,
+   "tier": "impact",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27516,
+   "input_tokens_B": 3616,
+   "output_tokens_A": 729,
+   "output_tokens_B": 487,
+   "question_id": "Q-09",
+   "savings": 0.8686,
+   "tier": "impact",
+   "truncated_A": true,
+   "truncated_B": false
+  },
+  {
+   "input_tokens_A": 27512,
+   "input_tokens_B": 2562,
+   "output_tokens_A": 82,
+   "output_tokens_B": 72,
+   "question_id": "Q-10",
+   "savings": 0.9069,
+   "tier": "impact",
+   "truncated_A": true,
+   "truncated_B": false
+  }
+ ],
+ "totals": {
+  "input_tokens_A": 275112,
+  "input_tokens_B": 39518,
+  "mean_savings": 0.8564,
+  "median_savings": 0.878,
+  "overall_savings": 0.8564
+ },
+ "version": "1.00"
+}

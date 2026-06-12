@@ -86,3 +86,22 @@ noted as future work).
 > `fb0749ad7a3b55317071b17f0750215310ae4fa671145f4afa239bea9a0450b0` — 10 questions (3 locate / 4 path / 3 impact), every
 > reference spot-checked against source at the pinned SHA. No post-hoc
 > edits permitted; amendments require a documented procedure note.
+
+## Measured results (LIVE, 2026-06-12, gpt-4o-mini both conditions)
+
+- **Run 1** (default retrieval caps: radius 2, 40 nodes, 3 seeds, 3
+  pages): overall savings **50.9%** — below target. Failure analysis:
+  Condition B ballooned to 14–19k tokens on 8/10 questions; answers
+  were correct, the context was simply over-provisioned.
+- **Documented amendment (sensitivity-driven, dataset untouched):**
+  retrieval tuned to radius 1, 20 nodes, 2 seeds, 2 pages via HW4__ env
+  overrides; run 1 archived as `condition_B_run1.json` /
+  `comparison_run1.json`.
+- **Run 2 (tuned):** overall savings **85.6%**, median 87.8%; by tier:
+  locate 87.8%, path 88.1%, impact 80.2%. Single below-target question:
+  Q-08 (63.0%) — the echo-SPOF impact question legitimately needs the
+  bottleneck's wide neighborhood. **KPI ≥70% met.**
+- Quality spot-check: tuned-run answers remain correct with proper file
+  citations; formal blind scoring pack generated
+  (`scoring_sheet.json` + sealed `blinding_key.json`) for human scoring.
+- Cost so far (ledger): see results/REPORT.md cost section.
