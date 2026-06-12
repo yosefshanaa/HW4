@@ -185,9 +185,9 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T139 (P1) (If fallback) docstring/TODO/WHY comments extracted as rationale nodes (keeps Part-C rationale layer alive)
 
 ### runner + models
-- [ ] T140 (P0) TDD `services/graph_runner.py`: invoke backend via ProcessRunner; output dir `results/graphs/<iteration>/`; never overwrite previous iterations (FR-2.6)
-- [ ] T141 (P0) graph_runner records: backend id+version, command, duration, scan scope, content hash of graph.json
-- [ ] T142 (P0) Tests: output versioning, hash stability on identical input, failure surfaces cleanly
+- [x] T140 (P0) TDD `services/graph_runner.py`: invoke backend via ProcessRunner; output dir `results/graphs/<iteration>/`; never overwrite previous iterations (FR-2.6)
+- [x] T141 (P0) graph_runner records: backend id+version, command, duration, scan scope, content hash of graph.json
+- [x] T142 (P0) Tests: output versioning, hash stability on identical input, failure surfaces cleanly
 - [x] T143 (P0) TDD `services/graph_models.py`: Node/Edge/Graph dataclasses per PLAN §2.1 contract; `from_json`/`to_json`; schema validation with precise error messages
 - [x] T144 (P0) Normalizer: map real Graphify output fields → our contract; unknown relation types preserved verbatim + logged
 - [x] T145 (P0) Evidence enum enforced on every edge; missing evidence → AMBIGUOUS + warning (conservative default, Part-C)
@@ -215,7 +215,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T163 (P0) Wire `Hw4Sdk.build_graph()` + CLI `hw4 graph --iteration N`; integration test on mini_repo
 - [ ] T164 (P1) Record graph stats table (nodes by type, edges by relation, evidence distribution) → goes in README + notebook
 - [ ] T165 (P1) Time the full pipeline; verify NFR-18 (<10 min non-LLM)
-- [ ] T166 (P1) Re-run pipeline twice; confirm deterministic hash (or document nondeterminism source)
+- [x] T166 (P1) Re-run pipeline twice; confirm deterministic hash (or document nondeterminism source)
 - [ ] T167 (P0) Gate check + commit; tag `m2-graph`
 - [ ] T168 (P1) PROMPTS.md update
 - [ ] T169 (P2) Performance: cache parsed Graph object keyed by file hash (only if load >2s)
