@@ -283,20 +283,20 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T222 (P0) Write FINDINGS.md architecture chapters (macro/meso/micro/path) using template + careful language formula
 
 ### detectors (automated, fixture-tested)
-- [ ] T223 (P0) TDD `detectors/base.py`: Detector ABC `detect(graph, metrics) -> list[Finding]`; Finding carries kind, nodes, evidence_chain (each link: relation, evidence class, confidence, source_file), status=hypothesis
-- [ ] T224 (P0) Tests: Finding serialization to findings.json schema (T098)
-- [ ] T225 (P0) TDD `detectors/spof.py`: high betweenness + no alternative path between its neighbor sets ⇒ SPOF hypothesis; thresholds from config
-- [ ] T226 (P0) Tests on fixtures: planted SPOF found; healthy redundant hub NOT flagged (bridge with fallback path, L07 §10.1)
-- [ ] T227 (P0) TDD `detectors/god_node.py`: fan-in+fan-out outlier (z-score or top-percentile from config) + rubric profile attached
-- [ ] T228 (P0) Tests: planted god node found; large-but-cohesive abstraction not auto-condemned (healthy-hub criteria attached as evidence)
-- [ ] T229 (P0) TDD `detectors/isolation.py`: isolated components classified with checklist {intentional standalone, deprecated/dead, parser miss, semantic-only} — output is a finding REQUIRING human triage (Part-C: isolation is a finding, not a diagnosis)
-- [ ] T230 (P0) Tests: orphan in fixture flagged with classification options, not a verdict
-- [ ] T231 (P0) TDD `detectors/traceability.py`: docs community with zero implements/tested_by/mentions edges into code ⇒ TRACE_GAP hypothesis
-- [ ] T232 (P0) Tests: planted docs-gap in fixture found
-- [ ] T233 (P1) TDD `detectors/duplication.py`: semantically_similar_to pairs (if backend provides) ⇒ DUPLICATION hypothesis with mandatory verify-checklist (purpose/usage/tests) — never a delete recommendation (Part-C ex. 3)
-- [ ] T234 (P1) Tests: similar pair emitted as hypothesis with checklist fields
-- [ ] T235 (P0) Detector registry + `Hw4Sdk.analyze()` runs all detectors → findings.json; CLI `hw4 analyze`
-- [ ] T236 (P0) Integration test: analyze(mini_repo graph) yields planted findings exactly
+- [x] T223 (P0) TDD `detectors/base.py`: Detector ABC `detect(graph, metrics) -> list[Finding]`; Finding carries kind, nodes, evidence_chain (each link: relation, evidence class, confidence, source_file), status=hypothesis
+- [x] T224 (P0) Tests: Finding serialization to findings.json schema (T098)
+- [x] T225 (P0) TDD `detectors/spof.py`: high betweenness + no alternative path between its neighbor sets ⇒ SPOF hypothesis; thresholds from config
+- [x] T226 (P0) Tests on fixtures: planted SPOF found; healthy redundant hub NOT flagged (bridge with fallback path, L07 §10.1)
+- [x] T227 (P0) TDD `detectors/god_node.py`: fan-in+fan-out outlier (z-score or top-percentile from config) + rubric profile attached
+- [x] T228 (P0) Tests: planted god node found; large-but-cohesive abstraction not auto-condemned (healthy-hub criteria attached as evidence)
+- [x] T229 (P0) TDD `detectors/isolation.py`: isolated components classified with checklist {intentional standalone, deprecated/dead, parser miss, semantic-only} — output is a finding REQUIRING human triage (Part-C: isolation is a finding, not a diagnosis)
+- [x] T230 (P0) Tests: orphan in fixture flagged with classification options, not a verdict
+- [x] T231 (P0) TDD `detectors/traceability.py`: docs community with zero implements/tested_by/mentions edges into code ⇒ TRACE_GAP hypothesis
+- [x] T232 (P0) Tests: planted docs-gap in fixture found
+- [x] T233 (P1) TDD `detectors/duplication.py`: semantically_similar_to pairs (if backend provides) ⇒ DUPLICATION hypothesis with mandatory verify-checklist (purpose/usage/tests) — never a delete recommendation (Part-C ex. 3)
+- [x] T234 (P1) Tests: similar pair emitted as hypothesis with checklist fields
+- [x] T235 (P0) Detector registry + `Hw4Sdk.analyze()` runs all detectors → findings.json; CLI `hw4 analyze`
+- [x] T236 (P0) Integration test: analyze(mini_repo graph) yields planted findings exactly
 - [ ] T237 (P0) Run analyze on TARGET iteration-0 graph; triage every hypothesis manually
 - [ ] T238 (P0) For ≥2 findings: complete source validation to EXTRACTED-backed status=validated (open files, confirm) — fix loop may only consume validated findings (FR-6.3)
 - [ ] T239 (P0) For each rejected hypothesis: record why (false-positive analysis is part of the report's credibility)
@@ -316,9 +316,9 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T251 (P2) Mini literature note in notebook: Lost in the Middle (Liu et al. 2024) citation + 2-sentence relevance (Part-B grounding)
 - [ ] T252 (P0) Check: every FINDINGS.md conclusion sentence uses qualified language matching its evidence level (search for unqualified "is/must/always" near INFERRED claims)
 - [ ] T253 (P1) File-length audit; refactor any service >130 lines
-- [ ] T254 (P1) Coverage check on detectors ≥85%
+- [x] T254 (P1) Coverage check on detectors ≥85%
 - [ ] T255 (P2) Export FINDINGS.md → vault wiki mirror
-- [ ] T256 (P1) Confirm findings.json schema matches doc (T098) byte-for-byte (json schema validation test)
+- [x] T256 (P1) Confirm findings.json schema matches doc (T098) byte-for-byte (json schema validation test)
 - [ ] T257 (P2) Graph-literacy self-test: can each teammate explain every edge label used? (oral check, 10 min)
 - [ ] T258 (P1) List AMBIGUOUS edges consumed anywhere in findings → must be zero or explicitly human-resolved
 - [ ] T259 (P2) Record 2–3 "surprises" the graph revealed vs naive impression (T119) — strong report material

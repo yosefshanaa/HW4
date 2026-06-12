@@ -14,6 +14,7 @@ from pathlib import Path
 
 from hw4.sdk.errors import ServiceNotReadyError
 from hw4.services import graph_metrics
+from hw4.services.detectors import registry
 from hw4.services.graph_models import Graph
 from hw4.services.graph_runner import GraphRunner
 from hw4.services.retrieval import ContextBundle, Retriever
@@ -70,6 +71,15 @@ def build_vault(sdk, graph_path: Path | str | None = None) -> VaultBuildReport:
     return VaultBuildReport(
         iteration=graph.iteration, pages=pages, index_path=index_path, raw_copies=raw_copies
     )
+
+
+def analyze(sdk, graph_path: Path | str | None = None):
+    """All detectors over one graph -> ranked findings + findings.json (FR-6)."""
+    graph = Graph.load(graph_path) if graph_path else latest_graph(sdk)
+    metrics = graph_metrics.compute(graph, sdk.config)
+    findings = registry.run_all(graph, metrics, sdk.config)
+    registry.dump_findings(findings, sdk.results_dir / "findings.json", graph.iteration)
+    return findings
 
 
 def ask(sdk, question: str, mode: str = "graph") -> AskResult:

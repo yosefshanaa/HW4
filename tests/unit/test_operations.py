@@ -29,6 +29,13 @@ FULL_SETUP = {
     "vault": {"project": "proj-x", "domains": ["python"], "top_hub_pages": 3,
               "wiki_page_max_lines": 40, "index_max_entries_per_section": 8,
               "min_community_size": 3},
+    "detectors": {
+        "spof": {"min_mandatory_ratio": 0.3, "max_rank": 5},
+        "god_node": {"degree_multiplier": 2.0, "min_fan_out": 3, "min_communities": 2},
+        "isolation": {"min_size": 1},
+        "traceability": {"report_undocumented": False},
+        "duplication": {"min_confidence": 0.5},
+    },
 }
 
 
@@ -104,6 +111,29 @@ class TestAsk:
         sdk, _ = make_sdk(tmp_path)
         with pytest.raises(ServiceNotReadyError, match="Phase 7"):
             sdk.ask("q", mode="naive")
+
+
+class TestAnalyze:
+    def test_planted_defects_found_on_mini_repo(self, tmp_path):
+        """T236: the fixture's answer key, end to end through the SDK."""
+        from hw4.constants import FindingKind
+
+        sdk, _ = make_sdk(tmp_path)
+        findings = sdk.analyze()
+        by_kind = {}
+        for finding in findings:
+            by_kind.setdefault(finding.kind, []).append(finding)
+        gap_nodes = {n for f in by_kind[FindingKind.TRACE_GAP] for n in f.nodes}
+        assert "missing:app.plugins" in gap_nodes  # the planted README lie
+        island_nodes = {n for f in by_kind[FindingKind.ISOLATED] for n in f.nodes}
+        assert {"orphan", "orphan.legacy"} <= island_nodes  # the planted orphan
+        assert (tmp_path / "results" / "findings.json").exists()
+
+    def test_findings_ranked_with_stable_ids(self, tmp_path):
+        sdk, _ = make_sdk(tmp_path)
+        findings = sdk.analyze()
+        assert findings, "mini_repo must produce findings"
+        assert [f.id for f in findings] == [f"F-{i:03d}" for i in range(1, len(findings) + 1)]
 
 
 class TestContextBudgetSanity:

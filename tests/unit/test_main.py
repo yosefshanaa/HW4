@@ -61,6 +61,7 @@ class TestDispatch:
             (["graph", "repo/", "--iteration", "2"], ("build_graph", ("repo/",), {"iteration": 2})),
             (["vault", "g.json"], ("build_vault", ("g.json",), {})),
             (["analyze", "g.json"], ("analyze", ("g.json",), {})),
+            (["analyze"], ("analyze", (None,), {})),
             (["ask", "why?"], ("ask", ("why?",), {"mode": "graph"})),
             (["ask", "why?", "--mode", "naive"], ("ask", ("why?",), {"mode": "naive"})),
             (["fix", "F-001"], ("fix", ("F-001",), {})),

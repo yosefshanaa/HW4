@@ -36,7 +36,8 @@ def build_parser() -> argparse.ArgumentParser:
                        help="path to graph.json (default: latest iteration)")
 
     analyze = sub.add_parser("analyze", help="run detectors, rank findings (FR-6)")
-    analyze.add_argument("graph_path", help="path to graph.json")
+    analyze.add_argument("graph_path", nargs="?", default=None,
+                         help="path to graph.json (default: latest iteration)")
 
     ask = sub.add_parser("ask", help="answer a question about the repo (FR-8)")
     ask.add_argument("question")

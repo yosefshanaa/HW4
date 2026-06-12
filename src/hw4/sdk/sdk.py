@@ -114,9 +114,9 @@ class Hw4Sdk:
         """Generate the Obsidian vault from a graph (FR-3)."""
         return operations.build_vault(self, graph_path)
 
-    def analyze(self, graph_path: Path | str):
+    def analyze(self, graph_path: Path | str | None = None):
         """Run all detectors, return ranked findings (FR-6)."""
-        raise self._not_ready("analyze", "Phase 6")
+        return operations.analyze(self, graph_path)
 
     def ask(self, question: str, *, mode: str = "graph"):
         """Answer a question about the repo, graph-guided or naive (FR-8)."""
