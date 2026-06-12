@@ -229,10 +229,10 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T173 (P0) TDD `services/vault_builder.py`: create taxonomy `00_Portfolio/10_Domains/20_Projects/30_Comparisons` + project folder with `raw/`, `wiki/`, `index.md`, `log.md` (Part-A case study; Part-B anatomy)
 - [x] T174 (P0) Portfolio/Domain/Project notes carry frontmatter (type/status/project) and a one-line routing title (titles are the graph fuel, L07 §5)
 - [x] T175 (P0) Tests: structure creation idempotent, frontmatter valid YAML, re-run does not clobber human edits (guard or versioned sections)
-- [ ] T176 (P0) TDD `services/wiki_writer.py`: generate wiki page per major entity (top-N central modules/classes, each community, each architectural decision found) — short pages, one concept each, wikilinked
-- [ ] T177 (P0) Wiki page template: Summary (≤3 sentences), Evidence (relations + confidence + source_file), Links (`[[...]]`), Open-questions
-- [ ] T178 (P0) Page generation uses LLM (cheap tier) THROUGH gatekeeper with purpose tag `wiki.gen`; deterministic fields (evidence lists) injected programmatically, not asked from the LLM
-- [ ] T179 (P0) Tests with mocked LLM: template fill, wikilink integrity (no links to nonexistent pages), length cap enforcement
+- [x] T176 (P0) TDD `services/wiki_writer.py`: generate wiki page per major entity (top-N central modules/classes, each community, each architectural decision found) — short pages, one concept each, wikilinked
+- [x] T177 (P0) Wiki page template: Summary (≤3 sentences), Evidence (relations + confidence + source_file), Links (`[[...]]`), Open-questions
+- [x] T178 (P0) Page generation uses LLM (cheap tier) THROUGH gatekeeper with purpose tag `wiki.gen`; deterministic fields (evidence lists) injected programmatically, not asked from the LLM
+- [x] T179 (P0) Tests with mocked LLM: template fill, wikilink integrity (no links to nonexistent pages), length cap enforcement
 - [x] T180 (P0) `index.md` generator: compact navigation map — communities → key pages; reads in <1 screen (index-first rule, Part-B)
 - [x] T181 (P0) `log.md` appender: every ingestion/update logged (what, when, source, tool) — traceability (Part-B)
 - [x] T182 (P0) Tests: index regeneration stable order, log append-only

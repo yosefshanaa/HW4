@@ -86,6 +86,7 @@
     ],
     "top_hub_pages": 5,
     "wiki_page_max_lines": 40,
-    "index_max_entries_per_section": 8
+    "index_max_entries_per_section": 8,
+    "min_community_size": 3
   }
 }
