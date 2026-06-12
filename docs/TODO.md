@@ -149,9 +149,9 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T108 (P0) BugsInPy timebox attempt (≤90 min hard stop): clone framework, try ONE project env setup; if friction → abandon without guilt (lecturer-sanctioned, L07 §11.2)
 - [ ] T109 (P0) Decision meeting: pick primary repo + named fallback; record decision trail + reasons in TARGET_REPO.md (ADR-2 instantiation)
 - [ ] T110 (P0) If personal codebase chosen instead — obtain explicit lecturer approval BEFORE proceeding (L07 §11.1.1); archive the approval message
-- [ ] T111 (P0) TDD `services/repo_service.py`: clone(url, dest), checkout(commit), provenance() → {url, commit_hash, branch, license, loc, files}
-- [ ] T112 (P0) repo_service: LOC counter (code lines per file, totals) — reused later by file-length checks on target analysis
-- [ ] T113 (P0) Tests: clone into tmp (use local fixture repo, not network), provenance fields, checkout behavior, error on dirty workspace
+- [x] T111 (P0) TDD `services/repo_service.py`: clone(url, dest), checkout(commit), provenance() → {url, commit_hash, branch, license, loc, files}
+- [x] T112 (P0) repo_service: LOC counter (code lines per file, totals) — reused later by file-length checks on target analysis
+- [x] T113 (P0) Tests: clone into tmp (use local fixture repo, not network), provenance fields, checkout behavior, error on dirty workspace
 - [ ] T114 (P0) Clone chosen repo into `workspace/target/` (gitignored); pin to specific commit hash
 - [ ] T115 (P0) Record provenance into TARGET_REPO.md: URL, commit, license text reference, LOC, file count, date
 - [ ] T116 (P0) Unfamiliarity attestation signed by both teammates in TARGET_REPO.md
@@ -162,7 +162,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [ ] T121 (P1) License compliance note: confirm educational modification permitted; cite clause
 - [ ] T122 (P0) Define `workspace/` lifecycle: never committed; regeneration command documented in README
 - [ ] T123 (P1) Create tiny synthetic fixture repo under `tests/fixtures/mini_repo/` (≤10 files: 2 packages, planted god-node module, an orphan module, a docs file referencing nonexistent module) — powers ALL unit/integration tests without network
-- [ ] T124 (P0) Tests using mini_repo: repo_service provenance + LOC on fixture
+- [x] T124 (P0) Tests using mini_repo: repo_service provenance + LOC on fixture
 - [ ] T125 (P1) Mini_repo includes a tiny pytest suite (3 tests) so fix-loop integration tests can run real pytest cheaply
 - [ ] T126 (P1) Commit Phase 3 (without workspace/)
 - [ ] T127 (P1) PROMPTS.md update

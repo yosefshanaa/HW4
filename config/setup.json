@@ -15,8 +15,14 @@
     "api_key_env": "ANTHROPIC_API_KEY"
   },
   "pricing_per_mtok": {
-    "claude-haiku-4-5-20251001": { "input": 1.0, "output": 5.0 },
-    "claude-sonnet-4-6": { "input": 3.0, "output": 15.0 }
+    "claude-haiku-4-5-20251001": {
+      "input": 1.0,
+      "output": 5.0
+    },
+    "claude-sonnet-4-6": {
+      "input": 3.0,
+      "output": 15.0
+    }
   },
   "retrieval": {
     "k_pages": 3,
@@ -37,5 +43,9 @@
   "budget": {
     "max_usd": 10.0,
     "warn_usd": 7.0
+  },
+  "repo": {
+    "timeout_seconds": 300,
+    "default_dirname": "target"
   }
 }
