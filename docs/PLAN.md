@@ -56,7 +56,7 @@ All files ≤150 code lines (NFR-8). Planned split is below; if any file approac
 HW4/
 ├── src/hw4/
 │   ├── __init__.py                  # exports Hw4Sdk, __version__
-│   ├── main.py                      # CLI entry (argparse/typer) — thin
+│   ├── main.py                      # CLI entry — DECIDED (T025): stdlib argparse, cuts a dep — thin
 │   ├── constants.py                 # immutable constants, Enums (EdgeEvidence, FindingKind, StopReason)
 │   ├── sdk/
 │   │   ├── __init__.py
@@ -155,6 +155,7 @@ Design rationale: Part-C demands that every conclusion trace to relation + confi
 - Each wiki page: frontmatter `type/status/project`, one concept per page, wikilinks; pages are short (≤~40 lines) and written for re-retrieval (Part-B).
 - `index.md` is the navigation hub and is the ONLY thing loaded by default; `log.md` records every ingestion (what, when, source) for traceability.
 - The most important line of every file is its title (L07 §5 "graph over skills") — titles are written as routing descriptions.
+- Language policy — DECIDED (T093): vault and all generated docs in English; Hebrew only where a course term has no faithful translation, given with an inline gloss.
 
 ### 2.4 Retrieval discipline (token engine)
 

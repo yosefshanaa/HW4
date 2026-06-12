@@ -134,7 +134,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T097 (P1) Define loop_log.json schema doc (iteration, finding_id, diff_stats, tests, graph_hash_before/after, metric_deltas, tokens, verdict, stop_reason)
 - [x] T098 (P1) Define findings.json schema doc (id, kind, nodes[], evidence_chain[], confidence, status{hypothesis,validated,rejected,fixed,blocked})
 - [ ] T099 (P2) Glossary page in vault: hub, bridge, community, betweenness, SPOF, evidence classes (reused later as wiki seed)
-- [ ] T100 (P0) Commit docs suite; tag `m0-docs-approved`
+- [x] T100 (P0) Commit docs suite; tag `m0-docs-approved`
 - [x] T101 (P1) Log doc-authoring prompts to PROMPTS.md
 - [ ] T102 (P1) Calendar check: confirm submission deadline; back-plan milestones M2–M8 with dates; write into PLAN §12
 - [ ] T103 (P2) Set up shared scratchpad for pair notes (decisions made verbally must land in ADRs same day)
@@ -636,7 +636,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 |---|---|---|---|---|
 | 0 Environment | T001–T030 | 27/30 | in progress (T007 user .env, T023 Obsidian, T028 editor pending) | |
 | 1 Shared infra & SDK | T031–T075 | 40/45 | done core; T042,T061,T071,T072,T074 open | 2026-06-12 |
-| 2 Docs & approvals | T076–T105 | 0/30 | not started | |
+| 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
 | 3 Target repo | T106–T130 | 0/25 | not started | |
 | 4 Graph pipeline | T131–T172 | 0/42 | not started | |
 | 5 Vault & wiki | T173–T210 | 0/38 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **67/515** | | |
+| **Total** | **515 tasks** | **91/515** | | |
 
 *End of TODO v1.00.*
