@@ -18,94 +18,94 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ## Phase 0 — Environment & Tooling (Milestone M1)
 **Phase DoD:** clean machine can run `uv sync` + quality-gates script green on the empty skeleton; no pip/venv anywhere.
 
-- [ ] T001 (P0) Verify Python ≥3.10 available locally; record exact version in README prerequisites
-- [ ] T002 (P0) Install `uv`; verify `uv --version`; document install command for graders
-- [ ] T003 (P0) Confirm rule with both teammates: NO `pip install`, `python -m`, `venv`, `virtualenv` anywhere — code, docs, scripts, muscle memory
-- [ ] T004 (P0) `git init` repository in HW4 root; set user.name/user.email
-- [ ] T005 (P0) Create `.gitignore`: `.env`, `*.pem`, `*.key`, `credentials.json`, `workspace/`, `__pycache__/`, `.coverage`, `htmlcov/`, `.ruff_cache/`, `results/logs/`
-- [ ] T006 (P0) Create `.env-example` with dummy values for every secret we anticipate (LLM key(s)); commit it
+- [x] T001 (P0) Verify Python ≥3.10 available locally; record exact version in README prerequisites
+- [x] T002 (P0) Install `uv`; verify `uv --version`; document install command for graders
+- [x] T003 (P0) Confirm rule with both teammates: NO `pip install`, `python -m`, `venv`, `virtualenv` anywhere — code, docs, scripts, muscle memory
+- [x] T004 (P0) `git init` repository in HW4 root; set user.name/user.email
+- [x] T005 (P0) Create `.gitignore`: `.env`, `*.pem`, `*.key`, `credentials.json`, `workspace/`, `__pycache__/`, `.coverage`, `htmlcov/`, `.ruff_cache/`, `results/logs/`
+- [x] T006 (P0) Create `.env-example` with dummy values for every secret we anticipate (LLM key(s)); commit it
 - [ ] T007 (P0) Create local `.env` from example with real key; verify it is NOT tracked (`git status`)
-- [ ] T008 (P0) `uv init` / author `pyproject.toml`: name `hw4`, version `1.00`, description, authors, license, `requires-python >=3.10`
-- [ ] T009 (P0) `uv add` runtime deps: networkx, typer (or argparse stdlib — decide now), pydantic (or dataclasses — decide now), pyyaml, anthropic (or chosen provider SDK), crewai
-- [ ] T010 (P0) `uv add --dev` dev deps: pytest, pytest-cov, ruff
-- [ ] T011 (P0) Commit `uv.lock`; verify `uv sync` from scratch in a temp clone reproduces env
-- [ ] T012 (P0) Configure `[tool.ruff]` per guidelines §7.1: line-length 100, target py310, select E,F,W,I,N,UP,B,C4,SIM, ignore E501
-- [ ] T013 (P0) Configure `[tool.coverage.run]` source=["src"], omit main.py/tests/gui; `[tool.coverage.report] fail_under = 85`
-- [ ] T014 (P0) Configure `[tool.pytest.ini_options]`: testpaths, addopts `--cov=src --cov-report=term-missing`
-- [ ] T015 (P0) Verify `uv run ruff check` runs (passes trivially on empty src)
-- [ ] T016 (P0) Verify `uv run pytest` runs (collects zero tests without error)
-- [ ] T017 (P0) Create `scripts/check_gates.py` skeleton: runs ruff, pytest+cov, file-length check, hardcode grep, secrets grep; exits nonzero on any failure
-- [ ] T018 (P0) Implement file-length checker: fail if any `src/**/*.py` exceeds 150 code lines (blank + comment lines excluded per guidelines §3.2)
-- [ ] T019 (P1) Implement hardcode grep: flag `http(s)://` literals, numeric rate/timeout assignments, `api_key =` patterns inside src/
-- [ ] T020 (P1) Implement secrets grep: scan tracked files for key-like strings (`sk-`, `AKIA`, long base64) — run also at packaging time
-- [ ] T021 (P0) Create directory skeleton exactly as PLAN §1.3 (src/hw4/{sdk,services,shared,services/detectors,services/agents,services/fixloop,services/experiment}, tests/{unit,integration}, config, docs, vault, data, results, notebooks, workspace)
-- [ ] T022 (P0) Add `__init__.py` to every package dir; root `src/hw4/__init__.py` exports `__version__`
+- [x] T008 (P0) `uv init` / author `pyproject.toml`: name `hw4`, version `1.00`, description, authors, license, `requires-python >=3.10`
+- [x] T009 (P0) `uv add` runtime deps: networkx, typer (or argparse stdlib — decide now), pydantic (or dataclasses — decide now), pyyaml, anthropic (or chosen provider SDK), crewai
+- [x] T010 (P0) `uv add --dev` dev deps: pytest, pytest-cov, ruff
+- [x] T011 (P0) Commit `uv.lock`; verify `uv sync` from scratch in a temp clone reproduces env
+- [x] T012 (P0) Configure `[tool.ruff]` per guidelines §7.1: line-length 100, target py310, select E,F,W,I,N,UP,B,C4,SIM, ignore E501
+- [x] T013 (P0) Configure `[tool.coverage.run]` source=["src"], omit main.py/tests/gui; `[tool.coverage.report] fail_under = 85`
+- [x] T014 (P0) Configure `[tool.pytest.ini_options]`: testpaths, addopts `--cov=src --cov-report=term-missing`
+- [x] T015 (P0) Verify `uv run ruff check` runs (passes trivially on empty src)
+- [x] T016 (P0) Verify `uv run pytest` runs (collects zero tests without error)
+- [x] T017 (P0) Create `scripts/check_gates.py` skeleton: runs ruff, pytest+cov, file-length check, hardcode grep, secrets grep; exits nonzero on any failure
+- [x] T018 (P0) Implement file-length checker: fail if any `src/**/*.py` exceeds 150 code lines (blank + comment lines excluded per guidelines §3.2)
+- [x] T019 (P1) Implement hardcode grep: flag `http(s)://` literals, numeric rate/timeout assignments, `api_key =` patterns inside src/
+- [x] T020 (P1) Implement secrets grep: scan tracked files for key-like strings (`sk-`, `AKIA`, long base64) — run also at packaging time
+- [x] T021 (P0) Create directory skeleton exactly as PLAN §1.3 (src/hw4/{sdk,services,shared,services/detectors,services/agents,services/fixloop,services/experiment}, tests/{unit,integration}, config, docs, vault, data, results, notebooks, workspace)
+- [x] T022 (P0) Add `__init__.py` to every package dir; root `src/hw4/__init__.py` exports `__version__`
 - [ ] T023 (P0) Verify Obsidian desktop installed; create empty test vault; confirm graph view renders
-- [ ] T024 (P0) Verify git CLI + GitHub access (clone over https) from this machine
-- [ ] T025 (P1) Decide CLI framework (typer vs argparse) — record one-line note in PLAN §1.3 margin; stdlib argparse acceptable to cut deps
-- [ ] T026 (P1) Set up pre-commit habit (manual or hook): run check_gates before every commit
-- [ ] T027 (P1) Create `Makefile`-style task runner OR document `uv run` invocations in README dev section (no make dependency required)
+- [x] T024 (P0) Verify git CLI + GitHub access (clone over https) from this machine
+- [x] T025 (P1) Decide CLI framework (typer vs argparse) — record one-line note in PLAN §1.3 margin; stdlib argparse acceptable to cut deps
+- [x] T026 (P1) Set up pre-commit habit (manual or hook): run check_gates before every commit
+- [x] T027 (P1) Create `Makefile`-style task runner OR document `uv run` invocations in README dev section (no make dependency required)
 - [ ] T028 (P2) Configure editor (ruff plugin, 100-col ruler) for both teammates
-- [ ] T029 (P0) First commit: skeleton + tooling, message "chore: project skeleton + quality gates (v1.00)"
-- [ ] T030 (P0) Smoke-test `uv run python -c "import hw4"` succeeds
+- [x] T029 (P0) First commit: skeleton + tooling, message "chore: project skeleton + quality gates (v1.00)"
+- [x] T030 (P0) Smoke-test `uv run python -c "import hw4"` succeeds
 
 ## Phase 1 — Shared Infrastructure & SDK Skeleton (Milestone M1)
 **Phase DoD:** Hw4Sdk facade + gatekeeper + config + ledger + process runner implemented, unit-tested, coverage ≥85% on shared/, ruff clean.
 
 ### constants & version
-- [ ] T031 (P0) `constants.py`: Enums `EdgeEvidence{EXTRACTED,INFERRED,AMBIGUOUS}`, `FindingKind{SPOF,GOD_NODE,ISOLATED,TRACE_GAP,DUPLICATION}`, `StopReason{MAX_ITERATIONS,GOAL_METRIC_REACHED,TESTS_GREEN_NO_MORE_FINDINGS,BUDGET_EXCEEDED,NO_SAFE_ACTION}`
-- [ ] T032 (P0) Tests for constants: enum membership, string round-trip
-- [ ] T033 (P0) `shared/version.py`: `__version__ = "1.00"`; helper `assert_config_compatible(cfg_version)`
-- [ ] T034 (P0) Test version compatibility check (match, mismatch raises)
+- [x] T031 (P0) `constants.py`: Enums `EdgeEvidence{EXTRACTED,INFERRED,AMBIGUOUS}`, `FindingKind{SPOF,GOD_NODE,ISOLATED,TRACE_GAP,DUPLICATION}`, `StopReason{MAX_ITERATIONS,GOAL_METRIC_REACHED,TESTS_GREEN_NO_MORE_FINDINGS,BUDGET_EXCEEDED,NO_SAFE_ACTION}`
+- [x] T032 (P0) Tests for constants: enum membership, string round-trip
+- [x] T033 (P0) `shared/version.py`: `__version__ = "1.00"`; helper `assert_config_compatible(cfg_version)`
+- [x] T034 (P0) Test version compatibility check (match, mismatch raises)
 
 ### config
-- [ ] T035 (P0) Write `config/setup.json` v1.00: paths (workspace, results, vault), models{cheap,strong}, retrieval{k, ego_radius, max_nodes}, loop{max_iterations, metric_improvement_threshold}, experiment{n_questions_min, repetitions, temperature}, budget{max_usd, warn_usd}
-- [ ] T036 (P0) Write `config/rate_limits.json` v1.00 per guidelines §5.2 schema (default service: rpm 30, rph 500, concurrent 5, retry_after 30, max_retries 3, queue_depth)
-- [ ] T037 (P0) Write `config/logging_config.json` (level, format, file targets)
-- [ ] T038 (P0) TDD `shared/config.py`: load JSON files, merge env overrides, typed getters with defaults, fail on missing mandatory keys
-- [ ] T039 (P0) config.py validates `"version"` key of every JSON at startup against compatibility rule (NFR-6)
-- [ ] T040 (P0) Tests: valid load, missing file, missing version, env override, default fallback (≥5 cases)
-- [ ] T041 (P0) Secrets: config exposes `get_secret(name)` reading ONLY from env; test that secrets never appear in config files
+- [x] T035 (P0) Write `config/setup.json` v1.00: paths (workspace, results, vault), models{cheap,strong}, retrieval{k, ego_radius, max_nodes}, loop{max_iterations, metric_improvement_threshold}, experiment{n_questions_min, repetitions, temperature}, budget{max_usd, warn_usd}
+- [x] T036 (P0) Write `config/rate_limits.json` v1.00 per guidelines §5.2 schema (default service: rpm 30, rph 500, concurrent 5, retry_after 30, max_retries 3, queue_depth)
+- [x] T037 (P0) Write `config/logging_config.json` (level, format, file targets)
+- [x] T038 (P0) TDD `shared/config.py`: load JSON files, merge env overrides, typed getters with defaults, fail on missing mandatory keys
+- [x] T039 (P0) config.py validates `"version"` key of every JSON at startup against compatibility rule (NFR-6)
+- [x] T040 (P0) Tests: valid load, missing file, missing version, env override, default fallback (≥5 cases)
+- [x] T041 (P0) Secrets: config exposes `get_secret(name)` reading ONLY from env; test that secrets never appear in config files
 - [ ] T042 (P1) Negative test: constructing config with hardcoded-looking override logs a warning (guard habit)
 
 ### logging & process runner
-- [ ] T043 (P0) TDD `shared/logging_setup.py`: structured jsonl logger factory writing to results/logs/<run-id>.jsonl + console
-- [ ] T044 (P0) Tests: log record schema, file creation, level filtering
-- [ ] T045 (P0) TDD `shared/process_runner.py`: run subprocess with timeout, captured output, raise-or-return policy, structured log of cmd/duration/rc
-- [ ] T046 (P0) Tests: success, nonzero rc, timeout kill, output capture (use `echo`/`false` portable commands or python -c)
-- [ ] T047 (P1) ProcessRunner records every invocation to run log (deterministic audit trail for graphify/pytest/git calls)
+- [x] T043 (P0) TDD `shared/logging_setup.py`: structured jsonl logger factory writing to results/logs/<run-id>.jsonl + console
+- [x] T044 (P0) Tests: log record schema, file creation, level filtering
+- [x] T045 (P0) TDD `shared/process_runner.py`: run subprocess with timeout, captured output, raise-or-return policy, structured log of cmd/duration/rc
+- [x] T046 (P0) Tests: success, nonzero rc, timeout kill, output capture (use `echo`/`false` portable commands or python -c)
+- [x] T047 (P1) ProcessRunner records every invocation to run log (deterministic audit trail for graphify/pytest/git calls)
 
 ### gatekeeper + ledger + llm client
-- [ ] T048 (P0) TDD `shared/ledger.py`: append-only CSV/JSONL ledger — fields: ts, purpose_tag, model, input_tokens, output_tokens, cost_usd, latency_ms, status
-- [ ] T049 (P0) Ledger cost computation from per-model price table in config (prices are CONFIG, not code)
-- [ ] T050 (P0) Tests: append, totals by purpose tag, budget summation, file rotation safety
-- [ ] T051 (P0) TDD `shared/gatekeeper.py` class `ApiGatekeeper(config)` with `execute(call, *, purpose_tag)` per guidelines §5.1 interface
-- [ ] T052 (P0) Gatekeeper: rate-limit check before execution (rpm/rph windows from rate_limits.json)
-- [ ] T053 (P0) Gatekeeper: FIFO queue when saturated — request waits, never dropped; configurable max queue depth with backpressure warning
-- [ ] T054 (P0) Gatekeeper: retry transient failures (max_retries, retry_after backoff from config)
-- [ ] T055 (P0) Gatekeeper: every call logged to ledger; budget ceiling check — raise `BudgetExceeded` when cumulative cost ≥ budget.max_usd
-- [ ] T056 (P0) Gatekeeper: `get_queue_status()` returns depth + stats
-- [ ] T057 (P0) Tests: limit enforcement (time-mocked), queue order, retry then success, retry exhaustion, budget stop, logging side-effect (≥8 cases)
-- [ ] T058 (P0) TDD `shared/llm_client.py`: provider-agnostic interface `complete(messages, model_tier) -> (text, usage)`; Anthropic adapter; usage tokens read from API response metadata
-- [ ] T059 (P0) llm_client is ONLY callable through gatekeeper.execute (enforce by constructor wiring; test that direct use without gatekeeper raises)
-- [ ] T060 (P0) Tests with fake transport: success, usage extraction, provider error mapping, model-tier resolution from config
+- [x] T048 (P0) TDD `shared/ledger.py`: append-only CSV/JSONL ledger — fields: ts, purpose_tag, model, input_tokens, output_tokens, cost_usd, latency_ms, status
+- [x] T049 (P0) Ledger cost computation from per-model price table in config (prices are CONFIG, not code)
+- [x] T050 (P0) Tests: append, totals by purpose tag, budget summation, file rotation safety
+- [x] T051 (P0) TDD `shared/gatekeeper.py` class `ApiGatekeeper(config)` with `execute(call, *, purpose_tag)` per guidelines §5.1 interface
+- [x] T052 (P0) Gatekeeper: rate-limit check before execution (rpm/rph windows from rate_limits.json)
+- [x] T053 (P0) Gatekeeper: FIFO queue when saturated — request waits, never dropped; configurable max queue depth with backpressure warning
+- [x] T054 (P0) Gatekeeper: retry transient failures (max_retries, retry_after backoff from config)
+- [x] T055 (P0) Gatekeeper: every call logged to ledger; budget ceiling check — raise `BudgetExceeded` when cumulative cost ≥ budget.max_usd
+- [x] T056 (P0) Gatekeeper: `get_queue_status()` returns depth + stats
+- [x] T057 (P0) Tests: limit enforcement (time-mocked), queue order, retry then success, retry exhaustion, budget stop, logging side-effect (≥8 cases)
+- [x] T058 (P0) TDD `shared/llm_client.py`: provider-agnostic interface `complete(messages, model_tier) -> (text, usage)`; Anthropic adapter; usage tokens read from API response metadata
+- [x] T059 (P0) llm_client is ONLY callable through gatekeeper.execute (enforce by constructor wiring; test that direct use without gatekeeper raises)
+- [x] T060 (P0) Tests with fake transport: success, usage extraction, provider error mapping, model-tier resolution from config
 - [ ] T061 (P1) Second-provider adapter stub behind same interface (compile-time proof of swappability; can be NotImplemented)
 
 ### SDK facade & CLI
-- [ ] T062 (P0) TDD `sdk/sdk.py` class `Hw4Sdk(config)`: method stubs `build_graph()`, `build_vault()`, `analyze()`, `ask(question)`, `fix(finding_id)`, `run_experiment()`, `report()` — each delegates to services; NO business logic in CLI/agents (NFR-1)
-- [ ] T063 (P0) Tests: facade wires services with shared gatekeeper/config instances (constructor injection)
-- [ ] T064 (P0) `main.py` CLI: subcommands graph/vault/analyze/ask/fix/experiment/report/gates — thin parse→SDK calls only
-- [ ] T065 (P0) CLI smoke tests: `--help`, unknown command error, each subcommand reaches SDK stub (mocked)
-- [ ] T066 (P0) Wire `uv run hw4` entry point in pyproject `[project.scripts]`; verify it executes
-- [ ] T067 (P0) Run check_gates: ruff 0, coverage ≥85% on implemented modules, file lengths OK
-- [ ] T068 (P0) Commit Phase 1, tag `m1-skeleton`
-- [ ] T069 (P1) Review pass: any duplicated logic across shared modules? extract now (NFR-9)
-- [ ] T070 (P1) Docstrings audit: every public function/class/module has docstring explaining WHY (NFR-11)
+- [x] T062 (P0) TDD `sdk/sdk.py` class `Hw4Sdk(config)`: method stubs `build_graph()`, `build_vault()`, `analyze()`, `ask(question)`, `fix(finding_id)`, `run_experiment()`, `report()` — each delegates to services; NO business logic in CLI/agents (NFR-1)
+- [x] T063 (P0) Tests: facade wires services with shared gatekeeper/config instances (constructor injection)
+- [x] T064 (P0) `main.py` CLI: subcommands graph/vault/analyze/ask/fix/experiment/report/gates — thin parse→SDK calls only
+- [x] T065 (P0) CLI smoke tests: `--help`, unknown command error, each subcommand reaches SDK stub (mocked)
+- [x] T066 (P0) Wire `uv run hw4` entry point in pyproject `[project.scripts]`; verify it executes
+- [x] T067 (P0) Run check_gates: ruff 0, coverage ≥85% on implemented modules, file lengths OK
+- [x] T068 (P0) Commit Phase 1, tag `m1-skeleton`
+- [x] T069 (P1) Review pass: any duplicated logic across shared modules? extract now (NFR-9)
+- [x] T070 (P1) Docstrings audit: every public function/class/module has docstring explaining WHY (NFR-11)
 - [ ] T071 (P1) `__init__.py` exports audit: `__all__` defined in sdk and shared packages
 - [ ] T072 (P2) Type-check pass with mypy/pyright locally (not a gate, hygiene only)
-- [ ] T073 (P0) Verify relative imports/paths only; no absolute filesystem paths in code (paths come from config) (NFR-10)
+- [x] T073 (P0) Verify relative imports/paths only; no absolute filesystem paths in code (paths come from config) (NFR-10)
 - [ ] T074 (P1) Start `docs/PROMPTS.md` with prompts used so far for scaffolding (NFR-14)
-- [ ] T075 (P1) Record any deviation discovered between PLAN file map and reality — update PLAN (living doc, version bump note)
+- [x] T075 (P1) Record any deviation discovered between PLAN file map and reality — update PLAN (living doc, version bump note)
 
 ## Phase 2 — Documentation Suite & Approvals (Milestone M0 — gates implementation)
 **Phase DoD:** PRD/PLAN/TODO reviewed by both teammates; all 6 dedicated PRDs drafted; open questions dispatched to lecturer.
@@ -634,8 +634,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 
 | Phase | Tasks | Done | Status | Exit date |
 |---|---|---|---|---|
-| 0 Environment | T001–T030 | 0/30 | not started | |
-| 1 Shared infra & SDK | T031–T075 | 0/45 | not started | |
+| 0 Environment | T001–T030 | 27/30 | in progress (T007 user .env, T023 Obsidian, T028 editor pending) | |
+| 1 Shared infra & SDK | T031–T075 | 40/45 | done core; T042,T061,T071,T072,T074 open | 2026-06-12 |
 | 2 Docs & approvals | T076–T105 | 0/30 | not started | |
 | 3 Target repo | T106–T130 | 0/25 | not started | |
 | 4 Graph pipeline | T131–T172 | 0/42 | not started | |
@@ -652,6 +652,6 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 15 README & docs | T438–T455 | 0/18 | not started | |
 | 16 Final & ship | T456–T505 | 0/50 | not started | |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **0/515** | | |
+| **Total** | **515 tasks** | **67/515** | | |
 
 *End of TODO v1.00.*

@@ -18,8 +18,12 @@ This README will become a complete user manual by milestone M8
 
 ## Quick start (development)
 
+Prerequisites: `git` and [uv](https://docs.astral.sh/uv/) — install with
+`curl -LsSf https://astral.sh/uv/install.sh | sh`. uv provisions the
+pinned Python automatically (developed on uv-managed CPython 3.12.13;
+`requires-python >=3.10`). **No pip, no venv, ever** — uv only.
+
 ```bash
-# prerequisites: uv (https://docs.astral.sh/uv/), git
 uv sync                 # install all dependencies from uv.lock
 cp .env-example .env    # then fill in real API keys
 uv run pytest           # run test suite (coverage gate: 85%)
