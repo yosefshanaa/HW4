@@ -16,8 +16,9 @@ context stuffing in a frozen A/B experiment.
 
 | Axis | State |
 |---|---|
+| Target | **`pallets/click@8a1b1a3`** — mid-size CLI library, **9,075 source LOC / 17 files** (20,437 incl. its own tests), BSD-3, 1,672-test suite in ~14 s. Chosen + provenance in `docs/TARGET_REPO.md` |
 | Engineering | ~345 tests green · coverage ≈96% (gate 85%) · ruff 0 · all files ≤150 code lines · `scripts/check_gates.py` GREEN |
-| Analysis | target `pallets/click@8a1b1a3` graphed (1,226 nodes / 2,070 edges), **2 source-validated defects** (`results/FINDINGS.md`) |
+| Analysis | graphed into **1,226 nodes / 2,070 edges**, **2 source-validated defects** (`results/FINDINGS.md`) |
 | Token experiment (LIVE) | **85.6% input-token savings** (median 87.8%, KPI ≥70% met); first run (50.9%, default caps) archived with failure analysis (`docs/PRD_token_experiment.md`) |
 | Fix loop (LIVE) | **honest NO_SAFE_ACTION**: 4 attempts, every behavior-breaking edit caught by the target's 1,672 tests and reverted, with embedded evidence (`results/FINDINGS.md` §8, `results/dashboard.md`) |
 | Vault & agents (LIVE) | 34 LLM wiki pages; crew narratives with findings identical to the direct path |
