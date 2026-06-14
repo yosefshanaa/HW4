@@ -57,6 +57,18 @@ Direct vs agent analyze: findings are identical by construction
 (deterministic detectors); `--agents` adds careful-language narratives —
 determinism for science, agents for demonstration.
 
+## The Obsidian vault (`uv run hw4 vault`)
+
+The graph becomes a navigable Obsidian vault: an index-first hub, one LLM
+wiki page per key entity, and Obsidian's graph view of the whole knowledge
+base (index at the centre, community clusters radiating out).
+
+| Graph view — `index` hub + community clusters | `index.md` — navigation hub |
+|---|---|
+| ![Obsidian graph view](assets/vault_graph.png) | ![index.md](assets/vault_index.png) |
+| **`click.utils.echo` wiki — validated SPOF (F-002)** | **`click.core` wiki — god module (F-003)** |
+| ![echo wiki page](assets/wiki_echo.png) | ![core wiki page](assets/wiki_core.png) |
+
 ## Repository layout
 
 | Path | Purpose |

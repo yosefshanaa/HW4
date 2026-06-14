@@ -238,7 +238,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T182 (P0) Tests: index regeneration stable order, log append-only
 - [x] T183 (P0) Copy/lin raw inputs into `raw/`: GRAPH_REPORT.md, provenance, target README snapshot (raw vs wiki separation)
 - [x] T184 (P0) Run vault build on target analysis; open in Obsidian; verify graph view shows hub-and-spoke around index + community clusters
-- [ ] T185 (P0) Capture 3+ screenshots (vault graph view, a wiki page, index.md) → assets/ for README
+- [x] T185 (P0) Capture 3+ screenshots (vault graph view, a wiki page, index.md) → assets/ for README — 4 shots embedded in README (vault_graph, vault_index, wiki_echo, wiki_core)
 - [x] T186 (P0) TDD `services/retrieval.py`: question → index match → ego-subgraph (radius/cap from config) + top wiki pages (2–3) → ContextBundle
 - [x] T187 (P0) ContextBundle assembly enforces edge placement: instructions first, question last, evidence in middle kept SHORT (Part-B position-aware)
 - [x] T188 (P0) ContextBundle reports its own token estimate (tokenizer estimate OK here — it's a budget guard, not the experiment measurement)
@@ -639,7 +639,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
 | 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
 | 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
-| 5 Vault & wiki | T173–T210 | 33/38 | LIVE vault built (34 wiki pages); screenshots/Obsidian user-side | 2026-06-12 |
+| 5 Vault & wiki | T173–T210 | 34/38 | LIVE vault built (34 wiki pages); 4 Obsidian screenshots embedded in README; canvas (T199, P2) remains | 2026-06-15 |
 | 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
 | 7 Experiment baseline | T263–T292 | 28/30 | LIVE condition A measured; blind pack ready for human scoring | 2026-06-12 |
 | 8 Agents | T293–T320 | 27/28 | LIVE run done (narratives on target); T318 P2 parked | 2026-06-12 |
