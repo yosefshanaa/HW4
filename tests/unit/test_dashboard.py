@@ -5,8 +5,8 @@ from hw4.services.dashboard import render
 
 def entry(**overrides):
     base = {
-        "iteration": 1, "finding_id": "F-003", "strategy": "extract helpers",
-        "files_changed": ["src/click/core.py"], "characterization_test": "",
+        "iteration": 1, "finding_id": "F-005", "strategy": "extract helpers",
+        "files_changed": ["src/werkzeug/http.py"], "characterization_test": "",
         "tests_green": True, "graph_hash_before": "a" * 64,
         "graph_hash_after": "b" * 64,
         "metric_deltas": {"bottleneck_before": 1.0, "bottleneck_after": 0.5,
@@ -20,7 +20,7 @@ def entry(**overrides):
 class TestRender:
     def test_accepted_iteration_card(self):
         text = render({"iterations": [entry()], "stop_reason": "GOAL_METRIC_REACHED"})
-        assert "Iteration 1 — F-003 · ACCEPTED" in text
+        assert "Iteration 1 — F-005 · ACCEPTED" in text
         assert "1.0 → 0.5" in text
         assert "`aaaaaaaaaaaa` → `bbbbbbbbbbbb`" in text
 
@@ -50,6 +50,6 @@ class TestRender:
 
     def test_tokens_rendered_when_provided(self):
         text = render({"iterations": [entry()], "stop_reason": "GOAL_METRIC_REACHED"},
-                      {"F-003": {"calls": 2, "input_tokens": 1000,
+                      {"F-005": {"calls": 2, "input_tokens": 1000,
                                  "output_tokens": 200, "cost_usd": 0.012}})
         assert "1000 in / 200 out ($0.0120)" in text
