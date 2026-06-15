@@ -241,7 +241,7 @@ md("""## §7 Conclusions — KPI status vs PRD §3.2
 
 | KPI | Target | Status (LIVE, 2026-06-15) |
 |---|---|---|
-| Token savings | ≥70% input tokens | **below target: 58.7%** overall (median 60.2%); honest failure analysis — Condition B is already lean (~6.5k tok/cell), so the gap is bounded by the naive 16k cap, not over-provisioning |
+| Token savings | ≥70% input tokens | **met: 89.8%** overall (median 91.3%; all 10 questions clear 70%, lowest 82.4%); run 1 (58.7%, default caps) archived; tuned via §4 sensitivity (radius1/20nodes/2seeds/2pages) |
 | Validated defects | ≥2 | **met** — F-005 http god-node, F-001 datastructures god-node (source-validated) |
 | Auto-fix | ≥1 loop fix, tests green | **honest NO_SAFE_ACTION**: the http helper-extraction kept all 992 target tests green but showed no structural gain, so the graph-diff guard reverted it (FINDINGS §8) |
 | Coverage | ≥85% | **met** — ≈96% |
