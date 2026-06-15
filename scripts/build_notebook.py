@@ -28,10 +28,10 @@ def code(source: str) -> None:
     cells.append(nbf.v4.new_code_cell(source))
 
 
-md("""# HW4 — Research Notebook: graph-guided analysis of pallets/click
+md("""# HW4 — Research Notebook: graph-guided analysis of pallets/werkzeug
 
 Executes top-to-bottom from **committed artifacts** (`results/`,
-`config/`, `data/`) — including the LIVE 2026-06-12 measurements
+`config/`, `data/`) — including the LIVE 2026-06-15 measurements
 (experiment comparison, fix-loop log). Cells degrade to clearly-labeled
 estimates if an artifact is absent; nothing here invents numbers.
 
@@ -88,15 +88,16 @@ big = sorted((s for s in sizes.values() if s >= 3), reverse=True)
 fig, ax = plt.subplots(figsize=(8, 3.5))
 ax.bar(range(len(big)), big, color="#4878a8")
 ax.set_xlabel("community (rank by size)"); ax.set_ylabel("members")
-ax.set_title("click i00 — dependency-community sizes (≥3 members)")
+ax.set_title("werkzeug i00 — dependency-community sizes (≥3 members)")
 fig.tight_layout(); fig.savefig(ASSETS / "communities.png", dpi=150)
 plt.show()
 print(f"{len(big)} non-trivial communities; largest: {big[:5]}")""")
 
-md("""Interpretation: a handful of real clusters (tests, API core,
-terminal impl, platform compat) over a long singleton tail — consistent
-with a mature single-purpose library. The two validated findings sit
-exactly on the biggest connectors (FINDINGS.md §3).""")
+md("""Interpretation: a handful of real clusters (core package spine,
+HTTP header + response layer, dev-server, form parsing, test suites)
+over a long singleton tail — consistent with a mature single-purpose
+library. The two validated findings sit exactly on the biggest
+connectors (FINDINGS.md §3).""")
 
 md("""## §3 Token experiment — A (naive) vs B (graph-guided)
 
@@ -238,19 +239,20 @@ print("strong tier only for code edits + experiment cells (ADR-3).")""")
 
 md("""## §7 Conclusions — KPI status vs PRD §3.2
 
-| KPI | Target | Status (LIVE, 2026-06-12) |
+| KPI | Target | Status (LIVE, 2026-06-15) |
 |---|---|---|
-| Token savings | ≥70% input tokens | **met: 85.6%** overall (median 87.8%); run 1 (50.9%, default caps) archived with failure analysis; 1/10 questions below target (Q-08, explained) |
-| Validated defects | ≥2 | **met** — F-002 echo SPOF, F-003 core god module (source-validated) |
-| Auto-fix | ≥1 loop fix, tests green | **honest negative**: 4 live attempts, every behavior-breaking edit caught and reverted (FINDINGS §8); the loop mechanism itself is validated — incl. one accept path proven live before reclassification |
+| Token savings | ≥70% input tokens | **below target: 58.7%** overall (median 60.2%); honest failure analysis — Condition B is already lean (~6.5k tok/cell), so the gap is bounded by the naive 16k cap, not over-provisioning |
+| Validated defects | ≥2 | **met** — F-005 http god-node, F-001 datastructures god-node (source-validated) |
+| Auto-fix | ≥1 loop fix, tests green | **honest NO_SAFE_ACTION**: the http helper-extraction kept all 992 target tests green but showed no structural gain, so the graph-diff guard reverted it (FINDINGS §8) |
 | Coverage | ≥85% | **met** — ≈96% |
 | Gates | ruff 0, ≤150 lines/file, no hardcodes/secrets | **met** — check_gates GREEN |
 
 The auto-fix KPI is reported as an evidenced negative per T340: the
-god module resists safe automated extraction precisely because its
-concerns are entangled — the loop restated finding F-003 empirically.
-Blind quality scoring of the experiment answers (sheet + sealed key in
-results/experiment/) remains a human step before final submission.""")
+http god-node resists *metric-improving* extraction because its fan-in
+(21 importers) is unchanged by relocating private helpers — the loop
+restated finding F-005 empirically. Blind quality scoring of the
+experiment answers (sheet + sealed key in results/experiment/) remains
+a human step before final submission.""")
 
 nb["cells"] = cells
 nb["metadata"]["kernelspec"] = {
