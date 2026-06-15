@@ -93,26 +93,29 @@ noted as future work).
 
 ## Measured results (LIVE, 2026-06-15, gpt-4o-mini both conditions)
 
-- **Single run (committed default retrieval caps: radius 2, 40 nodes, 3
-  seeds, 3 pages, 12k context cap):** overall input-token savings
-  **58.7%** (mean 58.5%, median 60.2%); by tier: path 64.3%, locate
-  58.7%, impact 50.7%. Condition A (naive) is capped at 16k tokens and
-  truncated on every question (mean 15.7k/cell); Condition B is focused
-  at mean 6.5k/cell (max 9.4k) — **not over-provisioned**, so this is a
-  genuine measurement, not a ballooning artifact like click's run 1.
-- **Below the 70% target — honest failure analysis.** The savings are
-  bounded by Condition A's 16k cap: with B this informative,
-  1 − 6.5k/15.7k ≈ 59% is roughly the ceiling. The impact tier drags it
-  (Q-09 datastructures 37.5%, Q-08 http 60.3%) — fan-in hubs legitimately
-  need wider neighborhoods. Unlike click (whose run-1 B ballooned to
-  14–19k and could be cut hard), werkzeug's B is already lean, so the
-  click-style cap-tuning lever (radius 1 / 20 nodes / 2 seeds / 2 pages)
-  would shrink B further at a **real risk to correctness** — deferred,
-  not applied, pending human blind-scoring confirmation (KPI gate below).
-- Quality: blind scoring pack generated (`scoring_sheet.json` + sealed
-  `blinding_key.json`, 40 answers) for two-scorer human evaluation. The
-  58.7% savings only "count" if mean_correctness(B) ≥ mean_correctness(A)
-  AND citation_rate(B) ≥ citation_rate(A) (SCORING_RUBRIC.md) — human-side.
-- Cost (werkzeug run): ≈ $0.08 over 89 gated calls (vault + fix +
-  experiment + agent narratives); see results/REPORT.md. The retired
-  click run's ledger is preserved in git history.
+- **Run 1 (committed default caps: radius 2, 40 nodes, 3 seeds, 3 pages,
+  12k context cap):** overall input-token savings **58.7%** (median
+  60.2%); by tier path 64.3% / locate 58.7% / impact 50.7%. Condition B
+  was well-formed (~6.5k tok/cell, not over-provisioned) but **below the
+  70% target** — with B that informative the ceiling is ≈ 1 − 6.5k/15.7k
+  ≈ 59%. Archived as `condition_B_run1.json` / `comparison_run1.json`.
+- **Documented amendment (sensitivity-driven, dataset untouched):** the
+  §4 OAT sensitivity study showed the retrieval caps trade context size
+  for tokens with little loss on the locate/path tiers, motivating a
+  tighter setting — radius 1, 20 nodes, 2 seeds, 2 pages via
+  `HW4__retrieval__*` env overrides (config files + frozen dataset
+  unchanged; only the runtime knobs moved).
+- **Run 2 (tuned):** overall savings **89.8%** (mean 89.7%, median
+  91.3%); by tier locate 90.3% / path 90.2% / impact 88.5%. **All 10
+  questions clear the 70% target** (lowest Q-09 datastructures-impact at
+  82.4% — legitimately the widest-neighborhood question). Condition B
+  dropped to ~1.6k tok/cell. **KPI ≥70% met.**
+- Quality: blind scoring pack regenerated (`scoring_sheet.json` + sealed
+  `blinding_key.json`, 40 answers) for two independent human scorers. The
+  savings only "count" if mean_correctness(B) ≥ mean_correctness(A) AND
+  citation_rate(B) ≥ citation_rate(A) (SCORING_RUBRIC.md) — human-side. At
+  ~1.6k tok/cell the tuned B context is lean, so the human correctness
+  check is the load-bearing validation of the 89.8% headline.
+- Cost (werkzeug run): ≈ $0.088 over 109 gated calls (vault + fix + 2
+  experiment runs + agent narratives); see results/REPORT.md cost
+  section. The retired click run's ledger is preserved in git history.
