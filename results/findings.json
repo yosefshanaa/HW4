@@ -6,52 +6,25 @@
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "click.utils.echo degree 21 exceeds 2.0x median (13.0); fan_out=5",
+     "observation": "werkzeug.datastructures degree 76 exceeds 2.0x median (14.0); fan_out=10",
      "relation": "calls",
-     "source_file": "src/click/utils.py"
+     "source_file": "src/werkzeug/datastructures/__init__.py"
     },
     {
      "confidence": 0.8,
      "evidence": "EXTRACTED",
-     "observation": "outbound reach spans 5 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=16)",
+     "observation": "outbound reach spans 11 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=66)",
      "relation": "calls",
-     "source_file": "src/click/utils.py"
+     "source_file": "src/werkzeug/datastructures/__init__.py"
     }
    ],
    "id": "F-001",
    "kind": "GOD_NODE",
    "nodes": [
-    "click.utils.echo"
+    "werkzeug.datastructures"
    ],
    "status": "hypothesis",
-   "suggested_action": "split echo by concern (one community per responsibility); confirm concern-mixing in source first",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.75,
-   "evidence_chain": [
-    {
-     "confidence": 1.0,
-     "evidence": "EXTRACTED",
-     "observation": "click.utils.echo holds betweenness rank 1 (score 0.000152)",
-     "relation": "mentions",
-     "source_file": "src/click/utils.py"
-    },
-    {
-     "confidence": 0.75,
-     "evidence": "EXTRACTED",
-     "observation": "removing click.utils.echo disconnects 50% of previously connected pairs \u2014 paths through it are mandatory, not optional",
-     "relation": "mentions",
-     "source_file": "src/click/utils.py"
-    }
-   ],
-   "id": "F-002",
-   "kind": "SPOF",
-   "nodes": [
-    "click.utils.echo"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "introduce an interface/seam so dependents do not all route through echo; verify against source first",
+   "suggested_action": "split werkzeug.datastructures by concern (one community per responsibility); confirm concern-mixing in source first",
    "triage_checklist": []
   },
   {
@@ -60,25 +33,52 @@
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "click.core degree 18 exceeds 2.0x median (13.0); fan_out=10",
+     "observation": "werkzeug.wrappers.request degree 18 exceeds 2.0x median (14.0); fan_out=8",
      "relation": "calls",
-     "source_file": "src/click/core.py"
+     "source_file": "src/werkzeug/wrappers/request.py"
     },
     {
      "confidence": 0.8,
      "evidence": "EXTRACTED",
-     "observation": "outbound reach spans 4 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=8)",
+     "observation": "outbound reach spans 2 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=10)",
      "relation": "calls",
-     "source_file": "src/click/core.py"
+     "source_file": "src/werkzeug/wrappers/request.py"
+    }
+   ],
+   "id": "F-002",
+   "kind": "GOD_NODE",
+   "nodes": [
+    "werkzeug.wrappers.request"
+   ],
+   "status": "hypothesis",
+   "suggested_action": "split werkzeug.wrappers.request by concern (one community per responsibility); confirm concern-mixing in source first",
+   "triage_checklist": []
+  },
+  {
+   "confidence": 0.8,
+   "evidence_chain": [
+    {
+     "confidence": 0.9,
+     "evidence": "EXTRACTED",
+     "observation": "werkzeug.wrappers.response degree 17 exceeds 2.0x median (14.0); fan_out=10",
+     "relation": "calls",
+     "source_file": "src/werkzeug/wrappers/response.py"
+    },
+    {
+     "confidence": 0.8,
+     "evidence": "EXTRACTED",
+     "observation": "outbound reach spans 2 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=7)",
+     "relation": "calls",
+     "source_file": "src/werkzeug/wrappers/response.py"
     }
    ],
    "id": "F-003",
    "kind": "GOD_NODE",
    "nodes": [
-    "click.core"
+    "werkzeug.wrappers.response"
    ],
    "status": "hypothesis",
-   "suggested_action": "split click.core by concern (one community per responsibility); confirm concern-mixing in source first",
+   "suggested_action": "split werkzeug.wrappers.response by concern (one community per responsibility); confirm concern-mixing in source first",
    "triage_checklist": []
   },
   {
@@ -87,109 +87,106 @@
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "click degree 15 exceeds 2.0x median (13.0); fan_out=9",
+     "observation": "werkzeug.exceptions degree 21 exceeds 2.0x median (14.0); fan_out=8",
      "relation": "calls",
-     "source_file": "src/click/__init__.py"
+     "source_file": "src/werkzeug/exceptions.py"
     },
     {
      "confidence": 0.8,
      "evidence": "EXTRACTED",
-     "observation": "outbound reach spans 27 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=6)",
+     "observation": "outbound reach spans 8 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=13)",
      "relation": "calls",
-     "source_file": "src/click/__init__.py"
+     "source_file": "src/werkzeug/exceptions.py"
     }
    ],
    "id": "F-004",
    "kind": "GOD_NODE",
    "nodes": [
-    "click"
+    "werkzeug.exceptions"
    ],
    "status": "hypothesis",
-   "suggested_action": "split click by concern (one community per responsibility); confirm concern-mixing in source first",
+   "suggested_action": "split werkzeug.exceptions by concern (one community per responsibility); confirm concern-mixing in source first",
    "triage_checklist": []
   },
   {
-   "confidence": 0.4,
+   "confidence": 0.8,
    "evidence_chain": [
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "CHANGES.md documents 'click.UNPROCESSED'",
-     "relation": "mentions",
-     "source_file": "CHANGES.md"
+     "observation": "werkzeug.http degree 24 exceeds 2.0x median (14.0); fan_out=3",
+     "relation": "calls",
+     "source_file": "src/werkzeug/http.py"
     },
     {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.UNPROCESSED' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "CHANGES.md"
+     "confidence": 0.8,
+     "evidence": "EXTRACTED",
+     "observation": "outbound reach spans 5 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=21)",
+     "relation": "calls",
+     "source_file": "src/werkzeug/http.py"
     }
    ],
    "id": "F-005",
-   "kind": "TRACE_GAP",
+   "kind": "GOD_NODE",
    "nodes": [
-    "doc:CHANGES.md",
-    "missing:click.UNPROCESSED"
+    "werkzeug.http"
    ],
    "status": "hypothesis",
-   "suggested_action": "verify 'click.UNPROCESSED' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
+   "suggested_action": "split werkzeug.http by concern (one community per responsibility); confirm concern-mixing in source first",
    "triage_checklist": []
   },
   {
-   "confidence": 0.4,
+   "confidence": 0.8,
    "evidence_chain": [
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "docs/advanced.md documents 'click.UNPROCESSED'",
-     "relation": "mentions",
-     "source_file": "docs/advanced.md"
+     "observation": "werkzeug.test.run_wsgi_app degree 18 exceeds 2.0x median (14.0); fan_out=3",
+     "relation": "calls",
+     "source_file": "src/werkzeug/test.py"
     },
     {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.UNPROCESSED' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/advanced.md"
+     "confidence": 0.8,
+     "evidence": "EXTRACTED",
+     "observation": "outbound reach spans 3 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=15)",
+     "relation": "calls",
+     "source_file": "src/werkzeug/test.py"
     }
    ],
    "id": "F-006",
-   "kind": "TRACE_GAP",
+   "kind": "GOD_NODE",
    "nodes": [
-    "doc:docs/advanced.md",
-    "missing:click.UNPROCESSED"
+    "werkzeug.test.run_wsgi_app"
    ],
    "status": "hypothesis",
-   "suggested_action": "verify 'click.UNPROCESSED' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
+   "suggested_action": "split run_wsgi_app by concern (one community per responsibility); confirm concern-mixing in source first",
    "triage_checklist": []
   },
   {
-   "confidence": 0.4,
+   "confidence": 0.8,
    "evidence_chain": [
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "docs/advanced.md documents 'click.Context.params'",
-     "relation": "mentions",
-     "source_file": "docs/advanced.md"
+     "observation": "werkzeug.utils degree 17 exceeds 2.0x median (14.0); fan_out=8",
+     "relation": "calls",
+     "source_file": "src/werkzeug/utils.py"
     },
     {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.Context.params' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/advanced.md"
+     "confidence": 0.8,
+     "evidence": "EXTRACTED",
+     "observation": "outbound reach spans 5 communities \u2014 fan-OUT across concerns, unlike a fan-IN utility (healthy-hub counter-check: fan_in=9)",
+     "relation": "calls",
+     "source_file": "src/werkzeug/utils.py"
     }
    ],
    "id": "F-007",
-   "kind": "TRACE_GAP",
+   "kind": "GOD_NODE",
    "nodes": [
-    "doc:docs/advanced.md",
-    "missing:click.Context.params"
+    "werkzeug.utils"
    ],
    "status": "hypothesis",
-   "suggested_action": "verify 'click.Context.params' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
+   "suggested_action": "split werkzeug.utils by concern (one community per responsibility); confirm concern-mixing in source first",
    "triage_checklist": []
   },
   {
@@ -198,226 +195,30 @@
     {
      "confidence": 0.9,
      "evidence": "EXTRACTED",
-     "observation": "docs/commands-and-groups.md documents 'click.ParameterSource.DEFAULT_MAP'",
+     "observation": "CHANGES.rst documents 'werkzeug.wsgi.make_line_iter'",
      "relation": "mentions",
-     "source_file": "docs/commands-and-groups.md"
+     "source_file": "CHANGES.rst"
     },
     {
      "confidence": 0.4,
      "evidence": "AMBIGUOUS",
-     "observation": "'click.ParameterSource.DEFAULT_MAP' resolves to no code entity in the graph",
+     "observation": "'werkzeug.wsgi.make_line_iter' resolves to no code entity in the graph",
      "relation": "mentions",
-     "source_file": "docs/commands-and-groups.md"
+     "source_file": "CHANGES.rst"
     }
    ],
    "id": "F-008",
    "kind": "TRACE_GAP",
    "nodes": [
-    "doc:docs/commands-and-groups.md",
-    "missing:click.ParameterSource.DEFAULT_MAP"
+    "doc:CHANGES.rst",
+    "missing:werkzeug.wsgi.make_line_iter"
    ],
    "status": "hypothesis",
-   "suggested_action": "verify 'click.ParameterSource.DEFAULT_MAP' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/parameter-types.md documents 'click.STRING'",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.STRING' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    }
-   ],
-   "id": "F-009",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/parameter-types.md",
-    "missing:click.STRING"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.STRING' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/parameter-types.md documents 'click.INT'",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.INT' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    }
-   ],
-   "id": "F-010",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/parameter-types.md",
-    "missing:click.INT"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.INT' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/parameter-types.md documents 'click.FLOAT'",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.FLOAT' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    }
-   ],
-   "id": "F-011",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/parameter-types.md",
-    "missing:click.FLOAT"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.FLOAT' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/parameter-types.md documents 'click.BOOL'",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.BOOL' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    }
-   ],
-   "id": "F-012",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/parameter-types.md",
-    "missing:click.BOOL"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.BOOL' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/parameter-types.md documents 'click.UUID'",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.UUID' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/parameter-types.md"
-    }
-   ],
-   "id": "F-013",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/parameter-types.md",
-    "missing:click.UUID"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.UUID' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/unicode-support.md documents 'click.palletsprojects.com'",
-     "relation": "mentions",
-     "source_file": "docs/unicode-support.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.palletsprojects.com' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/unicode-support.md"
-    }
-   ],
-   "id": "F-014",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/unicode-support.md",
-    "missing:click.palletsprojects.com"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.palletsprojects.com' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
-   "triage_checklist": []
-  },
-  {
-   "confidence": 0.4,
-   "evidence_chain": [
-    {
-     "confidence": 0.9,
-     "evidence": "EXTRACTED",
-     "observation": "docs/utils.md documents 'click.palletsprojects.com'",
-     "relation": "mentions",
-     "source_file": "docs/utils.md"
-    },
-    {
-     "confidence": 0.4,
-     "evidence": "AMBIGUOUS",
-     "observation": "'click.palletsprojects.com' resolves to no code entity in the graph",
-     "relation": "mentions",
-     "source_file": "docs/utils.md"
-    }
-   ],
-   "id": "F-015",
-   "kind": "TRACE_GAP",
-   "nodes": [
-    "doc:docs/utils.md",
-    "missing:click.palletsprojects.com"
-   ],
-   "status": "hypothesis",
-   "suggested_action": "verify 'click.palletsprojects.com' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
+   "suggested_action": "verify 'werkzeug.wsgi.make_line_iter' in source (constant/attribute/external?); if truly absent, fix the doc or implement the claim",
    "triage_checklist": []
   }
  ],
- "generated_utc": "2026-06-12T17:23:38.097953+00:00",
- "iteration": 13,
+ "generated_utc": "2026-06-15T11:21:42.654273+00:00",
+ "iteration": 0,
  "version": "1.00"
 }

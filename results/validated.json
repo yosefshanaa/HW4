@@ -1,15 +1,15 @@
 {
   "validations": [
     {
-      "kind": "SPOF",
-      "anchor": "click.utils.echo",
-      "note": "source-validated 2026-06-12; FINDINGS.md §3 — no seam between 7 binding modules and the implementation"
+      "kind": "GOD_NODE",
+      "anchor": "werkzeug.http",
+      "note": "source-validated 2026-06-15; FINDINGS.md §3 — http.py (1543 LOC) bundles distinct HTTP header-family concerns behind one module: cookies (parse_cookie/dump_cookie ~1274-1483), etags (~1000-1063), dates/age (~1079-1180), ranges (~916-998) and accept/cache-control/csp parsing (~711-872); fan-in 21 importers, degree 24, no per-concern seam (god-node F-005)"
     },
     {
       "kind": "GOD_NODE",
-      "anchor": "click.core",
-      "note": "source-validated 2026-06-12; FINDINGS.md §3 — 4 concerns confirmed at cited lines (pre-registered H1)"
+      "anchor": "werkzeug.datastructures",
+      "note": "source-validated 2026-06-15; FINDINGS.md §3 — the datastructures package __init__ re-exports many independent container families (MultiDict family structures.py:139, Headers headers.py:21, Accept/Auth/CacheControl/CSP/ETag/Range submodules) into one degree-76 / fan-in-66 hub reaching 11 communities (rank-1 bottleneck F-001)"
     }
   ],
-  "format_note": "signature matching (kind+anchor) replaced positional finding ids on 2026-06-12 after live ID drift authorized a triage-rejected finding (see loop_log iteration 4 annotation)"
+  "format_note": "signature matching (kind+anchor) per the 2026-06-12 live ID-drift lesson; re-issued for the werkzeug re-target 2026-06-15"
 }
