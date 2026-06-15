@@ -75,11 +75,12 @@ noted as future work).
   reps), ≈321.5k input + ≈8k output tokens → **≈$1.08** — comfortably
   inside the $10 budget firewall. Actual-vs-estimate to be recorded
   after the live run.
-- Observed: ALL 10 naive bundles truncate (T291 ✅), and the cut file is
-  `src/click/core.py` in 10/10 cases — the naive condition's failure
-  mode is itself corroboration of validated finding F-003 (whatever you
-  ask about this codebase, grep hands you the god module first).
-- Live A/B execution: completed 2026-06-12 with the OpenAI provider
+- Observed: ALL 10 naive bundles truncate (T291 ✅) — grep-ranked
+  whole-file pasting blows the 16k cap on every question; the naive
+  condition cannot prioritize the relevant file, so it floods context
+  indiscriminately (exactly the structural failure mode the graph
+  condition avoids by retrieving an ego-subgraph + wiki pages).
+- Live A/B execution: completed 2026-06-15 with the OpenAI provider
   (config-switched); measured results below supersede the preflight.
 
 > **Dataset re-frozen 2026-06-15 (T266; werkzeug re-target):**
@@ -90,21 +91,28 @@ noted as future work).
 > SHA. No post-hoc edits permitted; amendments require a documented
 > procedure note. (Prior click freeze: sha256 `fb0749ad…`, 2026-06-12.)
 
-## Measured results (LIVE, 2026-06-12, gpt-4o-mini both conditions)
+## Measured results (LIVE, 2026-06-15, gpt-4o-mini both conditions)
 
-- **Run 1** (default retrieval caps: radius 2, 40 nodes, 3 seeds, 3
-  pages): overall savings **50.9%** — below target. Failure analysis:
-  Condition B ballooned to 14–19k tokens on 8/10 questions; answers
-  were correct, the context was simply over-provisioned.
-- **Documented amendment (sensitivity-driven, dataset untouched):**
-  retrieval tuned to radius 1, 20 nodes, 2 seeds, 2 pages via HW4__ env
-  overrides; run 1 archived as `condition_B_run1.json` /
-  `comparison_run1.json`.
-- **Run 2 (tuned):** overall savings **85.6%**, median 87.8%; by tier:
-  locate 87.8%, path 88.1%, impact 80.2%. Single below-target question:
-  Q-08 (63.0%) — the echo-SPOF impact question legitimately needs the
-  bottleneck's wide neighborhood. **KPI ≥70% met.**
-- Quality spot-check: tuned-run answers remain correct with proper file
-  citations; formal blind scoring pack generated
-  (`scoring_sheet.json` + sealed `blinding_key.json`) for human scoring.
-- Cost so far (ledger): see results/REPORT.md cost section.
+- **Single run (committed default retrieval caps: radius 2, 40 nodes, 3
+  seeds, 3 pages, 12k context cap):** overall input-token savings
+  **58.7%** (mean 58.5%, median 60.2%); by tier: path 64.3%, locate
+  58.7%, impact 50.7%. Condition A (naive) is capped at 16k tokens and
+  truncated on every question (mean 15.7k/cell); Condition B is focused
+  at mean 6.5k/cell (max 9.4k) — **not over-provisioned**, so this is a
+  genuine measurement, not a ballooning artifact like click's run 1.
+- **Below the 70% target — honest failure analysis.** The savings are
+  bounded by Condition A's 16k cap: with B this informative,
+  1 − 6.5k/15.7k ≈ 59% is roughly the ceiling. The impact tier drags it
+  (Q-09 datastructures 37.5%, Q-08 http 60.3%) — fan-in hubs legitimately
+  need wider neighborhoods. Unlike click (whose run-1 B ballooned to
+  14–19k and could be cut hard), werkzeug's B is already lean, so the
+  click-style cap-tuning lever (radius 1 / 20 nodes / 2 seeds / 2 pages)
+  would shrink B further at a **real risk to correctness** — deferred,
+  not applied, pending human blind-scoring confirmation (KPI gate below).
+- Quality: blind scoring pack generated (`scoring_sheet.json` + sealed
+  `blinding_key.json`, 40 answers) for two-scorer human evaluation. The
+  58.7% savings only "count" if mean_correctness(B) ≥ mean_correctness(A)
+  AND citation_rate(B) ≥ citation_rate(A) (SCORING_RUBRIC.md) — human-side.
+- Cost (werkzeug run): ≈ $0.08 over 89 gated calls (vault + fix +
+  experiment + agent narratives); see results/REPORT.md. The retired
+  click run's ledger is preserved in git history.
