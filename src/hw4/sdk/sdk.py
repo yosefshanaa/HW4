@@ -15,7 +15,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
-from hw4.sdk import experiment_ops, fix_ops, operations
+from hw4.sdk import eval_ops, experiment_ops, fix_ops, operations
 from hw4.sdk.errors import ServiceNotReadyError
 from hw4.services import graph_metrics
 from hw4.services.graph_models import Graph
@@ -136,6 +136,10 @@ class Hw4Sdk:
     def fix(self, finding_id: str = "", *, auto: bool = False):
         """Run the test-guarded improvement loop (FR-7)."""
         return fix_ops.fix(self, finding_id, auto=auto)
+
+    def evaluate(self, target_path=None, answer_key_path=None):
+        """Score detector findings as a confusion matrix vs the answer key (L07 §13.2)."""
+        return eval_ops.evaluate(self, target_path, answer_key_path)
 
     def run_experiment(self, condition: str = "both"):
         """Token-savings A/B experiment over the question set (FR-8)."""

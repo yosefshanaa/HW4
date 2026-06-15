@@ -102,6 +102,7 @@ flowchart LR
 |---|---|---|
 | **graph** | immutable `results/graphs/iNN/{graph,manifest,metrics}.json` | content-hash identical on rebuild (proven in `VALIDATION.md`) |
 | **analyze** | `findings.json` + careful-language `FINDINGS.md`; `--agents` adds CrewAI narratives | findings identical with or without agents |
+| **evaluate** | `confusion_matrix.json` + `CONFUSION_MATRIX.md` — detector predictions scored vs the planted answer key (L07 §13.2) | no LLM/network; reproducible TP/FP/FN/TN |
 | **vault** | Obsidian taxonomy (Portfolio→Domains→Projects) + raw/ snapshots + LLM `wiki/` + machine-owned `index.md` | skeleton never clobbered; index regenerated |
 | **fix** | `fix/<id>` branch, characterization tests if needed, `loop_log.json`, per-iteration graph diffs | every iteration logged, accepted **or** reverted |
 | **experiment** | paired/repeated `condition_{A,B}.json`, `comparison.json`, blind `scoring_sheet.json` + sealed key | seeded shuffle, resume-on-crash, tokens from API metadata only |
@@ -133,6 +134,7 @@ The CLI is a 1:1 thin shell over `Hw4Sdk`:
 uv run hw4 graph workspace/target            # immutable graph iteration + metrics
 uv run hw4 analyze                           # detectors → results/findings.json + FINDINGS.md
 uv run hw4 analyze --agents                  # same findings + CrewAI careful-language narratives
+uv run hw4 evaluate                          # confusion matrix vs mini_repo answer key (L07 §13.2)
 uv run hw4 vault                             # Obsidian vault + LLM wiki pages
 uv run hw4 ask "where is the routing Map implemented?"  # graph-guided, cited answer
 uv run hw4 fix F-005                          # test-guarded fix loop on a validated finding
@@ -178,6 +180,17 @@ Selection trail, naive pre-graph impression, and the unfamiliarity attestation l
 | F-008 | TRACE_GAP | `wsgi.make_line_iter` | rejected | changelog records its **removal**; the symbol is correctly absent |
 
 **No SPOF finding** — no node reaches `mandatory_path_ratio ≥ 0.3` (highest is `datastructures` at 0.106). werkzeug's hubs are reachable by multiple paths, unlike click's seam-less `echo`. Reported honestly rather than forced. Full 5-step inference per validated finding, plus the rejected-hypothesis analysis and block/class diagrams, in [`results/FINDINGS.md`](results/FINDINGS.md).
+
+### Agent evaluation — confusion matrix on the planted fixture (L07 §13.2)
+
+The detectors are a binary classifier, so they get a classifier's yardstick. `hw4 evaluate` runs the deterministic spine over [`tests/fixtures/mini_repo`](tests/fixtures/mini_repo) — a synthetic target whose README documents its planted defects *and* two false-positive guards — and scores findings against the machine-readable answer key. No LLM, no network; fully reproducible.
+
+| | Actual defect | Actual clean | | Metric | Value |
+|---|---|---|---|---|---|
+| **Pred defect** | TP = 3 | FP = 1 | | Precision | **0.75** |
+| **Pred clean** | FN = 0 | TN = 2 | | Recall | **1.00** |
+
+**Recall 1.00** — all three planted defects (god-node `app.engine`, orphan `orphan.legacy`, doc gap `app.plugins`) detected. The lone **FP** is the fixture's `conftest.py`: genuinely disconnected, so the isolation detector surfaces it for triage — reported as an honest precision cost, not hidden, in keeping with Part-C's "isolation is a finding, not a diagnosis." The healthy-hub guard (`app.utils`, high fan-in / one concern) stays unflagged — the two true negatives that keep precision from collapsing. We publish the real 0.75, not a hand-tuned 1.0. Full breakdown: [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), design in [`docs/PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 
 ### Fix loop — an honest negative (T340)
 

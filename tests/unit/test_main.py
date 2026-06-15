@@ -33,6 +33,9 @@ class RecordingSdk:
     def fix(self, finding_id, *, auto=False):
         return self._record("fix", finding_id, auto=auto)
 
+    def evaluate(self, target_path, answer_key_path):
+        return self._record("evaluate", target_path, answer_key_path)
+
     def run_experiment(self, *, condition="both"):
         return self._record("run_experiment", condition=condition)
 
@@ -70,6 +73,9 @@ class TestDispatch:
             (["ask", "why?", "--mode", "naive"], ("ask", ("why?",), {"mode": "naive"})),
             (["fix", "F-001"], ("fix", ("F-001",), {"auto": False})),
             (["fix", "--auto"], ("fix", ("",), {"auto": True})),
+            (["evaluate"], ("evaluate", (None, None), {})),
+            (["evaluate", "repo/", "--answer-key", "k.json"],
+             ("evaluate", ("repo/", "k.json"), {})),
             (["experiment"], ("run_experiment", (), {"condition": "both"})),
             (["experiment", "--condition", "A"], ("run_experiment", (), {"condition": "A"})),
             (["report"], ("report", (), {"dashboard": False})),

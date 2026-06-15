@@ -1,0 +1,66 @@
+{
+ "version": "1.00",
+ "target": "tests/fixtures/mini_repo",
+ "cells": {
+  "tp": 3,
+  "fp": 1,
+  "fn": 0,
+  "tn": 2
+ },
+ "metrics": {
+  "precision": 0.75,
+  "recall": 1.0,
+  "f1": 0.8571,
+  "accuracy": 0.8333
+ },
+ "outcomes": [
+  {
+   "target": "app.engine",
+   "kind": "GOD_NODE",
+   "expected": "defect",
+   "predicted": true,
+   "cell": "TP",
+   "rationale": "app/engine.py imports and drives every other app module, mixing loading, math, and formatting concerns."
+  },
+  {
+   "target": "app.utils",
+   "kind": "GOD_NODE",
+   "expected": "clean",
+   "predicted": false,
+   "cell": "TN",
+   "rationale": "Healthy hub: high fan-in but a single concern. The god-node detector's healthy-hub counter-check must NOT flag it."
+  },
+  {
+   "target": "app.utils",
+   "kind": "SPOF",
+   "expected": "clean",
+   "predicted": false,
+   "cell": "TN",
+   "rationale": "Shared helper, but no mandatory-path bottleneck. Guards against over-flagging common utilities as single points of failure."
+  },
+  {
+   "target": "orphan.legacy",
+   "kind": "ISOLATED",
+   "expected": "defect",
+   "predicted": true,
+   "cell": "TP",
+   "rationale": "orphan/legacy.py has no inbound or outbound imports to the main component."
+  },
+  {
+   "target": "conftest",
+   "kind": "ISOLATED",
+   "expected": "clean",
+   "predicted": true,
+   "cell": "FP",
+   "rationale": "Test scaffolding, genuinely disconnected. A correct topological observation but not a code defect; surfaced for human triage, so it costs precision rather than masking a real bug."
+  },
+  {
+   "target": "app.plugins",
+   "kind": "TRACE_GAP",
+   "expected": "defect",
+   "predicted": true,
+   "cell": "TP",
+   "rationale": "The README documents app.plugins, which exists nowhere in the tree \u2014 a documented-but-absent claim."
+  }
+ ]
+}

@@ -50,6 +50,12 @@ def build_parser() -> argparse.ArgumentParser:
     fix.add_argument("--auto", action="store_true",
                      help="loop over all validated findings in rank order")
 
+    evaluate = sub.add_parser("evaluate", help="confusion matrix vs the answer key (L07 §13.2)")
+    evaluate.add_argument("target_path", nargs="?", default=None,
+                          help="repo to analyze (default: the mini_repo fixture)")
+    evaluate.add_argument("--answer-key", default=None,
+                          help="path to the ground-truth JSON (default: mini_repo answer key)")
+
     experiment = sub.add_parser("experiment", help="token-savings A/B experiment (FR-8)")
     experiment.add_argument("--condition", choices=("A", "B", "both"), default="both")
     report = sub.add_parser("report", help="aggregate the final report (FR-9)")
@@ -68,6 +74,7 @@ def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
         ),
         "ask": lambda: sdk.ask(args.question, mode=args.mode),
         "fix": lambda: sdk.fix(args.finding_id, auto=args.auto),
+        "evaluate": lambda: sdk.evaluate(args.target_path, args.answer_key),
         "experiment": lambda: sdk.run_experiment(condition=args.condition),
         "report": lambda: sdk.report(dashboard=args.dashboard),
     }

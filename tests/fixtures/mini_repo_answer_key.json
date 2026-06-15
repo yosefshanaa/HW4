@@ -1,0 +1,43 @@
+{
+ "version": "1.00",
+ "target": "tests/fixtures/mini_repo",
+ "description": "Planted-defect ground truth for the mini_repo analysis fixture (see its README). Used by `hw4 evaluate` to score detector predictions as a confusion matrix (L07 §13.2). Each candidate is a (node, detector-kind) pair with the verdict a correct detector must reach: `defect` = must be flagged, `clean` = must NOT be flagged (false-positive guard).",
+ "candidates": [
+  {
+   "target": "app.engine",
+   "kind": "GOD_NODE",
+   "label": "defect",
+   "rationale": "app/engine.py imports and drives every other app module, mixing loading, math, and formatting concerns."
+  },
+  {
+   "target": "app.utils",
+   "kind": "GOD_NODE",
+   "label": "clean",
+   "rationale": "Healthy hub: high fan-in but a single concern. The god-node detector's healthy-hub counter-check must NOT flag it."
+  },
+  {
+   "target": "app.utils",
+   "kind": "SPOF",
+   "label": "clean",
+   "rationale": "Shared helper, but no mandatory-path bottleneck. Guards against over-flagging common utilities as single points of failure."
+  },
+  {
+   "target": "orphan.legacy",
+   "kind": "ISOLATED",
+   "label": "defect",
+   "rationale": "orphan/legacy.py has no inbound or outbound imports to the main component."
+  },
+  {
+   "target": "conftest",
+   "kind": "ISOLATED",
+   "label": "clean",
+   "rationale": "Test scaffolding, genuinely disconnected. A correct topological observation but not a code defect; surfaced for human triage, so it costs precision rather than masking a real bug."
+  },
+  {
+   "target": "app.plugins",
+   "kind": "TRACE_GAP",
+   "label": "defect",
+   "rationale": "The README documents app.plugins, which exists nowhere in the tree — a documented-but-absent claim."
+  }
+ ]
+}
