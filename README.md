@@ -35,10 +35,12 @@
 8. [Evidence discipline (Part-C)](#evidence-discipline-part-c)
 9. [Configuration guide](#configuration-guide)
 10. [Repository layout](#repository-layout)
-11. [Key design decisions (ADRs)](#key-design-decisions-adrs-in-docsplanmd-5)
-12. [Reproducing the analysis](#reproducing-the-analysis)
-13. [Quality, cost & limitations](#quality-cost--limitations)
-14. [License & attribution](#license--attribution)
+11. [Extension points](#extension-points)
+12. [Key design decisions (ADRs)](#key-design-decisions-adrs-in-docsplanmd-5)
+13. [Reproducing the analysis](#reproducing-the-analysis)
+14. [Quality standards (ISO/IEC 25010)](#quality-standards--isoiec-25010-conformance)
+15. [Quality, cost & limitations](#quality-cost--limitations)
+16. [License & attribution](#license--attribution)
 
 ---
 
@@ -342,19 +344,34 @@ Selected `setup.json` keys:
 | `src/hw4/services/` | extractor, metrics/diff, vault+wiki, retrieval, detectors, fix loop, experiment, CrewAI, dashboard |
 | `tests/` | unit+integration, mirrors `src/` 1:1; `tests/fixtures/mini_repo/` is the planted-defect answer key |
 | `config/` | versioned JSON — zero hardcoded values; secrets only via env |
-| `docs/` | PRD/PLAN/TODO, **6 mechanism PRDs**, SKILL protocols, SCORING_RUBRIC, PROMPTS log, TARGET_REPO |
+| `docs/` | PRD/PLAN/TODO, **7 mechanism PRDs**, SKILL protocols, SCORING_RUBRIC, PROMPTS log, TARGET_REPO |
 | `data/` | frozen question dataset (sha256-sealed in `PRD_token_experiment.md`) |
 | `results/` | graph iterations, findings, FINDINGS.md, loop log, experiment artifacts, ledger, REPORT, dashboard |
 | `notebooks/` | `analysis.ipynb` — restart-and-run-all from committed artifacts |
 | `vault/` | Obsidian vault (taxonomy + wiki incl. SKILL mirrors) |
 | `workspace/` | target clone (gitignored; regenerate via `RepoService.clone(url, commit=<SHA>)`) |
 
+## Extension points
+
+The system is built so a new capability is a small isolated change, not a rewrite (guidelines §12.1) — each axis of growth has one obvious seam:
+
+| To add… | Do this | Selected by |
+|---|---|---|
+| **A detector** | subclass `Detector` (`services/detectors/base.py`), implement `detect(graph, metrics, config)`; add it to `all_detectors()` in `registry.py`; add a `FindingKind` if it's a new kind | runs in every `analyze` |
+| **A graph backend** | implement `extract(root, config, iteration) -> Graph`; register it in `_BACKENDS` in `graph_runner.py` | `config graph.backend` |
+| **An LLM provider** | add a transport in `shared/transports.py` (the only code allowed to touch a provider SDK); usage tokens still come from the API | `config llm.provider` |
+| **An agent role** | add an entry to `ROLE_DEFINITIONS` in `services/agents/roles.py` — the gated LLM bridge is wired in automatically | `make_agent("<role>", sdk.llm)` |
+| **A CLI command / SDK op** | op module in `sdk/*_ops.py` → method on `Hw4Sdk` → subparser + dispatch in `main.py` (the `evaluate` / `debug` pattern) | `hw4 <command>` |
+| **A node type / relation / evidence class** | extend the frozensets in `graph_models.py` / the enums in `constants.py`; normalization degrades anything unknown to `AMBIGUOUS` at one boundary | — |
+
+Two invariants make these safe: whatever a backend emits is normalized at a **single boundary** (`Graph.from_dict`), and every tunable lives in `config/` (no code change to retune). So an extension is testable in isolation and can't silently break the frozen evidence.
+
 ## Key design decisions (ADRs in `docs/PLAN.md` §5)
 
 - **One choke point** for every external call (`ApiGatekeeper`): rate limits, queue-not-drop, bounded retries, budget firewall, JSONL ledger. The LLM client *cannot be constructed* without it.
 - **Evidence as a first-class enum** from extractor to fix-eligibility (above).
 - **Deterministic spine, LLM at the edges** — metrics/diffs/detectors/loop are plain Python; the LLM writes narratives, plans, and edits only, through the gate.
-- **Graphify fallback executed** (ADR-4): the course tool was unobtainable; the in-repo AST backend emits the identical contract, stamped so a future real run is distinguishable.
+- **Two graph backends** (ADR-4, revised): a real Graphify node-link adapter ships *and* the in-repo AST backend stays the default, so the frozen experiment/findings reproduce without an external tool while a real Graphify run drops in at one boundary.
 - **Provider-swappable** (ADR-3): proven live by config-switching to OpenAI `gpt-4o-mini` for both tiers.
 
 ## Reproducing the analysis
@@ -373,6 +390,21 @@ uv run hw4 analyze
 uv run --with nbformat python scripts/build_notebook.py
 uv run --with nbformat --with nbclient --with ipykernel --with matplotlib python scripts/execute_notebook.py
 ```
+
+## Quality standards — ISO/IEC 25010 conformance
+
+Assessed against the eight ISO/IEC 25010 product-quality characteristics (guidelines §13):
+
+| Characteristic | How this project addresses it |
+|---|---|
+| **Functional suitability** | Every FR has acceptance criteria (PRD §6); KPIs verified (TL;DR table); detectors scored against a planted answer key — confusion matrix **P=0.75 / R=1.00** ([`CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md)). |
+| **Performance efficiency** | The thesis itself — graph-guided retrieval uses **58.7% fewer tokens** at equal answer quality; full pipeline < 10 min (NFR-18); the I/O-bound wiki phase is parallelized (§15). |
+| **Compatibility** | Provider-swappable LLM (`llm.provider`) and two graph backends (`graph.backend`); one normalized graph contract every consumer reads (`Graph.from_dict`). |
+| **Usability** | User-manual-level README (install · usage tour · config guide · screenshots); a 1:1 thin CLI with `--help` on every subcommand. |
+| **Reliability** | ~96% coverage incl. error paths; the Gatekeeper **queues-not-drops** + retries; the fix loop reverts on any regression; graphs are content-hash reproducible. |
+| **Security** | Secrets only via env (`.env` gitignored, `.env-example` committed); a grep gate blocks hardcoded secrets/keys; the key is never printed or logged. |
+| **Maintainability** | SDK + services modularity, ≤150 code-lines/file, ruff-0, OOP without duplication, **7 mechanism PRDs** + ADRs, and documented [extension points](#extension-points). |
+| **Portability** | `uv`-managed env (`pyproject.toml` + `uv.lock`), relative paths only, config-driven throughout; runs fully locally except the LLM API. |
 
 ## Quality, cost & limitations
 
