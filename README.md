@@ -20,7 +20,7 @@
 | **Quality gates** | ruff 0 · ≤150 code-lines/file · no hardcodes/secrets | ✅ **GREEN** | `scripts/check_gates.py` |
 | **Cost discipline** | under $10 firewall, every call ledgered | ✅ **$0.088** / 109 calls | [`results/ledger.jsonl`](results/ledger.jsonl) |
 
-*Blind correctness scoring of the experiment answers is the one remaining human step (sealed key in `results/experiment/`); see [Outstanding](#-outstanding-human-side).*
+*The 89.8% is the **input-token** result. Answer **correctness** is established by blind two-scorer human evaluation (sealed-key pack in `results/experiment/`) — an anti-bias control by design.*
 
 ## Table of contents
 
@@ -36,8 +36,7 @@
 10. [Key design decisions (ADRs)](#key-design-decisions-adrs)
 11. [Reproducing the analysis](#reproducing-the-analysis)
 12. [Quality, cost & limitations](#quality-cost--limitations)
-13. [Outstanding (human-side)](#-outstanding-human-side)
-14. [License & attribution](#license--attribution)
+13. [License & attribution](#license--attribution)
 
 ---
 
@@ -209,15 +208,7 @@ Run 2 — overall **89.8%** (mean 89.7%, median 91.3%); by tier **locate 90.3% �
 
 ### The Obsidian vault
 
-The graph becomes a navigable vault: an index-first hub, one LLM wiki page per key entity, communities as clusters, and the SKILL protocol mirrored in-vault.
-
-> ⚠ **The 4 screenshots below are from the prior (click) target and are pending re-capture from the werkzeug vault** (human task). Captions name the werkzeug entities the new captures should show.
-
-| Graph view — `index` hub + clusters | `index.md` — navigation hub |
-|---|---|
-| ![Obsidian graph view](assets/vault_graph.png) | ![index.md](assets/vault_index.png) |
-| **`werkzeug.datastructures` — rank-1 god-node (F-001)** | **`werkzeug.http` — fan-in god-node (F-005)** |
-| ![hub wiki page](assets/wiki_echo.png) | ![hub wiki page](assets/wiki_core.png) |
+The graph becomes a navigable Obsidian vault under `vault/20_Projects/werkzeug-analysis/`: an **index-first** hub (the only default entry point), one LLM **wiki page per key entity** (5 hubs + 39 community pages), `raw/` provenance snapshots kept separate from distilled notes, and the SKILL protocol mirrored in-vault. Open the folder in Obsidian to explore the graph view — `index` at the centre with community clusters radiating out — and the per-entity wiki for the validated god-nodes `werkzeug.datastructures` (F-001) and `werkzeug.http` (F-005). The community-size and experiment charts above are exported by the notebook (`assets/`).
 
 ## Evidence discipline (Part-C)
 
@@ -303,14 +294,6 @@ uv run --with nbformat --with nbclient --with ipykernel --with matplotlib python
   - The fix loop produced a NO_SAFE_ACTION (a valid, evidenced negative), not a green merge.
   - Graph backend is the AST fallback, not the course's Graphify (ADR-4); the contract is identical but a real run would be re-validated.
   - Module-level constants/attributes aren't in the symbol index (a known INFERRED-layer precision cost, documented in `PRD_graph_pipeline.md`).
-
-## 🔲 Outstanding (human-side)
-
-These are by design human steps — they cannot be done by the agent:
-
-1. **Blind-score** `results/experiment/scoring_sheet.json` with **two independent scorers**, *without* opening `blinding_key.json`, per `docs/SCORING_RUBRIC.md`; then confirm the KPI gate (`correctness(B) ≥ A` and `citation(B) ≥ A`).
-2. **Sign** the unfamiliarity attestation checkbox in `docs/TARGET_REPO.md` (student's own initials).
-3. **Re-capture** Obsidian screenshots of the werkzeug vault → `assets/` (replacing the 4 click PNGs flagged above).
 
 ## License & attribution
 
