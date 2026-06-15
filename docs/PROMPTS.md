@@ -133,4 +133,19 @@ empty placeholders — the offline projection (60.5%) exposed a possible
 sub-target savings figure early enough to study the retrieval-cap knobs
 (§4 sensitivity) before spending tokens.
 
+## P-011 · 2026-06-15 · Re-target click → werkzeug (≥70-file floor)
+
+The course requires ≥70 code files; click had 63. Re-pointed the
+repo-agnostic pipeline at `pallets/werkzeug` @ `1b00618e` (138 `.py` /
+27,498 LOC, same `src/` layout + Pallets pytest tooling). Prompt
+pattern: "verify-first — clone werkzeug, confirm ≥70 files and a
+green/stable baseline before regenerating any artifact; fall back to
+rich only if the baseline is flaky." Baseline: 992 pass in ~60 s (needs
+cryptography / ephemeral-port-reserve / pytest-timeout / watchdog;
+`fixloop.test_command` gained `--isolated` to ignore werkzeug's
+`[tool.uv]` default-groups). **Lesson:** a repo-agnostic pipeline made
+the swap a config + answer-key exercise, not a rewrite — only
+`config/setup.json` and `data/questions.yaml` carried target-specific
+values into the code path.
+
 *Maintained continuously; see git history for the per-commit trail.*
