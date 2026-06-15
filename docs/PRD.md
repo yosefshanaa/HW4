@@ -226,6 +226,9 @@ Metrics captured: source traceability rate (answers citing correct source_file),
 ### FR-12 — Agent evaluation: confusion matrix (P0 — L07 §13.2)
 The detectors are a binary classifier, so they are scored as one. `hw4 evaluate` runs the deterministic detector spine over the `mini_repo` fixture and compares findings to a labeled, machine-readable answer key (planted defects + false-positive guards), emitting TP/FP/FN/TN and precision/recall/F1 to `results/CONFUSION_MATRIX.md`. The published result is the honest, un-tuned one (P=0.75, R=1.00); the single FP is explained, not hidden. Detailed in `docs/PRD_agent_evaluation.md`.
 
+### FR-13 — Graph-guided debugging case (P0 — EX04 §5.3–5.4)
+A concrete *functional* bug, found → root-caused → fixed → verified, distinct from the architectural fix loop (FR-7). `hw4 debug` runs a small planted-bug target (`tests/fixtures/buggy_case`: an HTTP byte-range off-by-one): it reproduces the bug (red), **localizes it via the graph** (the failing test's `tested_by` edge names the implicated module — no full-tree read), verifies the fix turns the spec green, and writes `results/BUG_ANALYSIS.md` (problem, root cause, research path, before/after, token comparison: 51% fewer tokens than naive whole-package reading). Verification is deterministic (red→green); the CrewAI analyst narrates the root cause on the spine. Small target chosen per the lecturer's §6 "prefer a small, well-explained case" guidance.
+
 ## 7. Non-Functional Requirements
 
 | ID | Requirement | Source |

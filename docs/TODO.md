@@ -638,6 +638,15 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T527 (P0) `Ledger` thread-safe — locked JSONL append + read-back (no lost/torn rows)
 - [x] T528 (P0) `tests/unit/test_concurrency.py` (64-way no-loss, no torn lines, saturation-queues-never-drops) + ADR-8 (PLAN.md) + README §15
 
+### graph-guided debugging case (EX04 §5.3–5.4) — concrete bug → fix
+- [x] T530 (P0) `tests/fixtures/buggy_case/` — small planted-bug target (HTTP byte-range off-by-one); fixed `parser.py` + `parser_buggy.py` "before" + spec `tests/test_range.py` + README (target-choice rationale)
+- [x] T531 (P0) `services/debug/case.py` + `sdk/debug_ops.py` + `hw4 debug` CLI — reproduce (red) → graph-localize via `tested_by` edge → verify fix (green) → `results/BUG_ANALYSIS.md`
+- [x] T532 (P0) Bug-analysis report: problem, root cause (off-by-one, inclusive RFC 9110 range), graph-guided research path, before/after diff, verification, **token comparison 560→273 (51% saved)**
+- [x] T533 (P0) `tests/unit/test_debug_case.py` (reproduce, localize, fix verified, spec red/green) + CLI dispatch test; README "Debugging case" + FR-13
+
+### vault hot.md (EX04 §5.1) — was missing
+- [x] T534 (P0) `VaultBuilder.write_hot` + `operations._write_hot` — machine-owned `hot.md` focused-context page for the rank-1 bottleneck; linked from `index.md` "Start here"; live werkzeug `hot.md` regenerated; test added
+
 ### reconcile
 - [x] T529 (P0) PRD/PLAN/TODO/README reconciled; full gates re-run GREEN; each unit committed + pushed
 
@@ -678,8 +687,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 14 Quality hardening | T413–T437 | 6/25 | gate-enforced subset GREEN: ruff 0 (T418), file-length ≤150 (T419), no-hardcodes (T420), no-secrets (T421), suite green + cov ~96% (T413/T414); deeper error-path/dup/edge audits (T415-417,T422-433) remain | 2026-06-15 |
 | 15 README & docs | T438–T455 | 14/18 | rich README (overview/arch diagram/methodology/usage/results/config guide/ADRs/repro/limits), all docs reflect werkzeug, PROMPTS+TODO current, FINDINGS qualified-language; T446 contrib + T452 screenshot inventory (human re-capture) + T454/455 remain | 2026-06-15 |
 | 16 Final & ship | T456–T505 | 2/50 | submission zip builds from tracked tree (228 files, excl workspace/.env/caches) + secrets-scanned clean — real key absent, .env-example dummy (T498/T499); id-named zip, clean-machine test, human sign-off + submit remain | 2026-06-15 |
-| 17 Reviewer enhancements | T516–T529 | 14/14 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00, honest FP), **Graphify backend** (real node-link adapter, AST default, ADR-4 revised), **parallelism+thread-safety** (§15: threaded wiki, locked gatekeeper/ledger); all behind green gates with tests + docs | 2026-06-15 |
+| 17 Reviewer enhancements | T516–T534 | 19/19 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00, honest FP), **Graphify backend** (real node-link adapter, AST default, ADR-4 revised), **parallelism+thread-safety** (§15), **graph-guided debugging case** (`hw4 debug`: HTTP byte-range off-by-one → root cause → verified red→green fix, 51% token saving), **vault `hot.md`** (was missing, §5.1); all behind green gates with tests + docs | 2026-06-16 |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **529 tasks** | **417/529** | | |
+| **Total** | **534 tasks** | **422/534** | | |
 
 *End of TODO v1.00.*

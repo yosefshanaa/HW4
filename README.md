@@ -103,7 +103,8 @@ flowchart LR
 | **graph** | immutable `results/graphs/iNN/{graph,manifest,metrics}.json` | content-hash identical on rebuild (proven in `VALIDATION.md`) |
 | **analyze** | `findings.json` + careful-language `FINDINGS.md`; `--agents` adds CrewAI narratives | findings identical with or without agents |
 | **evaluate** | `confusion_matrix.json` + `CONFUSION_MATRIX.md` — detector predictions scored vs the planted answer key (L07 §13.2) | no LLM/network; reproducible TP/FP/FN/TN |
-| **vault** | Obsidian taxonomy (Portfolio→Domains→Projects) + raw/ snapshots + LLM `wiki/` + machine-owned `index.md` | skeleton never clobbered; index regenerated |
+| **vault** | Obsidian taxonomy (Portfolio→Domains→Projects) + raw/ snapshots + LLM `wiki/` + machine-owned `index.md` **+ `hot.md`** (focused context for the critical area) | skeleton never clobbered; index + hot regenerated |
+| **debug** | graph-guided bug fix on `buggy_case`: reproduce → localize via graph → verify fix → `BUG_ANALYSIS.md` | deterministic red→green; no network |
 | **fix** | `fix/<id>` branch, characterization tests if needed, `loop_log.json`, per-iteration graph diffs | every iteration logged, accepted **or** reverted |
 | **experiment** | paired/repeated `condition_{A,B}.json`, `comparison.json`, blind `scoring_sheet.json` + sealed key | seeded shuffle, resume-on-crash, tokens from API metadata only |
 | **report** | `REPORT.md` + Refactor Truth Dashboard | aggregates committed artifacts |
@@ -135,6 +136,7 @@ uv run hw4 graph workspace/target            # immutable graph iteration + metri
 uv run hw4 analyze                           # detectors → results/findings.json + FINDINGS.md
 uv run hw4 analyze --agents                  # same findings + CrewAI careful-language narratives
 uv run hw4 evaluate                          # confusion matrix vs mini_repo answer key (L07 §13.2)
+uv run hw4 debug                             # graph-guided bug fix on buggy_case → results/BUG_ANALYSIS.md
 uv run hw4 vault                             # Obsidian vault + LLM wiki pages
 uv run hw4 ask "where is the routing Map implemented?"  # graph-guided, cited answer
 uv run hw4 fix F-005                          # test-guarded fix loop on a validated finding
@@ -223,7 +225,19 @@ The detectors are a binary classifier, so they get a classifier's yardstick. `hw
 
 **Recall 1.00** — all three planted defects (god-node `app.engine`, orphan `orphan.legacy`, doc gap `app.plugins`) detected. The lone **FP** is the fixture's `conftest.py`: genuinely disconnected, so the isolation detector surfaces it for triage — reported as an honest precision cost, not hidden, in keeping with Part-C's "isolation is a finding, not a diagnosis." The healthy-hub guard (`app.utils`, high fan-in / one concern) stays unflagged — the two true negatives that keep precision from collapsing. We publish the real 0.75, not a hand-tuned 1.0. Full breakdown: [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), design in [`docs/PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 
-### Fix loop — an honest negative (T340)
+### Debugging case — graph-guided bug fix (§5.3–5.4)
+
+The assignment's core debugging thread, on a small planted-bug target ([`tests/fixtures/buggy_case`](tests/fixtures/buggy_case)) chosen over a heavy BugsInPy environment per the lecturer's "prefer a small, well-explained case" guidance. `uv run hw4 debug` runs it end-to-end and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
+
+- **Bug:** `httprange.parse_byte_range("bytes=0-499", 1000)` returns content-length **499**, but HTTP byte ranges are *inclusive* (RFC 9110 §14.1.2) → it must be **500**. A boundary bug that passes a casual read.
+- **Root cause:** off-by-one — `length = end - start` instead of `end - start + 1`.
+- **Graph-guided localization:** start from the failing test and follow the graph — `tests.test_range` →(`tested_by`)→ **`httprange.parser`**. The graph names the one file to open; no full-tree scan.
+- **Fix (before→after):** `- end - start` → `+ end - start + 1`; the 4-case spec goes **red→green** (verified deterministically, no network).
+- **Token comparison:** naive whole-package read **560** tok vs graph-guided single-module **273** tok → **51% fewer tokens** to reach the fix.
+
+The CrewAI analyst narrates the root cause on top of this deterministic spine — the same "deterministic spine, LLM at the edges" rule as the rest of the system.
+
+### Fix loop (architectural) — an honest negative (T340)
 
 The loop targeted the validated `http` god-node with the bounded GOD_NODE strategy (*extract the smallest cohesive group of private helpers into a sibling module, import them back, do not touch the public API*).
 
