@@ -100,7 +100,7 @@ flowchart LR
 
 | Stage | What it produces | Determinism |
 |---|---|---|
-| **graph** | immutable `results/graphs/iNN/{graph,manifest,metrics}.json` | content-hash identical on rebuild (proven in `VALIDATION.md`) |
+| **graph** | immutable `results/graphs/iNN/{graph,manifest,metrics}.json` + human-readable `GRAPH_REPORT.md` | content-hash identical on rebuild (proven in `VALIDATION.md`) |
 | **analyze** | `findings.json` + careful-language `FINDINGS.md`; `--agents` adds CrewAI narratives | findings identical with or without agents |
 | **evaluate** | `confusion_matrix.json` + `CONFUSION_MATRIX.md` — detector predictions scored vs the planted answer key (L07 §13.2) | no LLM/network; reproducible TP/FP/FN/TN |
 | **vault** | Obsidian taxonomy (Portfolio→Domains→Projects) + raw/ snapshots + LLM `wiki/` + machine-owned `index.md` **+ `hot.md`** (focused context for the critical area) | skeleton never clobbered; index + hot regenerated |
@@ -164,6 +164,8 @@ HW4__graph__graphify__graph_json=$PWD/graph.json \
 # Or let hw4 invoke Graphify for you (cwd = repo) via a configured command:
 #   "graph": { "backend": "graphify", "graphify": { "command": ["npx","graphify","."] } }
 ```
+
+Either backend emits the Graphify-parity deliverables: `graph.json` plus a human-readable [`GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md) (node/edge/evidence breakdown, top bottlenecks, largest communities) written beside it on every `hw4 graph` build.
 
 The adapter (`src/hw4/services/extractor/graphify.py`) only translates structure (`links`→edges, `source`/`target`→`src`/`dst`, Graphify's `confidence` evidence class → our `evidence` + `confidence_score`→confidence, `file_type`→node type) and validates at the single `Graph.from_dict` boundary. **We keep AST as the default on purpose:** the frozen experiment, findings, and content-hash determinism must reproduce without an external tool — Graphify is an honest drop-in, not a swap that would invalidate committed evidence (see ADR-4 in [`docs/PLAN.md`](docs/PLAN.md)).
 

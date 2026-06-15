@@ -17,7 +17,7 @@ from pathlib import Path
 
 from hw4.sdk import debug_ops, eval_ops, experiment_ops, fix_ops, operations
 from hw4.sdk.errors import ServiceNotReadyError
-from hw4.services import graph_metrics
+from hw4.services import graph_metrics, graph_report
 from hw4.services.graph_models import Graph
 from hw4.services.graph_runner import BuildRecord, GraphRunner
 from hw4.shared.config import Config
@@ -101,8 +101,10 @@ class Hw4Sdk:
             latest = runner.latest_iteration()
             iteration = 0 if latest is None else latest + 1
         record = runner.build(repo_path, iteration)
-        metrics = graph_metrics.compute(Graph.load(record.graph_path), self._config)
+        graph = Graph.load(record.graph_path)
+        metrics = graph_metrics.compute(graph, self._config)
         metrics.dump(record.graph_path.parent / "metrics.json")
+        graph_report.write(graph, metrics, record.graph_path.parent / "GRAPH_REPORT.md")
         return record
 
     def build_vault(self, graph_path: Path | str | None = None):
