@@ -144,6 +144,27 @@ uv run hw4 report --dashboard                 # REPORT.md + Refactor Truth Dashb
 
 Example — the deterministic-vs-agent equivalence (a graded claim): `analyze` and `analyze --agents` produce **byte-identical `findings.json`**; the crew only adds prose. *Determinism for the science, agents for the demonstration.*
 
+### Graph backend — AST (default) or Graphify (ADR-4)
+
+The course tool [Graphify](https://github.com/safishamsi/graphify) ([graphify.net](https://graphify.net/)) is a real, obtainable Tree-sitter + NetworkX extractor that exports `graph.json` in **node-link format**. `hw4` ships a tested adapter that ingests that genuine output, so you can run either backend via `config/setup.json → graph.backend`:
+
+```bash
+# Default: the in-repo AST backend (deterministic, token-free, reproducible) —
+# all committed findings/experiment artifacts are built with this.
+uv run hw4 graph workspace/target
+
+# Graphify backend: run Graphify yourself, then point hw4 at its graph.json.
+npx graphify .                                          # produces ./graph.json (node-link)
+HW4__graph__backend=graphify \
+HW4__graph__graphify__graph_json=$PWD/graph.json \
+  uv run hw4 graph workspace/target                     # adapter normalizes → our contract
+
+# Or let hw4 invoke Graphify for you (cwd = repo) via a configured command:
+#   "graph": { "backend": "graphify", "graphify": { "command": ["npx","graphify","."] } }
+```
+
+The adapter (`src/hw4/services/extractor/graphify.py`) only translates structure (`links`→edges, `source`/`target`→`src`/`dst`, Graphify's `confidence` evidence class → our `evidence` + `confidence_score`→confidence, `file_type`→node type) and validates at the single `Graph.from_dict` boundary. **We keep AST as the default on purpose:** the frozen experiment, findings, and content-hash determinism must reproduce without an external tool — Graphify is an honest drop-in, not a swap that would invalidate committed evidence (see ADR-4 in [`docs/PLAN.md`](docs/PLAN.md)).
+
 ## Results deep-dive
 
 ### Target repository

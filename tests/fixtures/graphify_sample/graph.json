@@ -1,0 +1,20 @@
+{
+ "directed": true,
+ "multigraph": false,
+ "graph": {
+  "generator": "graphify",
+  "schema": "node-link",
+  "note": "Realistic small Graphify export (NetworkX node-link). Exercises the adapter: fine node types pass through, file_type falls back, EXTRACTED/INFERRED evidence with confidence_score."
+ },
+ "nodes": [
+  {"id": "app.engine", "label": "engine", "type": "module", "file_type": "code", "source_file": "app/engine.py"},
+  {"id": "app.engine.run", "label": "run", "type": "function", "file_type": "code", "source_file": "app/engine.py"},
+  {"id": "app.utils", "label": "utils", "type": "module", "file_type": "code", "source_file": "app/utils.py"},
+  {"id": "doc:README.md", "label": "README", "file_type": "document", "source_file": "README.md"}
+ ],
+ "links": [
+  {"source": "app.engine.run", "target": "app.engine", "relation": "implements", "confidence": "EXTRACTED", "source_file": "app/engine.py"},
+  {"source": "app.engine", "target": "app.utils", "relation": "imports", "confidence": "EXTRACTED", "source_file": "app/engine.py"},
+  {"source": "doc:README.md", "target": "app.engine", "relation": "mentions", "confidence": "INFERRED", "confidence_score": 0.66, "source_file": "README.md"}
+ ]
+}

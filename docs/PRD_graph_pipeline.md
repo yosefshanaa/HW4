@@ -28,14 +28,25 @@ Primary extractor was planned as **Graphify** (course tool) run via
 the *identical* contract.
 
 > **ADR-4 gate closed 2026-06-12 (T131–T136):** discovery spike found no
-> obtainable Graphify distribution (PyPI 404 for `graphify`/
-> `graphify-cli`; course materials contain only the Part-C PDF describing
-> its outputs, not the tool). **Fallback activated:** in-repo
-> `ast_extractor` backend — module/class/function nodes; `imports`/
-> `calls` edges as EXTRACTED; doc-mention edges as INFERRED; fuzzy
-> matches as AMBIGUOUS; docstrings/TODO comments become `rationale`
-> nodes (T137–T139). Backend id is recorded in every graph artifact so a
-> later real-Graphify run slots in without downstream change.
+> obtainable Graphify distribution *via pip/PyPI* (404 for `graphify`/
+> `graphify-cli`). **Fallback activated:** in-repo `ast_extractor`
+> backend — module/class/function nodes; `imports`/`calls` edges as
+> EXTRACTED; doc-mention edges as INFERRED; fuzzy matches as AMBIGUOUS;
+> docstrings/TODO comments become `rationale` nodes (T137–T139). Backend
+> id is recorded in every graph artifact so a later real-Graphify run
+> slots in without downstream change.
+>
+> **ADR-4 revised 2026-06-15:** Graphify *is* obtainable
+> ([`safishamsi/graphify`](https://github.com/safishamsi/graphify), Tree-sitter
+> + NetworkX, exports `graph.json` in node-link format). We added a real
+> ingestion backend `extractor/graphify.py`, selectable via
+> `config graph.backend`, that normalizes a genuine node-link export
+> through `Graph.from_dict` (and can run a configured Graphify command via
+> `ProcessRunner`). The **`ast` backend stays the default** so the frozen,
+> content-hash-verified experiment/findings remain reproducible without an
+> external tool; the adapter is an honest tested drop-in, not a swap that
+> would invalidate committed evidence. The earlier "later real-Graphify run
+> slots in" promise is now realized in code, not deferred.
 
 ## 2. Interfaces & I/O
 

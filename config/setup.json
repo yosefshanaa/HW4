@@ -63,6 +63,11 @@
     "default_dirname": "target"
   },
   "graph": {
+    "backend": "ast",
+    "graphify": {
+      "graph_json": "",
+      "command": []
+    },
     "exclude_dirs": [
       ".git",
       "__pycache__",

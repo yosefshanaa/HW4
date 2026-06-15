@@ -225,10 +225,11 @@ Threats to validity we explicitly document: answer-key bias (key built from the 
 - **Decision**: model ids live in `config/setup.json` (`models.cheap`, `models.strong`); cheap tier for drafts/narratives, strong tier for refactor planning and final experiment runs. No model id appears in code (NFR-5). Provider adapter behind `llm_client.py` interface so a second provider is a config + adapter addition, not a rewrite.
 - **Consequences**: cost control; experiment validity (single fixed model for both conditions).
 
-### ADR-4: Graphify fallback — minimal AST extractor with identical contract
-- **Trigger**: Graphify cannot be obtained/run by end of Phase 4 spike.
-- **Decision**: implement `graph_runner.py` alternative backend: Python `ast` walk producing modules/classes/functions as nodes, imports/calls as EXTRACTED edges; doc mentions as INFERRED (regex/heuristic); anything heuristic ⇒ AMBIGUOUS. Same graph.json contract ⇒ everything downstream unaffected.
-- **Consequences**: pedagogically aligned (AST = deterministic, token-free, L07 §4.1); lecturer notified; documented as limitation (no media/semantic layer).
+### ADR-4: Two selectable backends — AST default, Graphify adapter (revised 2026-06-15)
+- **Original trigger (2026-06-12)**: the Phase-4 discovery spike could not obtain a Graphify distribution (`pip`/PyPI 404), so we shipped a minimal `ast`-based extractor emitting our graph.json contract.
+- **Revision (2026-06-15)**: Graphify *is* obtainable — [`safishamsi/graphify`](https://github.com/safishamsi/graphify) / [graphify.net](https://graphify.net/), a Tree-sitter + NetworkX tool that exports `graph.json` in **NetworkX node-link format** (our PLAN §2.1 contract was, in fact, modelled on its documented schema: same `EXTRACTED/INFERRED/AMBIGUOUS` evidence vocabulary and relation verbs). We therefore add a **real Graphify ingestion backend** (`extractor/graphify.py`) selectable via `config graph.backend ∈ {ast, graphify}`, normalizing a genuine node-link export (`links`→edges, `source`/`target`→`src`/`dst`, `confidence`→`evidence` + `confidence_score`→confidence, `file_type`→type) through the single `Graph.from_dict` boundary. It can also shell out to a configured Graphify command (`graph.graphify.command`) via `ProcessRunner`.
+- **Decision**: keep the **`ast` backend as the default**. The frozen experiment, findings, and content-hash determinism (`VALIDATION.md`) are all AST-produced and must stay reproducible without an external tool; the Graphify adapter is an honest, tested drop-in (`tests/fixtures/graphify_sample/graph.json`), not a swap that would invalidate the committed evidence.
+- **Consequences**: tool independence preserved (one normalization boundary); AST path stays deterministic and token-free (L07 §4.1); the Graphify claim is now backed by a working code path rather than an availability caveat. Documented in README ("Graphify backend").
 
 ### ADR-5: Graph metrics via networkx
 - **Decision**: networkx for betweenness/communities/bridges — battle-tested, pure Python, easy to mock. Custom code only for the bottleneck rubric.

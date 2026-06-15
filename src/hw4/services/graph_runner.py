@@ -17,9 +17,13 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from hw4.services.extractor import extract
+from hw4.services.extractor import extract, graphify
 from hw4.shared.config import Config
 from hw4.shared.logging_setup import get_logger, log_event
+
+# graph.backend selects the extractor; the AST backend is the reproducible
+# default, the Graphify adapter (ADR-4) ingests a real node-link graph.json.
+_BACKENDS = {"ast": extract, "graphify": graphify.extract}
 
 
 class IterationExistsError(RuntimeError):
@@ -51,6 +55,12 @@ class GraphRunner:
         base = Path(results_dir) if results_dir else Path(config.path("results"))
         self._graphs_dir = base / "graphs"
 
+    def _extractor(self):
+        backend = str(self._config.get("graph.backend", default="ast"))
+        if backend not in _BACKENDS:
+            raise ValueError(f"unknown graph.backend {backend!r} (expected one of {list(_BACKENDS)})")
+        return _BACKENDS[backend]
+
     def iteration_dir(self, iteration: int) -> Path:
         return self._graphs_dir / f"i{iteration:02d}"
 
@@ -72,7 +82,7 @@ class GraphRunner:
         if graph_file.exists():
             raise IterationExistsError(f"iteration {iteration} already built: {graph_file}")
         started = time.monotonic()
-        graph = extract(repo_path, self._config, iteration=iteration)
+        graph = self._extractor()(repo_path, self._config, iteration=iteration)
         if not graph.nodes:
             raise EmptyGraphError(f"no nodes extracted from {repo_path} — check graph.* config")
         duration = time.monotonic() - started
