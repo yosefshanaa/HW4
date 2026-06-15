@@ -637,15 +637,15 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 0 Environment | T001–T030 | 27/30 | in progress (T007 user .env, T023 Obsidian, T028 editor pending) | |
 | 1 Shared infra & SDK | T031–T075 | 40/45 | done core; T042,T061,T071,T072,T074 open | 2026-06-12 |
 | 2 Docs & approvals | T076–T105 | 22/30 | docs done; T076-T080,T099,T102,T103 human-side | 2026-06-12 |
-| 3 Target repo | T106–T130 | 22/25 | locked: pallets/click @ 8a1b1a3; T110 n/a, T116+T118 user-side | 2026-06-12 |
-| 4 Graph pipeline | T131–T172 | 40/42 | done; T163 done, T169 perf-cache not needed (2.8s) | 2026-06-12 |
-| 5 Vault & wiki | T173–T210 | 34/38 | LIVE vault built (34 wiki pages); 4 Obsidian screenshots embedded in README; canvas (T199, P2) remains | 2026-06-15 |
-| 6 RevEng & detection | T211–T262 | 44/52 | done; T244 needs API key, T248-251,T255,T257 P2/human | 2026-06-12 |
-| 7 Experiment baseline | T263–T292 | 28/30 | LIVE condition A measured; blind pack ready for human scoring | 2026-06-12 |
-| 8 Agents | T293–T320 | 27/28 | LIVE run done (narratives on target); T318 P2 parked | 2026-06-12 |
-| 9 Fix loop | T321–T352 | 31/32 | LIVE campaign run: honest NO_SAFE_ACTION + integrity fixes; T341 done | 2026-06-12 |
-| 10 Experiment B | T353–T372 | 18/20 | LIVE: 85.6% savings (run2, tuned); run1 archived | 2026-06-12 |
-| 11 Notebook & cost | T373–T391 | 17/19 | executes offline; live cells degrade to estimates | 2026-06-12 |
+| 3 Target repo | T106–T130 | 22/25 | **re-targeted: pallets/werkzeug @ 1b00618e** (≥70-file floor; click 63 retired); T110 n/a, T116+T118 user-side | 2026-06-15 |
+| 4 Graph pipeline | T131–T172 | 40/42 | done; werkzeug i00 = 1,912 nodes / 3,304 edges, deterministic rebuild (hash 54274cf9), ~95 s on /mnt/c | 2026-06-15 |
+| 5 Vault & wiki | T173–T210 | 34/38 | LIVE werkzeug vault (44 wiki pages: 5 hubs + 39 communities); screenshots pending re-capture (human); canvas (T199, P2) remains | 2026-06-15 |
+| 6 RevEng & detection | T211–T262 | 44/52 | done on werkzeug: 8 hypotheses (7 god-node + 1 trace-gap), 2 validated (http, datastructures); T248-251,T255,T257 P2/human | 2026-06-15 |
+| 7 Experiment baseline | T263–T292 | 28/30 | dataset re-frozen for werkzeug (sha256 f7dc994e); blind pack ready for human scoring | 2026-06-15 |
+| 8 Agents | T293–T320 | 27/28 | LIVE werkzeug narratives (findings identical to direct path); T318 P2 parked | 2026-06-15 |
+| 9 Fix loop | T321–T352 | 31/32 | LIVE werkzeug: honest NO_SAFE_ACTION on F-005 http (green but no structural gain → reverted); T341 done | 2026-06-15 |
+| 10 Experiment B | T353–T372 | 18/20 | LIVE werkzeug: 58.7% savings (below 70% target; honest failure analysis, B lean at 6.5k/cell) | 2026-06-15 |
+| 11 Notebook & cost | T373–T391 | 17/19 | rebuilt + executed for werkzeug; live cells from committed artifacts | 2026-06-15 |
 | 12 SKILL | T392–T402 | 10/11 | done; T402 P2 parked | 2026-06-12 |
 | 13 Creative ext. | T403–T412 | 10/10 | dashboard generated on live run | 2026-06-12 |
 | 14 Quality hardening | T413–T437 | 0/25 | not started | |
