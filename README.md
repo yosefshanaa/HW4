@@ -26,21 +26,22 @@
 ## Table of contents
 
 1. [What this is & why a graph](#what-this-is--why-a-graph)
-2. [Research questions (§4)](#research-questions-4--answered)
-3. [Architecture](#architecture)
-4. [The pipeline, stage by stage](#the-pipeline-stage-by-stage)
-5. [Installation](#installation)
-6. [Usage tour](#usage-tour)
-7. [Results deep-dive](#results-deep-dive) — findings, agent evaluation, **debugging case**, fix loop, token experiment, the Obsidian vault
-8. [Evidence discipline (Part-C)](#evidence-discipline-part-c)
-9. [Configuration guide](#configuration-guide)
-10. [Repository layout](#repository-layout)
-11. [Extension points](#extension-points)
-12. [Key design decisions (ADRs)](#key-design-decisions-adrs-in-docsplanmd-5)
-13. [Reproducing the analysis](#reproducing-the-analysis)
-14. [Quality standards (ISO/IEC 25010)](#quality-standards--isoiec-25010-conformance)
-15. [Quality, cost & limitations](#quality-cost--limitations)
-16. [License & attribution](#license--attribution)
+2. [Documentation](#documentation)
+3. [Research questions (§4)](#research-questions-4--answered)
+4. [Architecture](#architecture)
+5. [The pipeline, stage by stage](#the-pipeline-stage-by-stage)
+6. [Installation](#installation)
+7. [Usage tour](#usage-tour)
+8. [Results deep-dive](#results-deep-dive) — findings, agent evaluation, **debugging case**, fix loop, token experiment, the Obsidian vault
+9. [Evidence discipline (Part-C)](#evidence-discipline-part-c)
+10. [Configuration guide](#configuration-guide)
+11. [Repository layout](#repository-layout)
+12. [Extension points](#extension-points)
+13. [Key design decisions (ADRs)](#key-design-decisions-adrs-in-docsplanmd-5)
+14. [Reproducing the analysis](#reproducing-the-analysis)
+15. [Quality standards (ISO/IEC 25010)](#quality-standards--isoiec-25010-conformance)
+16. [Quality, cost & limitations](#quality-cost--limitations)
+17. [License & attribution](#license--attribution)
 
 ---
 
@@ -57,6 +58,16 @@ The deliverable answers three task tiers over any repo:
 …and goes further: it **detects** architectural smells (god modules, single points of failure, isolation, doc↔code traceability gaps), **attempts to fix** them under a test-and-graph-diff guard, and **measures** the token economics of the whole approach.
 
 A guiding rule throughout: **deterministic spine, LLM at the edges.** Graph extraction, metrics, community detection, diffs, detectors, and loop control are plain, testable Python. The LLM only writes narratives, plans, and edits — and never without passing through the gate.
+
+## Documentation
+
+This project was written **docs-before-code** (guidelines §1.4): the requirements, architecture, and task plan existed before the first line was implemented, and each non-trivial mechanism got its own PRD. The full set lives in [`docs/`](docs/):
+
+- **Governing docs** — [`PRD.md`](docs/PRD.md) (problem, KPIs, functional/non-functional requirements, risks) · [`PLAN.md`](docs/PLAN.md) (architecture, C4/UML, the ADRs) · [`TODO.md`](docs/TODO.md) (541-task plan tracked phase by phase).
+- **Mechanism PRDs (7)** — one per subsystem: [`PRD_graph_pipeline.md`](docs/PRD_graph_pipeline.md) · [`PRD_defect_detection.md`](docs/PRD_defect_detection.md) · [`PRD_fix_loop.md`](docs/PRD_fix_loop.md) · [`PRD_gatekeeper.md`](docs/PRD_gatekeeper.md) · [`PRD_token_experiment.md`](docs/PRD_token_experiment.md) · [`PRD_agent_orchestration.md`](docs/PRD_agent_orchestration.md) · [`PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
+- **Process & reference** — [`PROMPTS.md`](docs/PROMPTS.md) (the AI prompt log) · [`SCORING_RUBRIC.md`](docs/SCORING_RUBRIC.md) (blind experiment scoring) · [`SKILL.md`](docs/SKILL.md) + [`SKILL_token_experiment.md`](docs/SKILL_token_experiment.md) (SKILL protocols) · [`TARGET_REPO.md`](docs/TARGET_REPO.md) (target provenance + unfamiliarity attestation).
+
+Key generated artifacts referenced throughout: [`results/FINDINGS.md`](results/FINDINGS.md), [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md), [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), [`results/graphs/i00/GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), and the Obsidian [`vault/`](vault/).
 
 ## Research questions (§4) — answered
 
