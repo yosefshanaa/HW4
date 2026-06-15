@@ -4,24 +4,23 @@
    "accepted": false,
    "characterization_test": "",
    "files_changed": [
-    "src/click/_helpers.py",
-    "src/click/core.py"
+    "src/werkzeug/http_helpers.py"
    ],
-   "finding_id": "F-003",
-   "graph_hash_after": "193ad5c9c4dc9a045979eaca9c03cf1ef2bc099bdd5052e9b8f7f2dd5feb8a30",
-   "graph_hash_before": "bc4f17d43c3714861d97c1ef205b5c14f60619c5fb04bc605f4c6fddf4e2c5a9",
-   "iteration": 12,
+   "finding_id": "F-005",
+   "graph_hash_after": "975c2e2246ea3377f0e6555835cb452deae4293d65620ebfab159c58e87c223e",
+   "graph_hash_before": "a37ab4bf54dc7f6d223ecbcb410f05b075ef252af60701f8b482de595c1766ac",
+   "iteration": 2,
    "metric_deltas": {
-    "bottleneck_after": 0.4948,
-    "bottleneck_before": 0.4965,
-    "isolated_after": 848,
-    "isolated_before": 846
+    "bottleneck_after": 0.106,
+    "bottleneck_before": 0.106,
+    "isolated_after": 1253,
+    "isolated_before": 1250
    },
-   "recorded_utc": "2026-06-12T17:21:00.998655+00:00",
+   "recorded_utc": "2026-06-15T12:15:47.121395+00:00",
    "stop_reason": "NO_SAFE_ACTION",
    "strategy": "extract the SMALLEST cohesive group of private module-level helper functions (e.g. formatting/label helpers) into one new sibling module; move ONLY functions with no class/state dependencies, import them back by name so every existing reference keeps working; do not move classes, do not touch the public API, do not reorder anything else",
-   "test_output_tail": "ing[choices3-[BOOLEAN]]\nFAILED tests/test_options.py::test_choice_usage_rendering[choices4-[TEXT|INTEGER]]\nFAILED tests/test_options.py::test_choice_usage_rendering[HashType-[HASHTYPE]]\nFAILED tests/test_options.py::test_choice_usage_rendering[Number-[NUMBER]] - ...\nFAILED tests/test_options.py::test_choice_usage_rendering[Letter-[LETTER]] - ...\nFAILED tests/test_options.py::test_choice_usage_rendering[Color-[COLOR]] - as...\nFAILED tests/test_options.py::test_choice_usage_rendering[ColorInt-[COLORINT]]\nFAILED tests/test_options.py::test_flag_group_competition_duplicate_option_name\nFAILED tests/test_stream_lifecycle.py::test_exception_does_not_corrupt_next_invoke\nFAILED tests/test_termui.py::test_flag_value_prompt[--flag/--no-flag-opt_params14-args14-None-None-MissingParameter]\nFAILED tests/test_termui.py::test_flag_value_prompt[--flag/--no-flag-opt_params20-args20-None-None-BadParameter]\nFAILED tests/test_testing.py::test_catch_exceptions - assert False\nFAILED tests/test_testing.py::test_catch_exceptions_cli_runner - assert False\nFAILED tests/test_testing.py::test_exit_code_and_output_from_sys_exit - Asser...\n70 failed, 1602 passed, 24 skipped, 31000 deselected, 1 xfailed in 15.92s",
-   "tests_green": false,
+   "test_output_tail": "",
+   "tests_green": true,
    "verdict": "regressed"
   }
  ],
