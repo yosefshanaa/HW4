@@ -208,7 +208,15 @@ Run 2 — overall **89.8%** (mean 89.7%, median 91.3%); by tier **locate 90.3% �
 
 ### The Obsidian vault
 
-The graph becomes a navigable Obsidian vault under `vault/20_Projects/werkzeug-analysis/`: an **index-first** hub (the only default entry point), one LLM **wiki page per key entity** (5 hubs + 39 community pages), `raw/` provenance snapshots kept separate from distilled notes, and the SKILL protocol mirrored in-vault. Open the folder in Obsidian to explore the graph view — `index` at the centre with community clusters radiating out — and the per-entity wiki for the validated god-nodes `werkzeug.datastructures` (F-001) and `werkzeug.http` (F-005). The community-size and experiment charts above are exported by the notebook (`assets/`).
+The graph becomes a navigable Obsidian vault under `vault/20_Projects/werkzeug-analysis/`: an **index-first** hub (the only default entry point), one LLM **wiki page per key entity** (5 hubs + 39 community pages), `raw/` provenance snapshots kept separate from distilled notes, and the SKILL protocol mirrored in-vault.
+
+| Graph view — `index` at the centre, community clusters radiating out | `index.md` — the machine-owned navigation hub |
+|---|---|
+| ![Obsidian graph view of the werkzeug vault](assets/vault_graph.png) | ![index.md navigation hub](assets/vault_index.png) |
+| **`werkzeug.datastructures` wiki — rank-1 god-node (F-001)** | **`werkzeug.wrappers` wiki — rank-5 dependency hub** |
+| ![werkzeug.datastructures wiki page](assets/wiki_datastructures.png) | ![werkzeug.wrappers wiki page](assets/wiki_wrappers.png) |
+
+Each wiki page carries an **evidence table** (EXTRACTED/INFERRED edges with their source files and confidence) plus open questions; the index ranks hubs by the graph's bottleneck metrics. The community-size and experiment charts elsewhere in this README are exported by the notebook (`assets/`).
 
 ## Evidence discipline (Part-C)
 
