@@ -644,13 +644,13 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 7 Experiment baseline | T263–T292 | 28/30 | dataset re-frozen for werkzeug (sha256 f7dc994e); blind pack ready for human scoring | 2026-06-15 |
 | 8 Agents | T293–T320 | 27/28 | LIVE werkzeug narratives (findings identical to direct path); T318 P2 parked | 2026-06-15 |
 | 9 Fix loop | T321–T352 | 31/32 | LIVE werkzeug: honest NO_SAFE_ACTION on F-005 http (green but no structural gain → reverted); T341 done | 2026-06-15 |
-| 10 Experiment B | T353–T372 | 18/20 | LIVE werkzeug: 58.7% savings (below 70% target; honest failure analysis, B lean at 6.5k/cell) | 2026-06-15 |
+| 10 Experiment B | T353–T372 | 18/20 | LIVE werkzeug: run1 58.7% (default caps, archived) → **run2 89.8%** (tuned radius1/20nodes/2seeds/2pages; all 10 q ≥82.4%); KPI ≥70% met (correctness human-gated) | 2026-06-15 |
 | 11 Notebook & cost | T373–T391 | 17/19 | rebuilt + executed for werkzeug; live cells from committed artifacts | 2026-06-15 |
 | 12 SKILL | T392–T402 | 10/11 | done; T402 P2 parked | 2026-06-12 |
 | 13 Creative ext. | T403–T412 | 10/10 | dashboard generated on live run | 2026-06-12 |
-| 14 Quality hardening | T413–T437 | 0/25 | not started | |
-| 15 README & docs | T438–T455 | 0/18 | not started | |
-| 16 Final & ship | T456–T505 | 0/50 | not started | |
+| 14 Quality hardening | T413–T437 | 6/25 | gate-enforced subset GREEN: ruff 0 (T418), file-length ≤150 (T419), no-hardcodes (T420), no-secrets (T421), suite green + cov ~96% (T413/T414); deeper error-path/dup/edge audits (T415-417,T422-433) remain | 2026-06-15 |
+| 15 README & docs | T438–T455 | 14/18 | rich README (overview/arch diagram/methodology/usage/results/config guide/ADRs/repro/limits), all docs reflect werkzeug, PROMPTS+TODO current, FINDINGS qualified-language; T446 contrib + T452 screenshot inventory (human re-capture) + T454/455 remain | 2026-06-15 |
+| 16 Final & ship | T456–T505 | 2/50 | submission zip builds from tracked tree (228 files, excl workspace/.env/caches) + secrets-scanned clean — real key absent, .env-example dummy (T498/T499); id-named zip, clean-machine test, human sign-off + submit remain | 2026-06-15 |
 | Backlog | T506–T515 | 0/10 | parked | |
 | **Total** | **515 tasks** | **403/515** | | |
 
