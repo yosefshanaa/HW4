@@ -93,10 +93,10 @@
     "top_k_bottlenecks": 10
   },
   "vault": {
-    "project": "click-analysis",
+    "project": "werkzeug-analysis",
     "domains": [
       "python",
-      "cli-frameworks"
+      "wsgi-http"
     ],
     "top_hub_pages": 5,
     "wiki_page_max_lines": 40,
@@ -135,6 +135,14 @@
       ".",
       "--with",
       "pytest",
+      "--with",
+      "pytest-timeout",
+      "--with",
+      "cryptography",
+      "--with",
+      "ephemeral-port-reserve",
+      "--with",
+      "watchdog",
       "pytest",
       "-q",
       "tests"
