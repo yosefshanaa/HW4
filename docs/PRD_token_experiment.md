@@ -93,29 +93,32 @@ noted as future work).
 
 ## Measured results (LIVE, 2026-06-15, gpt-4o-mini both conditions)
 
-- **Run 1 (committed default caps: radius 2, 40 nodes, 3 seeds, 3 pages,
-  12k context cap):** overall input-token savings **58.7%** (median
-  60.2%); by tier path 64.3% / locate 58.7% / impact 50.7%. Condition B
-  was well-formed (~6.5k tok/cell, not over-provisioned) but **below the
-  70% target** — with B that informative the ceiling is ≈ 1 − 6.5k/15.7k
-  ≈ 59%. Archived as `condition_B_run1.json` / `comparison_run1.json`.
-- **Documented amendment (sensitivity-driven, dataset untouched):** the
-  §4 OAT sensitivity study showed the retrieval caps trade context size
-  for tokens with little loss on the locate/path tiers, motivating a
-  tighter setting — radius 1, 20 nodes, 2 seeds, 2 pages via
-  `HW4__retrieval__*` env overrides (config files + frozen dataset
-  unchanged; only the runtime knobs moved).
-- **Run 2 (tuned):** overall savings **89.8%** (mean 89.7%, median
-  91.3%); by tier locate 90.3% / path 90.2% / impact 88.5%. **All 10
-  questions clear the 70% target** (lowest Q-09 datastructures-impact at
-  82.4% — legitimately the widest-neighborhood question). Condition B
-  dropped to ~1.6k tok/cell. **KPI ≥70% met.**
-- Quality: blind scoring pack regenerated (`scoring_sheet.json` + sealed
-  `blinding_key.json`, 40 answers) for two independent human scorers. The
-  savings only "count" if mean_correctness(B) ≥ mean_correctness(A) AND
-  citation_rate(B) ≥ citation_rate(A) (SCORING_RUBRIC.md) — human-side. At
-  ~1.6k tok/cell the tuned B context is lean, so the human correctness
-  check is the load-bearing validation of the 89.8% headline.
+- **Run 1 — the validated result (committed default caps: radius 2, 40
+  nodes, 3 seeds, 3 pages, 12k cap):** overall input-token savings
+  **58.7%** (median 60.2%); Condition B well-formed (~6.5k tok/cell).
+  **Blind quality (LLM-as-judge, masked sheet):** correctness B **1.20 ≥**
+  A **1.15** and citation B **0.70 ≥** A **0.65** → **rubric KPI PASS** —
+  the 58.7% savings *count* (graph quality matches/slightly beats naive).
+  Below the ≥70% FR aspiration, but quality-preserving.
+- **Run 2 — sensitivity over-tuning (radius 1, 20 nodes, 2 seeds, 2 pages
+  via `HW4__retrieval__*`; config + frozen dataset unchanged):** savings
+  rose to **89.8%** by cutting Condition B to ~1.6k tok/cell — but that
+  **starved B of context**: blind correctness collapsed to **0.50 ≪ 1.15**,
+  citation **0.30 ≪ 0.65** → **rubric KPI FAIL**. The 89.8% does NOT
+  count; archived as `*_run2.json` and reported as the savings/quality
+  **cliff**, not a result.
+- **Honest conclusion:** for this target, **≥70% savings and preserved
+  quality are not jointly reachable** — graph retrieval gives
+  quality-preserving ~59% savings; tightening further trades into a steep
+  quality cliff. The two runs map the savings↔quality frontier; the safe
+  operating point is the run-1 defaults. Full breakdown:
+  `results/experiment/SCORING.md`.
+- **Scoring method (transparent):** quality was scored by an **LLM-as-
+  judge**, not a human panel — appropriate for an AI-orchestration course
+  and labeled as such (not presented as human evaluation). The masked
+  `scoring_sheet.json` + sealed `blinding_key.json` give genuine blinding;
+  raw scores in `scores_llm_judge.jsonl`; `scoring_worksheet.csv` supports
+  an independent human re-score.
 - Cost (werkzeug run): ≈ $0.088 over 109 gated calls (vault + fix + 2
   experiment runs + agent narratives); see results/REPORT.md cost
   section. The retired click run's ledger is preserved in git history.
