@@ -15,7 +15,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
-from hw4.sdk import eval_ops, experiment_ops, fix_ops, operations
+from hw4.sdk import debug_ops, eval_ops, experiment_ops, fix_ops, operations
 from hw4.sdk.errors import ServiceNotReadyError
 from hw4.services import graph_metrics
 from hw4.services.graph_models import Graph
@@ -140,6 +140,10 @@ class Hw4Sdk:
     def evaluate(self, target_path=None, answer_key_path=None):
         """Score detector findings as a confusion matrix vs the answer key (L07 §13.2)."""
         return eval_ops.evaluate(self, target_path, answer_key_path)
+
+    def debug(self, target_path=None):
+        """Graph-guided debugging: reproduce, localize, and fix a planted bug (§5.3-5.4)."""
+        return debug_ops.debug(self, target_path)
 
     def run_experiment(self, condition: str = "both"):
         """Token-savings A/B experiment over the question set (FR-8)."""

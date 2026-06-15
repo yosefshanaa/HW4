@@ -56,6 +56,10 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--answer-key", default=None,
                           help="path to the ground-truth JSON (default: mini_repo answer key)")
 
+    debug = sub.add_parser("debug", help="graph-guided debugging of a planted bug (§5.3-5.4)")
+    debug.add_argument("target_path", nargs="?", default=None,
+                       help="debug-case repo (default: the buggy_case fixture)")
+
     experiment = sub.add_parser("experiment", help="token-savings A/B experiment (FR-8)")
     experiment.add_argument("--condition", choices=("A", "B", "both"), default="both")
     report = sub.add_parser("report", help="aggregate the final report (FR-9)")
@@ -75,6 +79,7 @@ def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
         "ask": lambda: sdk.ask(args.question, mode=args.mode),
         "fix": lambda: sdk.fix(args.finding_id, auto=args.auto),
         "evaluate": lambda: sdk.evaluate(args.target_path, args.answer_key),
+        "debug": lambda: sdk.debug(args.target_path),
         "experiment": lambda: sdk.run_experiment(condition=args.condition),
         "report": lambda: sdk.report(dashboard=args.dashboard),
     }
