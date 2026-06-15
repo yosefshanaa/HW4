@@ -10,6 +10,7 @@ Clock and sleeper are injected so tests control time instead of sleeping.
 
 from __future__ import annotations
 
+import threading
 import time
 from collections import deque
 from collections.abc import Callable
@@ -79,6 +80,9 @@ class ApiGatekeeper:
         self._hour_window: deque[float] = deque()
         self._waits = 0
         self._total_wait = 0.0
+        # Parallel callers (§15) share the rate windows; the lock guards
+        # admission/bookkeeping only — the slow network call runs outside it.
+        self._lock = threading.Lock()
 
     def _evict(self, now: float) -> None:
         while self._minute_window and now - self._minute_window[0] >= MINUTE:
@@ -86,22 +90,32 @@ class ApiGatekeeper:
         while self._hour_window and now - self._hour_window[0] >= HOUR:
             self._hour_window.popleft()
 
-    def _wait_for_slot(self) -> None:
-        """Queue (never drop) until both rate windows have room (§5.3)."""
+    def _slot_delay(self, now: float) -> float | None:
+        """None when a slot is free; else the seconds to wait for the next one."""
+        delays = []
+        if len(self._minute_window) >= self._rpm:
+            delays.append(MINUTE - (now - self._minute_window[0]))
+        if len(self._hour_window) >= self._rph:
+            delays.append(HOUR - (now - self._hour_window[0]))
+        return max(max(delays), 0.0) + 0.01 if delays else None
+
+    def _admit(self) -> None:
+        """Queue (never drop) until budget + both windows allow one call, then
+        reserve the slot. The sleep happens with the lock released, so
+        unsaturated callers proceed in parallel; only real waits serialize."""
         while True:
-            now = self._clock()
-            self._evict(now)
-            delays = []
-            if len(self._minute_window) >= self._rpm:
-                delays.append(MINUTE - (now - self._minute_window[0]))
-            if len(self._hour_window) >= self._rph:
-                delays.append(HOUR - (now - self._hour_window[0]))
-            if not delays:
-                return
-            wait = max(max(delays), 0.0) + 0.01
-            self._waits += 1
-            self._total_wait += wait
-            log_event(get_logger("gatekeeper"), "rate-limit queue wait", seconds=round(wait, 2))
+            with self._lock:
+                self._check_budget()
+                now = self._clock()
+                self._evict(now)
+                wait = self._slot_delay(now)
+                if wait is None:
+                    self._minute_window.append(now)
+                    self._hour_window.append(now)
+                    return
+                self._waits += 1
+                self._total_wait += wait
+                log_event(get_logger("gatekeeper"), "rate-limit queue wait", seconds=round(wait, 2))
             self._sleep(wait)
 
     def _check_budget(self) -> None:
@@ -112,11 +126,14 @@ class ApiGatekeeper:
             log_event(get_logger("gatekeeper"), "budget warning", spent_usd=spent)
 
     def execute(self, call: Callable[[], CallResult], *, purpose_tag: str, model: str = "") -> object:
-        """Run one gated call: budget check, slot wait, retries, ledger row."""
-        self._check_budget()
-        self._wait_for_slot()
-        attempts = 0
+        """Run one gated call: admission (budget + rate slot), retries, ledger row.
+
+        Thread-safe: the rate slot is reserved under the lock at admission, so
+        concurrent callers can never collectively exceed the window; the call
+        itself and its retries run lock-free, giving real parallelism (§15)."""
+        self._admit()
         started = self._clock()
+        attempts = 0
         while True:
             try:
                 result = call()
@@ -127,9 +144,6 @@ class ApiGatekeeper:
                     self._record(purpose_tag, model, 0, 0, started, status="retries_exhausted")
                     raise RetriesExhaustedError(str(exc)) from exc
                 self._sleep(self._retry_after)
-        stamp = self._clock()
-        self._minute_window.append(stamp)
-        self._hour_window.append(stamp)
         status = "ok" if attempts == 0 else "retry_ok"
         self._record(purpose_tag, model, result.input_tokens, result.output_tokens, started, status)
         return result.value
@@ -148,10 +162,11 @@ class ApiGatekeeper:
 
     def get_queue_status(self) -> QueueStatus:
         """Queue depth and stats (guidelines §5.1 interface)."""
-        self._evict(self._clock())
-        return QueueStatus(
-            waits=self._waits,
-            total_wait_seconds=round(self._total_wait, 3),
-            minute_window_used=len(self._minute_window),
-            hour_window_used=len(self._hour_window),
-        )
+        with self._lock:
+            self._evict(self._clock())
+            return QueueStatus(
+                waits=self._waits,
+                total_wait_seconds=round(self._total_wait, 3),
+                minute_window_used=len(self._minute_window),
+                hour_window_used=len(self._hour_window),
+            )

@@ -165,6 +165,16 @@ HW4__graph__graphify__graph_json=$PWD/graph.json \
 
 The adapter (`src/hw4/services/extractor/graphify.py`) only translates structure (`links`→edges, `source`/`target`→`src`/`dst`, Graphify's `confidence` evidence class → our `evidence` + `confidence_score`→confidence, `file_type`→node type) and validates at the single `Graph.from_dict` boundary. **We keep AST as the default on purpose:** the frozen experiment, findings, and content-hash determinism must reproduce without an external tool — Graphify is an honest drop-in, not a swap that would invalidate committed evidence (see ADR-4 in [`docs/PLAN.md`](docs/PLAN.md)).
 
+### Parallelism (guidelines §15)
+
+Wiki generation is the genuine bottleneck: one **I/O-bound** LLM call per page (44 pages on werkzeug), each idle on the network. So it is parallelized with a `ThreadPoolExecutor` (`config vault.wiki_workers`, default 4) — threads, not processes, because the work is I/O-bound, not CPU-bound (guidelines §15: CPU-bound→multiprocessing, I/O-bound→multithreading). Extraction/metrics stay single-threaded; they are CPU-bound and already cheap.
+
+Concurrency is only safe because the two pieces of **shared mutable state are locked**:
+- `ApiGatekeeper` reserves a rate slot under a `threading.Lock` *at admission* (before the call), so N threads can never collectively overshoot the rate window; the slow network call and its retries run **outside** the lock, so throttling never serializes real work.
+- `Ledger` guards the JSONL append and read-back with a lock, so concurrent `record()` calls never lose a row or tear a line.
+
+Rendering, file writes, and the vault log stay on the main thread, so the audit trail is the *only* contended resource — and it is locked. Proven by `tests/unit/test_concurrency.py`: 64 concurrent calls lose no ledger rows, produce no torn JSONL, and a saturated gatekeeper queues every call (never drops) under 8-way contention.
+
 ## Results deep-dive
 
 ### Target repository

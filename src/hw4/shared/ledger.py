@@ -9,6 +9,7 @@ of truth instead of three bookkeeping systems.
 from __future__ import annotations
 
 import json
+import threading
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -37,6 +38,9 @@ class Ledger:
         self._pricing = config.get("pricing_per_mtok", default={})
         self._path = Path(path)
         self._path.parent.mkdir(parents=True, exist_ok=True)
+        # Parallel wiki/agent calls record concurrently (§15): the append and
+        # the read-back must not interleave into a torn JSONL line.
+        self._lock = threading.Lock()
 
     def cost_of(self, model: str, input_tokens: int, output_tokens: int) -> float:
         """Cost in USD from the per-million-token price table in setup.json."""
@@ -69,16 +73,18 @@ class Ledger:
             latency_ms=latency_ms,
             status=status,
         )
-        with self._path.open("a", encoding="utf-8") as handle:
+        with self._lock, self._path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(asdict(entry)) + "\n")
         return entry
 
     def entries(self) -> list[LedgerEntry]:
         """Read back all rows (used by totals, the notebook, and tests)."""
-        if not self._path.is_file():
-            return []
+        with self._lock:
+            if not self._path.is_file():
+                return []
+            raw = self._path.read_text(encoding="utf-8")
         rows = []
-        for line in self._path.read_text(encoding="utf-8").splitlines():
+        for line in raw.splitlines():
             if line.strip():
                 rows.append(LedgerEntry(**json.loads(line)))
         return rows

@@ -11,6 +11,7 @@ re-retrieve better (Part-B).
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -77,11 +78,12 @@ class WikiWriter:
     def write_pages(self, graph: Graph, metrics: Metrics, config: Config) -> list[Path]:
         specs = select_entities(graph, metrics, config)
         known_ids = {spec.page_id for spec in specs}
+        evidence = {spec.page_id: _evidence_rows(graph, spec) for spec in specs}
+        prose = self._generate_all(specs, evidence, config)
         written = []
-        for spec in specs:
-            evidence = _evidence_rows(graph, spec)
-            prose = self._generate_prose(spec, evidence)
-            page = self._render(spec, evidence, prose, known_ids, graph, metrics)
+        for spec in specs:  # rendering + file writes stay single-threaded
+            page = self._render(spec, evidence[spec.page_id], prose[spec.page_id],
+                                 known_ids, graph, metrics)
             path = self._vault.wiki_dir / f"{spec.page_id}.md"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(page, encoding="utf-8")
@@ -89,6 +91,15 @@ class WikiWriter:
                                    "wiki_writer")
             written.append(path)
         return written
+
+    def _generate_all(self, specs, evidence, config) -> dict:
+        """Generate page prose in parallel (§15): tasks touch only the thread-safe ledger/gatekeeper; rendering and file writes stay single-threaded."""
+        workers = max(1, int(config.get("vault.wiki_workers", default=1)))
+        if workers == 1 or len(specs) <= 1:
+            return {s.page_id: self._generate_prose(s, evidence[s.page_id]) for s in specs}
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            proses = pool.map(lambda s: self._generate_prose(s, evidence[s.page_id]), specs)
+            return {s.page_id: pr for s, pr in zip(specs, proses, strict=True)}
 
     def _generate_prose(self, spec: PageSpec, evidence: list[str]) -> tuple[str, list[str]]:
         prompt = (

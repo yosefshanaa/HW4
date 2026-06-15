@@ -237,6 +237,12 @@ Threats to validity we explicitly document: answer-key bias (key built from the 
 ### ADR-6: Creative extension — "Refactor Truth Dashboard" (graph diff before/after as evidence)
 - **Decision**: extend graph_diff into a small HTML/Markdown dashboard that answers Part-C's diff question — "did the structure improve, or did the picture just change?" — bottleneck deltas, modularity delta, isolated-component delta, per-iteration. It is small, uses already-built parts, and directly showcases the course's evaluation philosophy. (Alternatives considered: org-chart graphing, test-gap heatmap — both larger and weaker ties to the fix loop.)
 
+### ADR-8: Parallelism — thread the I/O-bound wiki, lock the shared state (guidelines §15, added 2026-06-15)
+- **Bottleneck**: wiki generation issues one LLM call per page (~44 on werkzeug), each blocked on the network — the dominant wall-clock cost and a textbook **I/O-bound** workload.
+- **Decision**: parallelize page-prose generation with a `ThreadPoolExecutor` (config `vault.wiki_workers`, default 4). Threads (not processes) per guidelines §15: the work is I/O-bound, so the GIL is released during the network wait; multiprocessing would add serialization/IPC cost for no gain. Extraction/metrics stay single-threaded (CPU-bound but cheap, and determinism matters there). Rendering, file writes, and the vault log stay on the main thread, shrinking the shared-state surface to one resource: the audit trail.
+- **Thread-safety**: `ApiGatekeeper` takes a `threading.Lock` and reserves the rate slot *at admission* (before the call) so concurrent callers cannot collectively exceed the window; the slow `call()` + retries run lock-free for real parallelism. `Ledger` locks its JSONL append and read-back so no row is lost or torn. Verified by `tests/unit/test_concurrency.py` (64-way no-loss, saturation-queues-never-drops).
+- **Consequences**: real speedup on the page-generation phase with the rate/budget/audit guarantees intact; AST default keeps the frozen artifacts reproducible; opt-out is `vault.wiki_workers: 1`.
+
 ### ADR-7: Tests around LLM code — ports & adapters with mandatory mocks
 - **Decision**: every LLM/tool interaction behind an interface; unit tests use deterministic fakes; a tiny synthetic target-repo fixture (≤10 files) ships in tests/ for integration tests, so CI never needs network or the real target repo. This is the only realistic path to ≥85% coverage (R6).
 
