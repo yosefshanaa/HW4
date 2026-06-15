@@ -131,6 +131,7 @@
       "uv",
       "run",
       "--no-project",
+      "--isolated",
       "--with-editable",
       ".",
       "--with",
