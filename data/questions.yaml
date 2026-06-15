@@ -1,123 +1,144 @@
 # Token-experiment dataset (FR-8.1, T263-T266) — FROZEN at commit time.
-# Built from the validated i00 graph, every reference spot-checked against
-# raw source at the pinned SHA (answer-key bias mitigation, PLAN §4.1).
-# Tiers: 3 locate / 4 path / 3 impact.
+# Built from the validated i00 graph of pallets/werkzeug, every reference
+# spot-checked against raw source at the pinned SHA (answer-key bias
+# mitigation, PLAN §4.1). Tiers: 3 locate / 4 path / 3 impact.
 
 version: "1.00"
-target_repo_sha: "8a1b1a33d739be05b7e91251e3c0dde77c5e152f"
+target_repo_sha: "1b00618e787f40dfb21eba29caf8f8be7c8e1d93"
 
 questions:
   - id: Q-01
     tier: locate
-    question: "Where is the echo function implemented, and what responsibilities does it bundle?"
+    question: "Where is the URL routing Map (and the bound MapAdapter it produces) implemented?"
     reference_answer: >
-      src/click/utils.py (def echo, line ~245, ~99 lines). It bundles message
-      serialization (str/bytes), newline handling, color stripping/ANSI
-      wrapping, and output-stream selection (stdout/stderr/custom file).
+      src/werkzeug/routing/map.py — class Map (~line 40) holds the ordered
+      Rule set and is bound via Map.bind / Map.bind_to_environ, returning a
+      MapAdapter (~line 418) whose match() resolves a request path to an
+      endpoint.
     reference_files:
-      - src/click/utils.py
+      - src/werkzeug/routing/map.py
 
   - id: Q-02
     tier: locate
-    question: "Where are the built-in parameter types such as INT, STRING and UNPROCESSED defined?"
+    question: "Where are the built-in HTTP exception classes (e.g. NotFound, BadRequest) and the abort() helper defined?"
     reference_answer: >
-      src/click/types.py — ParamType subclasses plus module-level singleton
-      instances near the file end (e.g. UNPROCESSED at ~line 1348).
+      src/werkzeug/exceptions.py — HTTPException base (~line 68) with
+      subclasses BadRequest (~192), Forbidden (~338), NotFound (~353),
+      InternalServerError (~737); the default_exceptions status->class map
+      (~837) and the Aborter / abort() helpers (~858-892).
     reference_files:
-      - src/click/types.py
+      - src/werkzeug/exceptions.py
 
   - id: Q-03
     tier: locate
-    question: "Which module implements the CliRunner used to test click applications?"
+    question: "Which module provides the test Client and EnvironBuilder used to drive WSGI apps in tests?"
     reference_answer: >
-      src/click/testing.py defines CliRunner (plus EchoingStdin/Result
-      helpers); the test suite's main door into the library.
+      src/werkzeug/test.py — EnvironBuilder (~line 177) assembles a WSGI
+      environ, Client (~775) sends requests through an application and
+      returns a TestResponse (~1288); run_wsgi_app (~1216) is the low-level
+      driver that invokes the app callable.
     reference_files:
-      - src/click/testing.py
+      - src/werkzeug/test.py
 
   - id: Q-04
     tier: path
-    question: "How does a function decorated with @click.command become an executable Command object?"
+    question: "How does a raw WSGI environ become a usable Request object?"
     reference_answer: >
-      click.decorators.command() wraps the function and constructs
-      click.core.Command (decorators imports core); execution then flows
-      Command.main -> Context creation -> Command.invoke which calls the
-      original callback.
+      werkzeug.wrappers.request.Request (class ~line 32) subclasses the
+      framework-agnostic sansio.request.Request (~line 34). Request.__init__
+      pulls REQUEST_METHOD / PATH_INFO / QUERY_STRING / wsgi.url_scheme out
+      of the environ and calls super().__init__(..., headers=
+      EnvironHeaders(environ)); the sansio base stores method/path/headers
+      while the wrappers subclass keeps self.environ and adds stream/body
+      access.
     reference_files:
-      - src/click/decorators.py
-      - src/click/core.py
+      - src/werkzeug/wrappers/request.py
+      - src/werkzeug/sansio/request.py
 
   - id: Q-05
     tier: path
-    question: "Trace how a raw command-line parameter string is converted into a Python value."
+    question: "Trace how an incoming URL path is matched to a registered endpoint."
     reference_answer: >
-      core.Command.main -> Context -> Parameter.process_value (core.py) ->
-      ParamType.convert in types.py (per-type subclass); failures raise
-      exceptions.BadParameter.
+      Map.bind / bind_to_environ (routing/map.py) returns a MapAdapter; its
+      match() (~line 509) delegates to routing/matcher.py
+      StateMachineMatcher.match (~75), which walks the compiled Rule objects
+      (routing/rules.py). A miss raises NotFound / MethodNotAllowed (from
+      werkzeug.exceptions) or RequestRedirect (from routing.exceptions).
     reference_files:
-      - src/click/core.py
-      - src/click/types.py
-      - src/click/exceptions.py
+      - src/werkzeug/routing/map.py
+      - src/werkzeug/routing/matcher.py
+      - src/werkzeug/routing/rules.py
 
   - id: Q-06
     tier: path
-    question: "Through what chain does click.echo end up writing correctly to a Windows console?"
+    question: "How does submitted form data end up in request.form and request.files?"
     reference_answer: >
-      utils.echo -> _compat stream shims (_force_correct_text_stream /
-      auto_wrap_for_ansi) -> _winconsole's Windows console writer.
+      Request.form / Request.files (wrappers/request.py ~450/~491) call
+      _load_form_data() (~266), which builds a parser via
+      make_form_data_parser() -> formparser.FormDataParser and runs
+      parse_from_environ (~202) -> parse (~218). parse reads the Content-Type
+      with http.parse_options_header and dispatches to the urlencoded or
+      multipart (sansio/multipart.py) parser, yielding MultiDicts of fields
+      and FileStorage files.
     reference_files:
-      - src/click/utils.py
-      - src/click/_compat.py
-      - src/click/_winconsole.py
+      - src/werkzeug/wrappers/request.py
+      - src/werkzeug/formparser.py
+      - src/werkzeug/http.py
 
   - id: Q-07
     tier: path
-    question: "How do usage errors raised during parsing reach the user's terminal?"
+    question: "How is a Response object turned into the WSGI (status, headers, body) output sent to the server?"
     reference_answer: >
-      Parsing raises exceptions.UsageError; UsageError.show() formats the
-      message and writes it via utils.echo to stderr; Command.main catches
-      and exits with the error's exit_code.
+      Used as a WSGI app, Response.__call__(environ, start_response)
+      (wrappers/response.py ~line 566) calls get_wsgi_response (~547), which
+      assembles the body iterator via get_app_iter (~520) and the header
+      list via get_wsgi_headers (~438), then calls start_response(status,
+      headers) and returns the app iterator. status/headers state lives on
+      the sansio.response base.
     reference_files:
-      - src/click/exceptions.py
-      - src/click/utils.py
-      - src/click/core.py
+      - src/werkzeug/wrappers/response.py
+      - src/werkzeug/sansio/response.py
 
   - id: Q-08
     tier: impact
-    question: "What breaks if click.utils.echo changes its signature or behavior?"
+    question: "What breaks if the parse_/dump_ header helpers in werkzeug.http change signature or behavior?"
     reference_answer: >
-      Every output path: termui (6 call sites), exceptions.show, core,
-      decorators, shell_completion, _termui_impl bind echo directly (no
-      seam — validated SPOF F-002), plus the test suite's output
-      assertions via CliRunner.
+      werkzeug.http is a fan-in hub (validated god-node F-005; imported by
+      ~21 modules): the datastructures (Accept/Auth/CacheControl/ETag/
+      Headers/Range), sansio request/response, wrappers.response, formparser
+      and several middleware bind its parse_options_header / parse_dict_header
+      / dump_header / cookie / etag / date helpers directly, so a behavior
+      change ripples through header handling across the whole stack.
     reference_files:
-      - src/click/utils.py
-      - src/click/termui.py
-      - src/click/exceptions.py
+      - src/werkzeug/http.py
+      - src/werkzeug/sansio/request.py
+      - src/werkzeug/datastructures/headers.py
 
   - id: Q-09
     tier: impact
-    question: "Which parts of the codebase are affected by modifying the Context class in core.py?"
+    question: "Which parts of the codebase are affected by modifying the datastructures package (MultiDict / Headers)?"
     reference_answer: >
-      core.py itself (Command.main/invoke, Parameter handling),
-      decorators (pass_context/pass_obj), globals.get_current_context,
-      shell_completion (completion contexts), termui prompts via context
-      settings — effectively community c2 (god module F-003 blast radius).
+      werkzeug.datastructures is the rank-1 bottleneck and god-node F-001
+      (fan_in 66, degree 76, reaching 11 communities). Headers
+      (headers.py:21) and the MultiDict family (structures.py:139) back
+      request.headers / args / form and response.headers, so wrappers,
+      sansio, http, formparser and the test client all depend on their APIs.
     reference_files:
-      - src/click/core.py
-      - src/click/decorators.py
-      - src/click/globals.py
-      - src/click/shell_completion.py
+      - src/werkzeug/datastructures/structures.py
+      - src/werkzeug/datastructures/headers.py
+      - src/werkzeug/wrappers/request.py
 
   - id: Q-10
     tier: impact
-    question: "If the _compat module were removed, which user-facing features would degrade?"
+    question: "If the HTTP exception hierarchy in werkzeug.exceptions changed, what would be affected?"
     reference_answer: >
-      Encoding-correct echo output, ANSI color handling on Windows,
-      pager support in _termui_impl, and File/LazyFile stream opening in
-      types.py — the platform anti-corruption layer (community c4).
+      werkzeug.exceptions is god-node F-004 (fan_in 13, spans 8 communities),
+      imported by ~16 modules: routing (NotFound / MethodNotAllowed),
+      formparser and sansio (RequestEntityTooLarge / BadRequest),
+      wrappers.request/response, middleware, serving and utils all raise or
+      catch HTTPException subclasses, and abort()/Aborter route status codes
+      through default_exceptions.
     reference_files:
-      - src/click/_compat.py
-      - src/click/utils.py
-      - src/click/_termui_impl.py
-      - src/click/types.py
+      - src/werkzeug/exceptions.py
+      - src/werkzeug/routing/map.py
+      - src/werkzeug/wrappers/request.py

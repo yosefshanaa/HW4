@@ -82,10 +82,13 @@ noted as future work).
 - Live A/B execution: completed 2026-06-12 with the OpenAI provider
   (config-switched); measured results below supersede the preflight.
 
-> **Dataset frozen 2026-06-12 (T266):** `data/questions.yaml` sha256
-> `fb0749ad7a3b55317071b17f0750215310ae4fa671145f4afa239bea9a0450b0` — 10 questions (3 locate / 4 path / 3 impact), every
-> reference spot-checked against source at the pinned SHA. No post-hoc
-> edits permitted; amendments require a documented procedure note.
+> **Dataset re-frozen 2026-06-15 (T266; werkzeug re-target):**
+> `data/questions.yaml` sha256
+> `f7dc994e21225522e357d949c140fb402ba48eaca544c67e107e3592e8fa842b` — 10
+> questions (3 locate / 4 path / 3 impact) over `pallets/werkzeug` @
+> `1b00618e`, every reference spot-checked against source at the pinned
+> SHA. No post-hoc edits permitted; amendments require a documented
+> procedure note. (Prior click freeze: sha256 `fb0749ad…`, 2026-06-12.)
 
 ## Measured results (LIVE, 2026-06-12, gpt-4o-mini both conditions)
 
