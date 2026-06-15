@@ -641,10 +641,10 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 4 Graph pipeline | T131–T172 | 40/42 | done; werkzeug i00 = 1,912 nodes / 3,304 edges, deterministic rebuild (hash 54274cf9), ~95 s on /mnt/c | 2026-06-15 |
 | 5 Vault & wiki | T173–T210 | 34/38 | LIVE werkzeug vault (44 wiki pages: 5 hubs + 39 communities); screenshots pending re-capture (human); canvas (T199, P2) remains | 2026-06-15 |
 | 6 RevEng & detection | T211–T262 | 44/52 | done on werkzeug: 8 hypotheses (7 god-node + 1 trace-gap), 2 validated (http, datastructures); T248-251,T255,T257 P2/human | 2026-06-15 |
-| 7 Experiment baseline | T263–T292 | 28/30 | dataset re-frozen for werkzeug (sha256 f7dc994e); blind pack ready for human scoring | 2026-06-15 |
+| 7 Experiment baseline | T263–T292 | 28/30 | dataset re-frozen (sha256 f7dc994e); blind pack SCORED by LLM-as-judge (results/experiment/SCORING.md); human re-score supported via scoring_worksheet.csv | 2026-06-15 |
 | 8 Agents | T293–T320 | 27/28 | LIVE werkzeug narratives (findings identical to direct path); T318 P2 parked | 2026-06-15 |
 | 9 Fix loop | T321–T352 | 31/32 | LIVE werkzeug: honest NO_SAFE_ACTION on F-005 http (green but no structural gain → reverted); T341 done | 2026-06-15 |
-| 10 Experiment B | T353–T372 | 18/20 | LIVE werkzeug: run1 58.7% (default caps, archived) → **run2 89.8%** (tuned radius1/20nodes/2seeds/2pages; all 10 q ≥82.4%); KPI ≥70% met (correctness human-gated) | 2026-06-15 |
+| 10 Experiment B | T353–T372 | 18/20 | LIVE werkzeug: **run1 58.7% VALIDATED** (blind LLM-judge B correctness 1.20≥A 1.15, citation 0.70≥0.65 → KPI PASS); run2 89.8% over-tuned → quality collapsed (B corr 0.50) → KPI FAIL, archived. Maps savings↔quality frontier (SCORING.md) | 2026-06-15 |
 | 11 Notebook & cost | T373–T391 | 17/19 | rebuilt + executed for werkzeug; live cells from committed artifacts | 2026-06-15 |
 | 12 SKILL | T392–T402 | 10/11 | done; T402 P2 parked | 2026-06-12 |
 | 13 Creative ext. | T403–T412 | 10/10 | dashboard generated on live run | 2026-06-12 |
