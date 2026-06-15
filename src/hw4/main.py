@@ -59,6 +59,8 @@ def build_parser() -> argparse.ArgumentParser:
     debug = sub.add_parser("debug", help="graph-guided debugging of a planted bug (§5.3-5.4)")
     debug.add_argument("target_path", nargs="?", default=None,
                        help="debug-case repo (default: the buggy_case fixture)")
+    debug.add_argument("--agent", action="store_true",
+                       help="also run the CrewAI analyst on the localized snippet (§5.3)")
 
     experiment = sub.add_parser("experiment", help="token-savings A/B experiment (FR-8)")
     experiment.add_argument("--condition", choices=("A", "B", "both"), default="both")
@@ -79,7 +81,7 @@ def dispatch(sdk: Hw4Sdk, args: argparse.Namespace) -> object:
         "ask": lambda: sdk.ask(args.question, mode=args.mode),
         "fix": lambda: sdk.fix(args.finding_id, auto=args.auto),
         "evaluate": lambda: sdk.evaluate(args.target_path, args.answer_key),
-        "debug": lambda: sdk.debug(args.target_path),
+        "debug": lambda: sdk.debug(args.target_path, agent=args.agent),
         "experiment": lambda: sdk.run_experiment(condition=args.condition),
         "report": lambda: sdk.report(dashboard=args.dashboard),
     }

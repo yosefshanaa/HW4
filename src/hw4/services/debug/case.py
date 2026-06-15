@@ -37,6 +37,8 @@ class DebugResult:
     located_module: str
     naive_tokens: int
     graph_tokens: int
+    naive_files: int
+    graph_files: int = 1
 
     @property
     def savings(self) -> float:
@@ -64,7 +66,8 @@ def run_debug_case(root: Path | str, config: Config) -> DebugResult:
     buggy = _content_length(pkg / "parser_buggy.py")
     fixed = _content_length(pkg / "parser.py")
     graph = extract(root, config)
-    naive = sum(len(p.read_text(encoding="utf-8")) for p in sorted(pkg.glob("*.py"))) // 4
+    package_files = sorted(pkg.glob("*.py"))
+    naive = sum(len(p.read_text(encoding="utf-8")) for p in package_files) // 4
     graph_tokens = len((pkg / "parser.py").read_text(encoding="utf-8")) // 4
     return DebugResult(
         case=f"{SPEC_HEADER} of {SPEC_LENGTH}",
@@ -76,4 +79,5 @@ def run_debug_case(root: Path | str, config: Config) -> DebugResult:
         located_module=_locate(graph),
         naive_tokens=naive,
         graph_tokens=graph_tokens,
+        naive_files=len(package_files),
     )

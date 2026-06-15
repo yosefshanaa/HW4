@@ -36,8 +36,8 @@ class RecordingSdk:
     def evaluate(self, target_path, answer_key_path):
         return self._record("evaluate", target_path, answer_key_path)
 
-    def debug(self, target_path):
-        return self._record("debug", target_path)
+    def debug(self, target_path, *, agent=False):
+        return self._record("debug", target_path, agent=agent)
 
     def run_experiment(self, *, condition="both"):
         return self._record("run_experiment", condition=condition)
@@ -79,8 +79,8 @@ class TestDispatch:
             (["evaluate"], ("evaluate", (None, None), {})),
             (["evaluate", "repo/", "--answer-key", "k.json"],
              ("evaluate", ("repo/", "k.json"), {})),
-            (["debug"], ("debug", (None,), {})),
-            (["debug", "case/"], ("debug", ("case/",), {})),
+            (["debug"], ("debug", (None,), {"agent": False})),
+            (["debug", "case/", "--agent"], ("debug", ("case/",), {"agent": True})),
             (["experiment"], ("run_experiment", (), {"condition": "both"})),
             (["experiment", "--condition", "A"], ("run_experiment", (), {"condition": "A"})),
             (["report"], ("report", (), {"dashboard": False})),

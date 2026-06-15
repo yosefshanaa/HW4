@@ -36,13 +36,24 @@ The same spec against the fixed `parser.py` returns length **500**
 four spec cases (inclusive length, open-ended suffix, single byte, rejected
 unsatisfiable) all pass.
 
-## Token comparison — naive vs graph-guided
-| Approach | What is read | ~tokens |
+## Naive vs graph-guided — the four §5.5 dimensions
+| Dimension | Naive (read everything) | Graph-guided (localize first) |
 |---|---|---|
-| Naive | whole `httprange/` package pasted | 560 |
-| Graph-guided | only the located module `httprange.parser` | 273 |
+| Tokens consumed | 560 | **273** (51% fewer) |
+| Files / textual units read | 3 (whole `httprange/` package) | **1** (`httprange.parser` only) |
+| Research rounds | 1 whole-package sweep, then hunt for the line | 1 graph localization (`tested_by` edge) → 1 targeted read |
+| Speed/quality to root cause | scan all 3 files for the off-by-one | graph names the module + function directly — no scan |
 
-Graph-guided localization reads **51% fewer tokens** to reach the
-fix — the graph turned "read everything" into "read the one file the failing
-test points at". The CrewAI analyst narrates this root cause on top of the
-deterministic spine (`hw4 debug`); the fix itself is verified by the spec.
+Graph-guided localization reaches the fix reading **51% fewer
+tokens** and **3→1 files**: the graph turned "read
+everything" into "read the one file the failing test points at".
+
+## Graph-guided agent workflow (§5.3)
+`hw4 debug --agent` runs the CrewAI **analyst** on this spine: it is handed the
+symptom and **only** the graph-localized module's source (the
+273-token snippet, not the 560-token package) and
+writes its careful-language root-cause narrative to `results/agent_debug.md`,
+ledger-tagged `agent.analyst`. That snippet-on-demand context reduction — graph
+first, one file second, never the whole tree — is the efficiency mechanism. The
+fix itself is verified deterministically by the spec (red→green above), not by
+the LLM.

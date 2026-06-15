@@ -55,6 +55,20 @@ class TestPlantedFix:
         assert _load("parser_buggy.py").parse_byte_range("bytes=0-499", 1000)[2] == 499
 
 
+class TestTokenSubPoints:
+    def test_files_read_counted(self):
+        r = run_debug_case(FIXTURE, Config(CONFIG_DIR, environ={}))
+        assert r.naive_files >= 3 and r.graph_files == 1  # whole package vs one module
+
+    def test_report_has_all_four_dimensions(self, tmp_path):
+        write_config_dir(tmp_path / "config", setup=FULL_SETUP, rate_limits=FAST_RATE_LIMITS)
+        sdk = Hw4Sdk(config_dir="config", environ={}, base_dir=tmp_path)
+        text = sdk.debug(FIXTURE).report_path.read_text(encoding="utf-8")
+        for dimension in ("Tokens consumed", "Files / textual units", "Research rounds",
+                          "Speed/quality to root cause"):
+            assert dimension in text
+
+
 class TestDebugOp:
     def test_writes_bug_analysis_report(self, tmp_path):
         write_config_dir(tmp_path / "config", setup=FULL_SETUP, rate_limits=FAST_RATE_LIMITS)
@@ -64,3 +78,16 @@ class TestDebugOp:
         text = report.report_path.read_text(encoding="utf-8")
         assert "Root cause" in text and "tested_by" in text and "fix verified" in text
         assert "reproduced" in str(report)
+
+
+class TestDebugAgent:
+    def test_agent_narrates_from_localized_snippet_only(self, tmp_path):
+        from .test_llm_client import FakeTransport, response
+        write_config_dir(tmp_path / "config", setup=FULL_SETUP, rate_limits=FAST_RATE_LIMITS)
+        transport = FakeTransport([], fill=response(text="Root cause: end-start drops a byte."))
+        sdk = Hw4Sdk(config_dir="config", environ={}, base_dir=tmp_path, transport=transport)
+        report = sdk.debug(FIXTURE, agent=True)
+        assert report.narrative_path and Path(report.narrative_path).exists()
+        narrative = Path(report.narrative_path).read_text(encoding="utf-8")
+        assert "httprange.parser" in narrative  # graph-localized module named
+        assert sdk.ledger.entries()[-1].purpose_tag == "agent.analyst"  # gated + tagged

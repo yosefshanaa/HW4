@@ -143,9 +143,12 @@ class Hw4Sdk:
         """Score detector findings as a confusion matrix vs the answer key (L07 §13.2)."""
         return eval_ops.evaluate(self, target_path, answer_key_path)
 
-    def debug(self, target_path=None):
-        """Graph-guided debugging: reproduce, localize, and fix a planted bug (§5.3-5.4)."""
-        return debug_ops.debug(self, target_path)
+    def debug(self, target_path=None, *, agent: bool = False):
+        """Graph-guided debugging: reproduce, localize, and fix a planted bug (§5.3-5.4).
+
+        agent=True also runs the CrewAI analyst on the localized snippet (§5.3).
+        """
+        return debug_ops.debug(self, target_path, agent=agent)
 
     def run_experiment(self, condition: str = "both"):
         """Token-savings A/B experiment over the question set (FR-8)."""

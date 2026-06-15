@@ -19,24 +19,31 @@ DEFAULT_TARGET = "tests/fixtures/buggy_case"
 class DebugReport:
     result: DebugResult
     report_path: Path
+    narrative_path: str = ""
 
     def __str__(self) -> str:
         r = self.result
+        agent = f"; agent narrative -> {self.narrative_path}" if self.narrative_path else ""
         return (
             f"bug {'reproduced' if r.reproduced else 'NOT reproduced'} "
             f"({r.case}: buggy={r.buggy_value} expected={r.expected}); "
             f"located {r.located_module}; fix {'verified' if r.fixed else 'FAILED'}; "
-            f"tokens {r.naive_tokens}->{r.graph_tokens} ({r.savings:.0%} saved) -> {self.report_path}"
+            f"tokens {r.naive_tokens}->{r.graph_tokens} ({r.savings:.0%} saved) "
+            f"-> {self.report_path}{agent}"
         )
 
 
-def debug(sdk, target_path=None) -> DebugReport:
+def debug(sdk, target_path=None, agent: bool = False) -> DebugReport:
     root = Path(target_path) if target_path else Path(sdk.base_dir) / DEFAULT_TARGET
     result = run_debug_case(root, sdk.config)
     sdk.results_dir.mkdir(parents=True, exist_ok=True)
     path = sdk.results_dir / "BUG_ANALYSIS.md"
     path.write_text(_render(result), encoding="utf-8")
-    return DebugReport(result=result, report_path=path)
+    narrative_path = ""
+    if agent:
+        from hw4.services.agents.debug_flow import debug_flow
+        narrative_path = debug_flow(sdk, root).get("narrative_path", "")
+    return DebugReport(result=result, report_path=path, narrative_path=narrative_path)
 
 
 def _render(r: DebugResult) -> str:
@@ -78,14 +85,25 @@ The same spec against the fixed `parser.py` returns length **{r.fixed_value}**
 four spec cases (inclusive length, open-ended suffix, single byte, rejected
 unsatisfiable) all pass.
 
-## Token comparison — naive vs graph-guided
-| Approach | What is read | ~tokens |
+## Naive vs graph-guided — the four §5.5 dimensions
+| Dimension | Naive (read everything) | Graph-guided (localize first) |
 |---|---|---|
-| Naive | whole `httprange/` package pasted | {r.naive_tokens} |
-| Graph-guided | only the located module `{r.located_module}` | {r.graph_tokens} |
+| Tokens consumed | {r.naive_tokens} | **{r.graph_tokens}** ({r.savings:.0%} fewer) |
+| Files / textual units read | {r.naive_files} (whole `httprange/` package) | **{r.graph_files}** (`{r.located_module}` only) |
+| Research rounds | 1 whole-package sweep, then hunt for the line | 1 graph localization (`tested_by` edge) → 1 targeted read |
+| Speed/quality to root cause | scan all {r.naive_files} files for the off-by-one | graph names the module + function directly — no scan |
 
-Graph-guided localization reads **{r.savings:.0%} fewer tokens** to reach the
-fix — the graph turned "read everything" into "read the one file the failing
-test points at". The CrewAI analyst narrates this root cause on top of the
-deterministic spine (`hw4 debug`); the fix itself is verified by the spec.
+Graph-guided localization reaches the fix reading **{r.savings:.0%} fewer
+tokens** and **{r.naive_files}→{r.graph_files} files**: the graph turned "read
+everything" into "read the one file the failing test points at".
+
+## Graph-guided agent workflow (§5.3)
+`hw4 debug --agent` runs the CrewAI **analyst** on this spine: it is handed the
+symptom and **only** the graph-localized module's source (the
+{r.graph_tokens}-token snippet, not the {r.naive_tokens}-token package) and
+writes its careful-language root-cause narrative to `results/agent_debug.md`,
+ledger-tagged `agent.analyst`. That snippet-on-demand context reduction — graph
+first, one file second, never the whole tree — is the efficiency mechanism. The
+fix itself is verified deterministically by the spec (red→green above), not by
+the LLM.
 """
