@@ -36,6 +36,7 @@ class VaultBuildReport:
     pages: list[Path]
     index_path: Path
     raw_copies: list[Path]
+    hot_path: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -66,11 +67,35 @@ def build_vault(sdk, graph_path: Path | str | None = None) -> VaultBuildReport:
     raw_copies = _snapshot_raw_inputs(sdk, vault, graph)
     writer = WikiWriter(sdk.config, sdk.llm, vault)
     pages = writer.write_pages(graph, metrics, sdk.config)
-    index_path = vault.write_index(_index_sections(sdk, graph, metrics))
+    hot_path = _write_hot(vault, graph, metrics)
+    index_path = vault.write_index(_index_sections(sdk, graph, metrics, hot_path))
     vault.append_log(f"vault build for i{graph.iteration:02d}", "graph artifacts", "sdk")
     return VaultBuildReport(
-        iteration=graph.iteration, pages=pages, index_path=index_path, raw_copies=raw_copies
+        iteration=graph.iteration, pages=pages, index_path=index_path,
+        raw_copies=raw_copies, hot_path=hot_path,
     )
+
+
+def _write_hot(vault: VaultBuilder, graph: Graph, metrics) -> Path | None:
+    """Focused-context hot.md for the rank-1 bottleneck — the hottest node."""
+    if not metrics.bottlenecks:
+        return None
+    top = metrics.bottlenecks[0]
+    node = graph.nodes[top.node_id]
+    profile = ", ".join(f"{rel}:{n}" for rel, n in sorted(top.relation_profile.items()))
+    rows = list(dict.fromkeys(
+        f"{e.src} —{e.relation}→ {e.dst} ({e.evidence.value}, {e.confidence:.2f})"
+        for e in graph.edges if top.node_id in (e.src, e.dst)
+    ))[:6]
+    return vault.write_hot({
+        "title": f"{node.label} — rank-{top.rank} dependency bottleneck",
+        "why": (f"`{node.id}` is the rank-{top.rank} bottleneck: fan-in {top.fan_in}, "
+                f"fan-out {top.fan_out}, betweenness {top.betweenness:.3f}, mandatory-path "
+                f"ratio {top.mandatory_path_ratio:.3f} ({profile}). Source: `{node.source_file}`."),
+        "read_first": [f"[[{node.id.replace(':', '-')}]] — its wiki page",
+                       "[[index]] — whole-project navigation"],
+        "evidence": rows or ["no incident edges recorded"],
+    })
 
 
 def analyze(sdk, graph_path: Path | str | None = None):
@@ -104,13 +129,16 @@ def ask(sdk, question: str, mode: str = "graph") -> AskResult:
     )
 
 
-def _index_sections(sdk, graph: Graph, metrics) -> dict[str, list[str]]:
+def _index_sections(sdk, graph: Graph, metrics, hot_path=None) -> dict[str, list[str]]:
     cap = int(sdk.config.get("vault.index_max_entries_per_section"))
     specs = select_entities(graph, metrics, sdk.config)
     hubs = [f"[[{s.page_id}]] — {s.title}" for s in specs if s.kind == "hub"]
     communities = [f"[[{s.page_id}]] — {s.title}" for s in specs if s.kind == "community"]
+    start = ["[[log]] — ingestion trail", "raw/ — unprocessed inputs"]
+    if hot_path is not None:
+        start.insert(0, "[[hot]] — focused context for the critical area")
     return {
-        "Start here": ["[[log]] — ingestion trail", "raw/ — unprocessed inputs"],
+        "Start here": start,
         "Hubs & bottlenecks": hubs[:cap],
         "Communities": communities[:cap],
     }

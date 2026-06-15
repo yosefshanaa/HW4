@@ -83,8 +83,39 @@ class VaultBuilder:
         return self.project_dir / "index.md"
 
     @property
+    def hot_path(self) -> Path:
+        return self.project_dir / "hot.md"
+
+    @property
     def log_path(self) -> Path:
         return self.project_dir / "log.md"
+
+    def write_hot(self, focus: dict) -> Path:
+        """Machine-owned focused-context page for the hottest investigation area.
+
+        hot.md is the minimal context to load *first* before reading source —
+        the critical-area counterpart to the index's whole-project map (§5.1).
+        """
+        lines = [
+            frontmatter("hot", self._project, status="generated").rstrip("\n"),
+            AUTO_MARK,
+            f"# hot — focused context for {focus['title']}",
+            "",
+            "> Load this first when investigating the critical area; it is the",
+            "> minimal context a human or agent needs before opening source.",
+            "",
+            "## Why this is hot",
+            focus["why"],
+            "",
+            "## Read first",
+            *(f"- {item}" for item in focus["read_first"]),
+            "",
+            "## Evidence",
+            *(f"- {row}" for row in focus["evidence"]),
+        ]
+        self.hot_path.parent.mkdir(parents=True, exist_ok=True)
+        self.hot_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return self.hot_path
 
     def write_index(self, sections: dict[str, list[str]]) -> Path:
         """Regenerate the machine-owned navigation hub (stable order)."""

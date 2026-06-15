@@ -7,6 +7,7 @@ project: werkzeug-analysis
 # index — navigation hub for werkzeug-analysis (load this first)
 
 ## Start here
+- [[hot]] — focused context for the critical area
 - [[log]] — ingestion trail
 - raw/ — unprocessed inputs
 

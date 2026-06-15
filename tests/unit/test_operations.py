@@ -92,6 +92,14 @@ class TestBuildVault:
         tags = [e.purpose_tag for e in sdk.ledger.entries()]
         assert any(tag.startswith("wiki.gen.") for tag in tags)
 
+    def test_hot_md_focuses_the_critical_area(self, tmp_path):
+        sdk, _ = make_sdk(tmp_path)
+        report = sdk.build_vault()
+        assert report.hot_path is not None and report.hot_path.exists()
+        hot = report.hot_path.read_text()
+        assert "focused context" in hot and "## Evidence" in hot
+        assert "[[hot]]" in report.index_path.read_text()
+
 
 class TestAsk:
     def test_answer_carries_citation_material(self, tmp_path):
