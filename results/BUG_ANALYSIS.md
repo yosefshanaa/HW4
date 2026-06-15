@@ -57,3 +57,12 @@ ledger-tagged `agent.analyst`. That snippet-on-demand context reduction — grap
 first, one file second, never the whole tree — is the efficiency mechanism. The
 fix itself is verified deterministically by the spec (red→green above), not by
 the LLM.
+
+## Knowledge-level before/after (§5.4)
+The fix also moved the *knowledge* state, captured in the Obsidian vault
+project `vault/20_Projects/range-debug/`: before research the suspect was
+unknown (symptom only); after, the bug-focused `hot.md` names the
+graph-localized suspect `httprange.parser.parse_byte_range`, a `bug` page
+records the root cause, and `knowledge-before-after.md` tabulates what changed
+— the decisive `tested_by` edge that turned a whole-package search into a
+one-module read.

@@ -650,6 +650,12 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ### GRAPH_REPORT.md (EX04 §7 deliverable — literal Graphify-parity output)
 - [x] T535 (P0) `services/graph_report.py` — human-readable audit (nodes/edges/evidence breakdown, top bottlenecks, largest communities); emitted beside graph.json on every `hw4 graph` build; live werkzeug `results/graphs/i00/GRAPH_REPORT.md` generated; test added
 
+### critical re-audit vs official EX04 PDF — gaps found + closed (2026-06-16)
+- [x] T536 (P0) §5.3 — wire a real **graph-guided debug agent** (`hw4 debug --agent`): localize via graph → hand the CrewAI analyst ONLY the implicated module snippet → root-cause narrative (`agent_debug.md`, ledger `agent.analyst`); corrected the inaccurate "analyst narrates" claim in BUG_ANALYSIS.md + README
+- [x] T537 (P0) §5.5 — completed the bug token comparison's four dimensions (tokens 51%, files 3→1, research rounds, speed/quality to root cause)
+- [x] T538 (P0) §4/§8 — **Research Questions** section in README answering all 8 with evidence links
+- [x] T539 (P0) §5.1/§5.4 — bug now in Obsidian: vault project `range-debug/` with a **bug-focused `hot.md`**, `bug`, and `knowledge-before-after.md` (knowledge-level before/after the fix)
+
 ### reconcile
 - [x] T529 (P0) PRD/PLAN/TODO/README reconciled; full gates re-run GREEN; each unit committed + pushed
 
@@ -690,8 +696,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 14 Quality hardening | T413–T437 | 6/25 | gate-enforced subset GREEN: ruff 0 (T418), file-length ≤150 (T419), no-hardcodes (T420), no-secrets (T421), suite green + cov ~96% (T413/T414); deeper error-path/dup/edge audits (T415-417,T422-433) remain | 2026-06-15 |
 | 15 README & docs | T438–T455 | 14/18 | rich README (overview/arch diagram/methodology/usage/results/config guide/ADRs/repro/limits), all docs reflect werkzeug, PROMPTS+TODO current, FINDINGS qualified-language; T446 contrib + T452 screenshot inventory (human re-capture) + T454/455 remain | 2026-06-15 |
 | 16 Final & ship | T456–T505 | 2/50 | submission zip builds from tracked tree (228 files, excl workspace/.env/caches) + secrets-scanned clean — real key absent, .env-example dummy (T498/T499); id-named zip, clean-machine test, human sign-off + submit remain | 2026-06-15 |
-| 17 Reviewer enhancements | T516–T535 | 20/20 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00, honest FP), **Graphify backend** (real node-link adapter, AST default, ADR-4 revised), **parallelism+thread-safety** (§15), **graph-guided debugging case** (`hw4 debug`: HTTP byte-range off-by-one → root cause → verified red→green fix, 51% token saving), **vault `hot.md`** (was missing, §5.1); all behind green gates with tests + docs | 2026-06-16 |
+| 17 Reviewer enhancements | T516–T539 | 24/24 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00, honest FP), **Graphify backend** (real node-link adapter, AST default, ADR-4 revised), **parallelism+thread-safety** (§15), **graph-guided debugging case** (`hw4 debug`: HTTP byte-range off-by-one → root cause → verified red→green fix, 51% token saving), **vault `hot.md`** (was missing, §5.1); all behind green gates with tests + docs | 2026-06-16 |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **535 tasks** | **423/535** | | |
+| **Total** | **539 tasks** | **427/539** | | |
 
 *End of TODO v1.00.*

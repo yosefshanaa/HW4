@@ -80,6 +80,19 @@ class TestDebugOp:
         assert "reproduced" in str(report)
 
 
+class TestDebugVaultPages:
+    def test_bug_focused_hot_and_knowledge_pages_written(self, tmp_path):
+        write_config_dir(tmp_path / "config", setup=FULL_SETUP, rate_limits=FAST_RATE_LIMITS)
+        sdk = Hw4Sdk(config_dir="config", environ={}, base_dir=tmp_path)
+        sdk.debug(FIXTURE)
+        project = tmp_path / "vault" / "20_Projects" / "range-debug"
+        hot = (project / "hot.md").read_text(encoding="utf-8")
+        assert "byte-range" in hot and "httprange.parser" in hot  # bug-focused, localized
+        knowledge = (project / "knowledge-before-after.md").read_text(encoding="utf-8")
+        assert "Before research" in knowledge and "After fix" in knowledge
+        assert (project / "index.md").exists() and (project / "bug.md").exists()
+
+
 class TestDebugAgent:
     def test_agent_narrates_from_localized_snippet_only(self, tmp_path):
         from .test_llm_client import FakeTransport, response

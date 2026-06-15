@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from hw4.services.debug import DebugResult, run_debug_case
+from hw4.services.debug.vault_pages import write_debug_vault
 
 DEFAULT_TARGET = "tests/fixtures/buggy_case"
 
@@ -39,6 +40,7 @@ def debug(sdk, target_path=None, agent: bool = False) -> DebugReport:
     sdk.results_dir.mkdir(parents=True, exist_ok=True)
     path = sdk.results_dir / "BUG_ANALYSIS.md"
     path.write_text(_render(result), encoding="utf-8")
+    write_debug_vault(Path(sdk.base_dir) / sdk.config.path("vault"), result)
     narrative_path = ""
     if agent:
         from hw4.services.agents.debug_flow import debug_flow
@@ -106,4 +108,13 @@ ledger-tagged `agent.analyst`. That snippet-on-demand context reduction — grap
 first, one file second, never the whole tree — is the efficiency mechanism. The
 fix itself is verified deterministically by the spec (red→green above), not by
 the LLM.
+
+## Knowledge-level before/after (§5.4)
+The fix also moved the *knowledge* state, captured in the Obsidian vault
+project `vault/20_Projects/range-debug/`: before research the suspect was
+unknown (symptom only); after, the bug-focused `hot.md` names the
+graph-localized suspect `{r.located_module}.parse_byte_range`, a `bug` page
+records the root cause, and `knowledge-before-after.md` tabulates what changed
+— the decisive `tested_by` edge that turned a whole-package search into a
+one-module read.
 """

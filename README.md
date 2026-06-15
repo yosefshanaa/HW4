@@ -54,6 +54,19 @@ The deliverable answers three task tiers over any repo:
 
 A guiding rule throughout: **deterministic spine, LLM at the edges.** Graph extraction, metrics, community detection, diffs, detectors, and loop control are plain, testable Python. The LLM only writes narratives, plans, and edits — and never without passing through the gate.
 
+## Research questions (§4) — answered
+
+The assignment's eight research questions, each answered with a link to the evidence:
+
+1. **What is the real architecture, and what wasn't obvious at first glance?** werkzeug is a layered WSGI toolkit whose namespace backbone (`datastructures`, re-exporting ~10 container families) and a `sansio` core behind the `wrappers.request`/`.response` façades are *not* visible from the file tree — the graph surfaced them. → [Findings](#findings--7-god-nodes--1-traceability-gap-2-validated), [`results/FINDINGS.md`](results/FINDINGS.md).
+2. **Which components/modules/classes/functions are most central?** Ranked by the bottleneck rubric: `werkzeug.datastructures` (fan-in 66), `werkzeug.http`, `wrappers.request/response`. → [`GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), [`hot.md`](vault/20_Projects/werkzeug-analysis/hot.md).
+3. **Where are the complexity hotspots / mixed responsibilities / God Nodes?** 7 god-node hypotheses, 2 validated (`http` bundles ≥6 header families; `datastructures` is a re-export backbone); healthy hubs *rejected* to avoid false positives. → [Findings](#findings--7-god-nodes--1-traceability-gap-2-validated).
+4. **How do you extract block diagrams + OOP schema when docs are missing/partial?** From the graph's `implements`/`imports`/`calls` edges — rendered as mermaid block + class diagrams. → [Architecture](#architecture), [`results/FINDINGS.md`](results/FINDINGS.md) (classDiagram).
+5. **How did you identify the bug, what was the root cause, what led you to it?** Failing spec → graph `tested_by` edge → `httprange.parser` → off-by-one (`end - start` vs `+ 1`, inclusive RFC 9110 range). → [Debugging case](#debugging-case--graph-guided-bug-fix-53-54), [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
+6. **Advantage of graph navigation (Obsidian) over linear file reading?** `index.md`/`hot.md` + the ego-subgraph put the *defining* module one hop from the question, instead of grepping ranked files; the experiment shows it also cites the right source more often. → [Token experiment](#token-experiment--587-savings-with-quality-preserved-the-honest-result).
+7. **How does the AI agent save tokens / avoid unnecessary code reads via the graph?** It localizes on the graph first and requests **only** the implicated module — 273 vs 560 tok (debug case), and **58.7%** fewer input tokens at equal answer quality (Q&A experiment). → [Debugging case](#debugging-case--graph-guided-bug-fix-53-54), [Token experiment](#token-experiment--587-savings-with-quality-preserved-the-honest-result).
+8. **Which extensions / agent mechanisms would you add later?** Already added: confusion-matrix evaluation, a real Graphify backend, threaded wiki generation, the Refactor Truth Dashboard. Next: dynamic `hot.md` from `git diff`, suspect ranking by proximity to failing tests, a multi-agent fix↔QA debate. → [Key design decisions](#key-design-decisions-adrs-in-docsplanmd-5).
+
 ## Architecture
 
 ```mermaid
@@ -235,9 +248,9 @@ The assignment's core debugging thread, on a small planted-bug target ([`tests/f
 - **Root cause:** off-by-one — `length = end - start` instead of `end - start + 1`.
 - **Graph-guided localization:** start from the failing test and follow the graph — `tests.test_range` →(`tested_by`)→ **`httprange.parser`**. The graph names the one file to open; no full-tree scan.
 - **Fix (before→after):** `- end - start` → `+ end - start + 1`; the 4-case spec goes **red→green** (verified deterministically, no network).
-- **Token comparison:** naive whole-package read **560** tok vs graph-guided single-module **273** tok → **51% fewer tokens** to reach the fix.
-
-The CrewAI analyst narrates the root cause on top of this deterministic spine — the same "deterministic spine, LLM at the edges" rule as the rest of the system.
+- **Token comparison (§5.5, all four dimensions):** tokens **560→273** (51% fewer), files read **3→1**, research rounds (whole-package sweep → one graph localization + one read), and speed to root cause (scan all files → graph names the module). Full table in [`BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
+- **Agent (§5.3):** `uv run hw4 debug --agent` runs the CrewAI **analyst** on the spine — handed the symptom and **only** the graph-localized module's 273-token snippet (never the package), it writes the root-cause narrative to `results/agent_debug.md`, ledger-tagged `agent.analyst`. That snippet-on-demand reduction (graph first, one file second) *is* the efficiency mechanism. The fix is verified deterministically by the spec, not the LLM.
+- **Knowledge-level before/after (§5.4):** the bug has its own Obsidian project [`vault/20_Projects/range-debug/`](vault/20_Projects/range-debug/) — a bug-focused `hot.md`, a `bug` page, and `knowledge-before-after.md` tabulating how understanding moved from "symptom only" to a graph-localized suspect with a pinned inclusive-range contract.
 
 ### Fix loop (architectural) — an honest negative (T340)
 
