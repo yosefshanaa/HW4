@@ -138,7 +138,7 @@ so that architectural questions are answered and architectural bugs are fixed wi
 ### 5.3 Boundary risks called out now (critical)
 
 - **BugsInPy is heavy**: it requires per-bug pinned environments and old Python versions; the lecturer explicitly said "if the installation gets complicated — don't insist, move to a simpler repo; the choice doesn't affect the grade" (L07 §11.2). We therefore treat BugsInPy as *one candidate*, not a default. Decision gate in TODO Phase 3 with a hard timebox.
-- **Graphify availability/behavior is not fully specified** in the summary (exact CLI name, flags, output schema). PLAN includes a discovery task and a **fallback**: if the official tool is unusable in our environment, we build a minimal AST-based extractor producing the same graph.json contract (this is also pedagogically aligned — AST extraction is "pure logical analysis, ~free of tokens", L07 §4.1). The fallback decision is ADR-4 and requires lecturer notification.
+- **Graphify availability/behavior** (originally under-specified). **Resolved (2026-06-15):** Graphify is the real, obtainable `safishamsi/graphify` tool, exporting node-link `graph.json`. We ship *both* backends — a tested Graphify ingestion adapter and the in-repo AST extractor (the reproducible default; pedagogically aligned — AST extraction is "pure logical analysis, ~free of tokens", L07 §4.1) — selectable via `graph.backend`. ADR-4 revised accordingly.
 
 ## 6. Functional Requirements
 
@@ -223,6 +223,9 @@ One self-chosen extension, proposed in PLAN, e.g.: Graphify on the org/team stru
 ### FR-11 — Measurement & reporting (P0 — Part-B final-project step 3)
 Metrics captured: source traceability rate (answers citing correct source_file), noise reduction (tokens), correct-file identification rate, correct-tool activation. Reported in the notebook + README summary.
 
+### FR-12 — Agent evaluation: confusion matrix (P0 — L07 §13.2)
+The detectors are a binary classifier, so they are scored as one. `hw4 evaluate` runs the deterministic detector spine over the `mini_repo` fixture and compares findings to a labeled, machine-readable answer key (planted defects + false-positive guards), emitting TP/FP/FN/TN and precision/recall/F1 to `results/CONFUSION_MATRIX.md`. The published result is the honest, un-tuned one (P=0.75, R=1.00); the single FP is explained, not hidden. Detailed in `docs/PRD_agent_evaluation.md`.
+
 ## 7. Non-Functional Requirements
 
 | ID | Requirement | Source |
@@ -245,6 +248,7 @@ Metrics captured: source traceability rate (answers citing correct source_file),
 | NFR-16 | Runs fully locally (lecture constraint); only LLM API is remote | L07 §12 |
 | NFR-17 | Reproducibility: fixed seeds where applicable; pinned deps; documented model versions (model IDs are config values) | Guidelines + scientific hygiene |
 | NFR-18 | Performance envelope: full pipeline (graph + analysis, excluding LLM latency) completes < 10 min on a laptop for the chosen repo size | Practicality (5-hour budget statement, L07 §12) |
+| NFR-19 | Parallelism on the genuine bottleneck: I/O-bound wiki generation runs on a thread pool; shared state (gatekeeper rate windows, ledger) is lock-guarded; CPU-bound stages stay single-threaded; opt-out via config | Guidelines §15 (ADR-8) |
 
 ## 8. User Stories (selected)
 
@@ -256,7 +260,7 @@ Metrics captured: source traceability rate (answers citing correct source_file),
 
 ## 9. Assumptions
 
-1. Graphify (course tool) is obtainable and runs locally on our Python version; otherwise fallback ADR-4 activates.
+1. Graphify (course tool) is obtainable (`safishamsi/graphify`) and ingestible via our adapter; the AST backend remains the default so the pipeline never *depends* on it (ADR-4, revised 2026-06-15).
 2. We have API access to at least one LLM (Anthropic Claude and/or other); model identity is configuration, not code.
 3. Obsidian desktop is available for visual verification; the vault itself is plain Markdown (no proprietary lock-in).
 4. The pair has ~5 focused hours for the core path (lecturer estimate) + overhead for guidelines compliance; budget honestly tracked (see PLAN §12). We critically note the 5-hour estimate covers the *core assignment*, not V3 excellence overhead; our plan budgets ~3× that and says so.
@@ -287,7 +291,7 @@ Metrics captured: source traceability rate (answers citing correct source_file),
 | # | Risk | L | I | Mitigation |
 |---|---|---|---|---|
 | R1 | BugsInPy environment quicksand burns hours | H | M | 90-min timebox; pre-vetted simpler candidates; lecturer explicitly permits switching |
-| R2 | Graphify tool unavailable / undocumented flags / schema mismatch | M | H | Discovery spike first; fallback AST extractor with identical graph.json contract (ADR-4); notify lecturer |
+| R2 | Graphify tool unavailable / undocumented flags / schema mismatch | M | H | **Retired 2026-06-15:** Graphify obtainable; tested node-link adapter + AST default both ship (ADR-4 revised). Schema drift handled at the single `Graph.from_dict` boundary |
 | R3 | Token savings < 70% | M | H | This is survivable IF analyzed (lecture allows "explain why"); design experiment first, optimize retrieval (smaller subgraphs, index-first) before concluding |
 | R4 | Agent fix breaks target repo silently (no tests around touched code) | M | H | Characterization tests written before fix; branch isolation; QA agent gate; revert path |
 | R5 | LLM cost blowout from agent loops | M | M | Gatekeeper budget ceiling + per-iteration token cap; cached graph context; cheap model for drafts, strong model for final |
@@ -323,10 +327,11 @@ To be authored in Phase 2 (each ≤2 pages, with I/O spec, constraints, alternat
 4. `docs/PRD_fix_loop.md` — refactor planning, safety, stop conditions, characterization tests.
 5. `docs/PRD_token_experiment.md` — A/B methodology, question dataset, scoring rubric, statistics.
 6. `docs/PRD_gatekeeper.md` — rate limiting, queueing, retry, ledger schema.
+7. `docs/PRD_agent_evaluation.md` — confusion-matrix scoring of the detector spine vs the planted answer key (L07 §13.2; added 2026-06-15).
 
 ## 15. Open Questions (to resolve before M2 — tracked in TODO Phase 2)
 
-1. Exact Graphify distribution channel + version we must use (course repo? pip? Claude-integrated?). → blocks ADR-4 decision.
+1. ~~Exact Graphify distribution channel + version we must use (course repo? pip? Claude-integrated?). → blocks ADR-4 decision.~~ **Resolved 2026-06-15:** Graphify is [`safishamsi/graphify`](https://github.com/safishamsi/graphify) (npm / graphify.net), exporting node-link `graph.json`. We ship a real ingestion adapter (`extractor/graphify.py`, selectable via `graph.backend`) but keep the AST backend as the reproducible default — ADR-4 revised, see PLAN.md.
 2. Submission deadline + format (zip naming convention appears to be `<id1>_<id2>_hw4.zip` based on prior assignments — confirm).
 3. Is modifying the target repo in-place acceptable, or must fixes live as patch files? (We assume branch-in-clone is fine.)
 4. Which LLM provider(s) are sanctioned for the experiment (cost reimbursement? free tier?).

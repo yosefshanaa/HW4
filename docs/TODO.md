@@ -616,6 +616,33 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 
 ---
 
+## Phase 17 — Reviewer-driven enhancements (2026-06-15)
+**Phase DoD:** each enhancement lands behind the green gates, with tests, docs, and a committed artifact where applicable; defaults preserve the frozen werkzeug evidence.
+
+### confusion-matrix agent evaluation (L07 §13.2)
+- [x] T516 (P0) `services/evaluation/confusion.py` — TP/FP/FN/TN + precision/recall/F1/accuracy from findings vs a labeled answer key
+- [x] T517 (P0) `tests/fixtures/mini_repo_answer_key.json` — machine-readable planted-defect ground truth (3 defects + 3 false-positive guards) from the fixture README
+- [x] T518 (P0) `hw4 evaluate` CLI + SDK op (`eval_ops.py`) → `results/CONFUSION_MATRIX.md` + `confusion_matrix.json`
+- [x] T519 (P0) Honest result published: **P=0.75 R=1.00 F1=0.86** (TP3/FP1/FN0/TN2); lone FP is conftest, explained — not hand-tuned to 1.0
+- [x] T520 (P0) `tests/unit/test_confusion.py` (math, node-matching, answer-key load, end-to-end) + `docs/PRD_agent_evaluation.md` + README subsection
+
+### Graphify honest integration (ADR-4 revised)
+- [x] T521 (P0) Discovery redo: Graphify *is* obtainable (`safishamsi/graphify`, node-link `graph.json`); our contract was modelled on it
+- [x] T522 (P0) `extractor/graphify.py` — real adapter normalizing a genuine node-link export through `Graph.from_dict`; optional `ProcessRunner` CLI run
+- [x] T523 (P0) `config graph.backend ∈ {ast, graphify}` selector in `graph_runner`; **AST stays default** for reproducibility
+- [x] T524 (P0) `tests/fixtures/graphify_sample/graph.json` + `tests/unit/test_graphify_backend.py` (10 tests); ADR-4 revised in PLAN.md + PRD_graph_pipeline.md; README install+run
+
+### parallelism + thread-safety (guidelines §15)
+- [x] T525 (P0) Parallelize I/O-bound wiki generation via `ThreadPoolExecutor` (`config vault.wiki_workers`, default 4); rendering/writes stay single-threaded
+- [x] T526 (P0) `ApiGatekeeper` thread-safe — `threading.Lock`, rate slot reserved at admission; network call runs lock-free
+- [x] T527 (P0) `Ledger` thread-safe — locked JSONL append + read-back (no lost/torn rows)
+- [x] T528 (P0) `tests/unit/test_concurrency.py` (64-way no-loss, no torn lines, saturation-queues-never-drops) + ADR-8 (PLAN.md) + README §15
+
+### reconcile
+- [x] T529 (P0) PRD/PLAN/TODO/README reconciled; full gates re-run GREEN; each unit committed + pushed
+
+---
+
 ## Backlog (P2 — only if time remains after T504)
 - [ ] T506 (P2) Distractor-injection Lost-in-the-Middle mini-study (FR-8.6 full version)
 - [ ] T507 (P2) Hyperedge group-claims modeled for 3 requirements (Part-C)
@@ -651,7 +678,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 14 Quality hardening | T413–T437 | 6/25 | gate-enforced subset GREEN: ruff 0 (T418), file-length ≤150 (T419), no-hardcodes (T420), no-secrets (T421), suite green + cov ~96% (T413/T414); deeper error-path/dup/edge audits (T415-417,T422-433) remain | 2026-06-15 |
 | 15 README & docs | T438–T455 | 14/18 | rich README (overview/arch diagram/methodology/usage/results/config guide/ADRs/repro/limits), all docs reflect werkzeug, PROMPTS+TODO current, FINDINGS qualified-language; T446 contrib + T452 screenshot inventory (human re-capture) + T454/455 remain | 2026-06-15 |
 | 16 Final & ship | T456–T505 | 2/50 | submission zip builds from tracked tree (228 files, excl workspace/.env/caches) + secrets-scanned clean — real key absent, .env-example dummy (T498/T499); id-named zip, clean-machine test, human sign-off + submit remain | 2026-06-15 |
+| 17 Reviewer enhancements | T516–T529 | 14/14 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00, honest FP), **Graphify backend** (real node-link adapter, AST default, ADR-4 revised), **parallelism+thread-safety** (§15: threaded wiki, locked gatekeeper/ledger); all behind green gates with tests + docs | 2026-06-15 |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **515 tasks** | **403/515** | | |
+| **Total** | **529 tasks** | **417/529** | | |
 
 *End of TODO v1.00.*
