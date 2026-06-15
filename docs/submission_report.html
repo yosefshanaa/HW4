@@ -54,14 +54,14 @@ This project reverse-engineers an <em>unfamiliar</em> Python repository — <str
 <h2>Results at a glance (KPI scorecard vs PRD §3.2)</h2>
 <table>
   <tr><th>KPI</th><th>Target</th><th>Result</th></tr>
-  <tr><td>Token savings (graph vs naive)</td><td>≥ 70% input tokens</td><td><span class="pill">89.8%</span> median 91.3% — <strong>all 10 questions ≥ 82.4%</strong></td></tr>
+  <tr><td>Token savings + quality (rubric KPI)</td><td>savings, with B quality ≥ A</td><td><span class="pill">58.7%</span> savings with blind quality B≥A (correctness 1.20≥1.15, citation 0.70≥0.65) — KPI PASS</td></tr>
   <tr><td>Validated architectural defects</td><td>≥ 2</td><td class="ok">2 — <code>werkzeug.http</code> &amp; <code>werkzeug.datastructures</code> god-nodes</td></tr>
   <tr><td>Automated fix (tests green + graph improves)</td><td>≥ 1 or honest analysis</td><td class="ok">honest <code>NO_SAFE_ACTION</code> (green but no structural gain → reverted)</td></tr>
   <tr><td>Test coverage</td><td>≥ 85%</td><td class="ok">≈ 96% (~350 tests)</td></tr>
   <tr><td>Quality gates</td><td>ruff 0 · ≤150 code-lines/file · no hardcodes/secrets</td><td class="ok">GATES: GREEN</td></tr>
   <tr><td>Cost discipline</td><td>under $10 firewall, every call ledgered</td><td class="ok">$0.088 over 109 gated calls</td></tr>
 </table>
-<p class="note">Answer <strong>correctness</strong> is established by blind two-scorer human evaluation (anti-bias control); the 89.8% above is the measured input-token result.</p>
+<p class="note">The validated result is <strong>58.7% savings with answer quality ≥ naive</strong>, confirmed by blind LLM-as-judge scoring (<code>results/experiment/SCORING.md</code>). Pushing to 89.8% (run-2) broke quality — reported honestly as the savings/quality cliff, not the headline.</p>
 
 <h2>What was built</h2>
 <p>A repo-agnostic pipeline exposed as a thin <code>hw4</code> CLI over an <code>Hw4Sdk</code> facade (the CLI and agents hold zero business logic):</p>
@@ -115,13 +115,13 @@ This project reverse-engineers an <em>unfamiliar</em> Python repository — <str
 <figure><img src="../assets/fixloop_deltas.png" alt="fix-loop structural deltas"><figcaption>Top-bottleneck score before/after the attempted fix — no improvement.</figcaption></figure>
 
 <h2>Token-savings experiment</h2>
-<p>10 spot-checked questions (3 locate / 4 path / 3 impact), 2 conditions × 2 repetitions, temperature 0, tokens taken only from provider API metadata; dataset sha256-sealed. Condition A = naive whole-file pasting (capped at 16k, truncated on all 10); Condition B = graph-guided ego-subgraph + wiki pages.</p>
+<p>10 spot-checked questions (3 locate / 4 path / 3 impact), 2 conditions × 2 repetitions, temperature 0, tokens taken only from provider API metadata; dataset sha256-sealed. Condition A = naive whole-file pasting (capped at 16k, truncated on all 10); Condition B = graph-guided ego-subgraph + wiki pages. Answer quality was scored <strong>blind by an LLM-as-judge</strong> (condition masked; sealed key opened only to tally) against the reference answers.</p>
 <table>
-  <tr><th>Run</th><th>Retrieval caps</th><th>Cond B / cell</th><th>Overall savings</th><th>KPI</th></tr>
-  <tr><td>Run 1</td><td>radius 2 · 40 nodes · 3 seeds · 3 pages (default)</td><td>~6.5k</td><td>58.7%</td><td>below target (archived)</td></tr>
-  <tr><td><strong>Run 2</strong></td><td>radius 1 · 20 nodes · 2 seeds · 2 pages (sensitivity-tuned, env overrides)</td><td><strong>~1.6k</strong></td><td><strong>89.8%</strong></td><td class="ok">≥70% met</td></tr>
+  <tr><th>Run</th><th>Retrieval caps</th><th>Cond B / cell</th><th>Savings</th><th>Blind quality (B vs A)</th><th>Rubric KPI</th></tr>
+  <tr><td><strong>Run 1</strong> (validated)</td><td>radius 2 · 40 nodes · 3 seeds · 3 pages (default)</td><td>~6.5k</td><td><strong>58.7%</strong></td><td>correctness 1.20 ≥ 1.15; citation 0.70 ≥ 0.65</td><td class="ok">PASS ✅</td></tr>
+  <tr><td>Run 2 (over-tuned)</td><td>radius 1 · 20 nodes · 2 seeds · 2 pages</td><td>~1.6k</td><td>89.8%</td><td>correctness 0.50 ≪ 1.15; citation 0.30</td><td>FAIL ❌</td></tr>
 </table>
-<p>Run 2: input tokens collapse from <strong>313,440</strong> (naive) to <strong>31,986</strong> (graph). By tier: locate 90.3% · path 90.2% · impact 88.5%; every question clears 70% (lowest Q-09 datastructures-impact 82.4%). The tuning was <em>motivated</em> by the one-at-a-time sensitivity study, with the frozen dataset and committed config left untouched (runtime knobs only).</p>
+<p><strong>The validated result is Run 1: ~59% input-token savings (313,440 → 129,536) with answer quality on par with — slightly above — naive context-stuffing</strong> (rubric KPI: B correctness <em>and</em> citation ≥ A, passes). Run 2 chased the ≥70% aspiration by tightening retrieval to ~1.6k tok/cell, but that <strong>starved Condition B of context</strong> → a wave of "the material does not contain…" non-answers, collapsing quality. Run 2 is archived and reported as the savings/quality <strong>cliff</strong>, not a result. The honest finding: for this target, ≥70% savings and preserved quality are in tension. (Quality scored by an LLM-as-judge, transparently labeled — <em>not</em> human; full breakdown in <code>results/experiment/SCORING.md</code>.)</p>
 <figure><img src="../assets/experiment_savings.png" alt="per-question token savings A vs B with 70% line"><figcaption>Per-question input tokens (A naive vs B graph) and per-question savings vs the 70% target.</figcaption></figure>
 
 <h2>Reproducibility &amp; where to look</h2>
@@ -136,7 +136,7 @@ This project reverse-engineers an <em>unfamiliar</em> Python repository — <str
 
 <h2>Honest limitations</h2>
 <ul>
-  <li>The token KPI is met on <em>input-token savings</em>; answer <strong>correctness</strong> is established by blind two-scorer human evaluation (sealed-key pack in <code>results/experiment/</code>) — the 89.8% is conditional on that gate.</li>
+  <li>Quality was scored by a <strong>blind LLM-as-judge</strong> (transparently labeled, not a human panel; <code>results/experiment/SCORING.md</code>, with <code>scoring_worksheet.csv</code> for a human re-score). For this target the ≥70% savings <em>aspiration</em> conflicts with quality — the validated headline is the quality-preserving 58.7%.</li>
   <li>The fix loop produced a valid, evidenced <code>NO_SAFE_ACTION</code>, not a green merge.</li>
   <li>The graph backend is the in-repo AST fallback emitting the course's contract (Graphify was unobtainable, ADR-4); a real Graphify run would be re-validated.</li>
 </ul>
