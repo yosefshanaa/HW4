@@ -5,7 +5,7 @@
 **Target analysed:** [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` — the WSGI toolkit under Flask (138 `.py` files / 27,498 LOC).
 
 > Course: **Lecture 07 — Reverse Engineering of Graph Knowledge Systems** (Dr. Yoram Segal, June 2026).
-> Governing docs: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) (515 tasks), and **6 dedicated mechanism PRDs**.
+> Governing docs: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) (539 tasks), and **7 dedicated mechanism PRDs**.
 
 ---
 
@@ -16,6 +16,7 @@
 | **Token savings + quality** (rubric KPI) | savings, with B correctness & citation ≥ A | ✅ **58.7%** savings with blind quality B≥A (correctness 1.20≥1.15, citation 0.70≥0.65) | [`results/experiment/SCORING.md`](results/experiment/SCORING.md) |
 | **Validated architectural defects** | ≥ 2 | ✅ **2** — `http` god-node (F-005), `datastructures` god-node (F-001) | [`results/FINDINGS.md`](results/FINDINGS.md) §3 |
 | **Automated fix** (tests green + graph improves) | ≥ 1 or honest analysis | ✅ **honest NO_SAFE_ACTION** (green but no structural gain → reverted) | [`results/loop_log.json`](results/loop_log.json), `results/dashboard.md` |
+| **Concrete bug fixed** (graph-guided debug, §5.3–5.4) | find → root-cause → verified fix | ✅ HTTP byte-range off-by-one; spec **red→green**; **51%** fewer tokens to localize | [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md) |
 | **Coverage** | ≥ 85% | ✅ **≈96%** | `scripts/check_gates.py` |
 | **Quality gates** | ruff 0 · ≤150 code-lines/file · no hardcodes/secrets | ✅ **GREEN** | `scripts/check_gates.py` |
 | **Cost discipline** | under $10 firewall, every call ledgered | ✅ **$0.088** / 109 calls | [`results/ledger.jsonl`](results/ledger.jsonl) |
@@ -25,18 +26,19 @@
 ## Table of contents
 
 1. [What this is & why a graph](#what-this-is--why-a-graph)
-2. [Architecture](#architecture)
-3. [The pipeline, stage by stage](#the-pipeline-stage-by-stage)
-4. [Installation](#installation)
-5. [Usage tour](#usage-tour)
-6. [Results deep-dive](#results-deep-dive)
-7. [Evidence discipline (Part-C)](#evidence-discipline-part-c)
-8. [Configuration guide](#configuration-guide)
-9. [Repository layout](#repository-layout)
-10. [Key design decisions (ADRs)](#key-design-decisions-adrs)
-11. [Reproducing the analysis](#reproducing-the-analysis)
-12. [Quality, cost & limitations](#quality-cost--limitations)
-13. [License & attribution](#license--attribution)
+2. [Research questions (§4)](#research-questions-4--answered)
+3. [Architecture](#architecture)
+4. [The pipeline, stage by stage](#the-pipeline-stage-by-stage)
+5. [Installation](#installation)
+6. [Usage tour](#usage-tour)
+7. [Results deep-dive](#results-deep-dive) — findings, agent evaluation, **debugging case**, fix loop, token experiment, the Obsidian vault
+8. [Evidence discipline (Part-C)](#evidence-discipline-part-c)
+9. [Configuration guide](#configuration-guide)
+10. [Repository layout](#repository-layout)
+11. [Key design decisions (ADRs)](#key-design-decisions-adrs-in-docsplanmd-5)
+12. [Reproducing the analysis](#reproducing-the-analysis)
+13. [Quality, cost & limitations](#quality-cost--limitations)
+14. [License & attribution](#license--attribution)
 
 ---
 
@@ -62,9 +64,9 @@ The assignment's eight research questions, each answered with a link to the evid
 2. **Which components/modules/classes/functions are most central?** Ranked by the bottleneck rubric: `werkzeug.datastructures` (fan-in 66), `werkzeug.http`, `wrappers.request/response`. → [`GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), [`hot.md`](vault/20_Projects/werkzeug-analysis/hot.md).
 3. **Where are the complexity hotspots / mixed responsibilities / God Nodes?** 7 god-node hypotheses, 2 validated (`http` bundles ≥6 header families; `datastructures` is a re-export backbone); healthy hubs *rejected* to avoid false positives. → [Findings](#findings--7-god-nodes--1-traceability-gap-2-validated).
 4. **How do you extract block diagrams + OOP schema when docs are missing/partial?** From the graph's `implements`/`imports`/`calls` edges — rendered as mermaid block + class diagrams. → [Architecture](#architecture), [`results/FINDINGS.md`](results/FINDINGS.md) (classDiagram).
-5. **How did you identify the bug, what was the root cause, what led you to it?** Failing spec → graph `tested_by` edge → `httprange.parser` → off-by-one (`end - start` vs `+ 1`, inclusive RFC 9110 range). → [Debugging case](#debugging-case--graph-guided-bug-fix-53-54), [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
+5. **How did you identify the bug, what was the root cause, what led you to it?** Failing spec → graph `tested_by` edge → `httprange.parser` → off-by-one (`end - start` vs `+ 1`, inclusive RFC 9110 range). → [Debugging case](#debugging-case--graph-guided-bug-fix), [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
 6. **Advantage of graph navigation (Obsidian) over linear file reading?** `index.md`/`hot.md` + the ego-subgraph put the *defining* module one hop from the question, instead of grepping ranked files; the experiment shows it also cites the right source more often. → [Token experiment](#token-experiment--587-savings-with-quality-preserved-the-honest-result).
-7. **How does the AI agent save tokens / avoid unnecessary code reads via the graph?** It localizes on the graph first and requests **only** the implicated module — 273 vs 560 tok (debug case), and **58.7%** fewer input tokens at equal answer quality (Q&A experiment). → [Debugging case](#debugging-case--graph-guided-bug-fix-53-54), [Token experiment](#token-experiment--587-savings-with-quality-preserved-the-honest-result).
+7. **How does the AI agent save tokens / avoid unnecessary code reads via the graph?** It localizes on the graph first and requests **only** the implicated module — 273 vs 560 tok (debug case), and **58.7%** fewer input tokens at equal answer quality (Q&A experiment). → [Debugging case](#debugging-case--graph-guided-bug-fix), [Token experiment](#token-experiment--587-savings-with-quality-preserved-the-honest-result).
 8. **Which extensions / agent mechanisms would you add later?** Already added: confusion-matrix evaluation, a real Graphify backend, threaded wiki generation, the Refactor Truth Dashboard. Next: dynamic `hot.md` from `git diff`, suspect ranking by proximity to failing tests, a multi-agent fix↔QA debate. → [Key design decisions](#key-design-decisions-adrs-in-docsplanmd-5).
 
 ## Architecture
@@ -240,9 +242,9 @@ The detectors are a binary classifier, so they get a classifier's yardstick. `hw
 
 **Recall 1.00** — all three planted defects (god-node `app.engine`, orphan `orphan.legacy`, doc gap `app.plugins`) detected. The lone **FP** is the fixture's `conftest.py`: genuinely disconnected, so the isolation detector surfaces it for triage — reported as an honest precision cost, not hidden, in keeping with Part-C's "isolation is a finding, not a diagnosis." The healthy-hub guard (`app.utils`, high fan-in / one concern) stays unflagged — the two true negatives that keep precision from collapsing. We publish the real 0.75, not a hand-tuned 1.0. Full breakdown: [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), design in [`docs/PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 
-### Debugging case — graph-guided bug fix (§5.3–5.4)
+### Debugging case — graph-guided bug fix
 
-The assignment's core debugging thread, on a small planted-bug target ([`tests/fixtures/buggy_case`](tests/fixtures/buggy_case)) chosen over a heavy BugsInPy environment per the lecturer's "prefer a small, well-explained case" guidance. `uv run hw4 debug` runs it end-to-end and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
+The assignment's core debugging thread (EX04 §5.3–5.4), on a small planted-bug target ([`tests/fixtures/buggy_case`](tests/fixtures/buggy_case)) chosen over a heavy BugsInPy environment per the lecturer's "prefer a small, well-explained case" guidance. `uv run hw4 debug` runs it end-to-end and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
 
 - **Bug:** `httprange.parse_byte_range("bytes=0-499", 1000)` returns content-length **499**, but HTTP byte ranges are *inclusive* (RFC 9110 §14.1.2) → it must be **500**. A boundary bug that passes a casual read.
 - **Root cause:** off-by-one — `length = end - start` instead of `end - start + 1`.
@@ -251,6 +253,10 @@ The assignment's core debugging thread, on a small planted-bug target ([`tests/f
 - **Token comparison (§5.5, all four dimensions):** tokens **560→273** (51% fewer), files read **3→1**, research rounds (whole-package sweep → one graph localization + one read), and speed to root cause (scan all files → graph names the module). Full table in [`BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
 - **Agent (§5.3):** `uv run hw4 debug --agent` runs the CrewAI **analyst** on the spine — handed the symptom and **only** the graph-localized module's 273-token snippet (never the package), it writes the root-cause narrative to `results/agent_debug.md`, ledger-tagged `agent.analyst`. That snippet-on-demand reduction (graph first, one file second) *is* the efficiency mechanism. The fix is verified deterministically by the spec, not the LLM.
 - **Knowledge-level before/after (§5.4):** the bug has its own Obsidian project [`vault/20_Projects/range-debug/`](vault/20_Projects/range-debug/) — a bug-focused `hot.md`, a `bug` page, and `knowledge-before-after.md` tabulating how understanding moved from "symptom only" to a graph-localized suspect with a pinned inclusive-range contract.
+
+| Bug-focused `hot.md` — load this first (symptom → graph localization → suspect) | The `range-debug` vault project — the bug's pages in the tree |
+|---|---|
+| ![bug-focused hot.md for the byte-range defect](assets/range_debug_hot.png) | ![range-debug Obsidian vault project](assets/range_debug_vault.png) |
 
 ### Fix loop (architectural) — an honest negative (T340)
 
@@ -291,7 +297,7 @@ The graph becomes a navigable Obsidian vault under `vault/20_Projects/werkzeug-a
 | **`werkzeug.datastructures` wiki — rank-1 god-node (F-001)** | **`werkzeug.wrappers` wiki — rank-5 dependency hub** |
 | ![werkzeug.datastructures wiki page](assets/wiki_datastructures.png) | ![werkzeug.wrappers wiki page](assets/wiki_wrappers.png) |
 
-Each wiki page carries an **evidence table** (EXTRACTED/INFERRED edges with their source files and confidence) plus open questions; the index ranks hubs by the graph's bottleneck metrics. The community-size and experiment charts elsewhere in this README are exported by the notebook (`assets/`).
+Each wiki page carries an **evidence table** (EXTRACTED/INFERRED edges with their source files and confidence) plus open questions; the index ranks hubs by the graph's bottleneck metrics. A machine-owned **`hot.md`** focuses the critical area, and a second, smaller vault project — **`vault/20_Projects/range-debug/`** — documents the [debugging case](#debugging-case--graph-guided-bug-fix) (bug-focused `hot.md`, knowledge before/after). The community-size and experiment charts elsewhere in this README are exported by the notebook (`assets/`).
 
 ## Evidence discipline (Part-C)
 
@@ -374,8 +380,8 @@ uv run --with nbformat --with nbclient --with ipykernel --with matplotlib python
 - **Cost:** the entire werkzeug run cost **$0.088** of the $10 firewall across **109 gated calls** (vault wiki + fix-loop edit + 60 experiment cells over runs 1–2 + agent narratives), every one ledgered. The retired click run's ledger is preserved in git history.
 - **Honest limitations:**
   - Quality was scored by a **blind LLM-as-judge** (transparently labeled, not a human panel); `results/experiment/SCORING.md` documents the method and supports an independent human re-score. For this target the ≥70% *savings aspiration* conflicts with quality (run-2 over-tuning) — the validated headline is the quality-preserving 58.7%.
-  - The fix loop produced a NO_SAFE_ACTION (a valid, evidenced negative), not a green merge.
-  - Graph backend is the AST fallback, not the course's Graphify (ADR-4); the contract is identical but a real run would be re-validated.
+  - The *architectural* fix loop produced a NO_SAFE_ACTION (a valid, evidenced negative), not a green merge — by design, it only accepts a graph-metric improvement. The *functional* debugging case **is** fixed end-to-end (red→green, `results/BUG_ANALYSIS.md`).
+  - The default graph backend is the deterministic in-repo AST extractor, chosen so the frozen experiment/findings reproduce without an external tool; a **real Graphify node-link adapter ships** and is selectable via `graph.backend` (ADR-4, revised — the contract is normalized at one boundary).
   - Module-level constants/attributes aren't in the symbol index (a known INFERRED-layer precision cost, documented in `PRD_graph_pipeline.md`).
 
 ## License & attribution
