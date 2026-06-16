@@ -1,8 +1,8 @@
 # HW4 — EX04: Graph-Based Reverse Engineering with AI Agents
 
-> Reverse-engineer an **unfamiliar** Python repository the way a senior engineer would if they had a knowledge graph and a disciplined agent crew: build a dependency graph, navigate it as an Obsidian vault + LLM wiki, detect **architectural** defects with evidence-chained findings, attempt a **test-guarded** fix, and **prove** that graph-guided retrieval is cheaper than naive context-stuffing in a frozen A/B experiment.
+> Reverse-engineer an **unfamiliar** Python repository the way a senior engineer would if they had a knowledge graph and a disciplined agent crew: build a dependency graph, navigate it as an Obsidian vault + LLM wiki, detect **architectural** defects with evidence-chained findings, use the graph to **find and fix a real bug** in unfamiliar code, and **prove** that graph-guided retrieval is cheaper than naive context-stuffing in a frozen A/B experiment.
 
-**Target analysed:** [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` — the WSGI toolkit under Flask (138 `.py` files / 27,498 LOC).
+**Two targets.** The reverse-engineering subject is the large, clean [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` (138 `.py` files / 27,498 LOC). The **debugging** subject is the small, genuinely buggy [`andela/buggy-python`](https://github.com/andela/buggy-python) — the graph localizes five real defects we did *not* write, and **andela's own test harness goes from crashing → "All test passed"** ([before/after graphify, write-up](#debugging-case--graph-guided-bug-fix)).
 
 > Course: **Lecture 07 — Reverse Engineering of Graph Knowledge Systems** (Dr. Yoram Segal, June 2026).
 > Governing docs: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) (539 tasks), and **7 dedicated mechanism PRDs**.
