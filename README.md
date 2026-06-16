@@ -5,7 +5,7 @@
 **Two targets.** The reverse-engineering subject is the large, clean [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` (138 `.py` files / 27,498 LOC). The **debugging** subject is the small, genuinely buggy [`andela/buggy-python`](https://github.com/andela/buggy-python) — the graph localizes five real defects we did *not* write, and **andela's own test harness goes from crashing → "All test passed"** ([before/after graphify, write-up](#debugging-case--graph-guided-bug-fix)).
 
 > Course: **Lecture 07 — Reverse Engineering of Graph Knowledge Systems** (Dr. Yoram Segal, June 2026).
-> Governing docs: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) (539 tasks), and **7 dedicated mechanism PRDs**.
+> Governing docs: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) (544 tasks), and **7 dedicated mechanism PRDs**.
 
 ---
 
@@ -63,7 +63,7 @@ A guiding rule throughout: **deterministic spine, LLM at the edges.** Graph extr
 
 This project was written **docs-before-code** (guidelines §1.4): the requirements, architecture, and task plan existed before the first line was implemented, and each non-trivial mechanism got its own PRD. The full set lives in [`docs/`](docs/):
 
-- **Governing docs** — [`PRD.md`](docs/PRD.md) (problem, KPIs, functional/non-functional requirements, risks) · [`PLAN.md`](docs/PLAN.md) (architecture, C4/UML, the ADRs) · [`TODO.md`](docs/TODO.md) (541-task plan tracked phase by phase).
+- **Governing docs** — [`PRD.md`](docs/PRD.md) (problem, KPIs, functional/non-functional requirements, risks) · [`PLAN.md`](docs/PLAN.md) (architecture, C4/UML, the ADRs) · [`TODO.md`](docs/TODO.md) (544-task plan tracked phase by phase).
 - **Mechanism PRDs (7)** — one per subsystem: [`PRD_graph_pipeline.md`](docs/PRD_graph_pipeline.md) · [`PRD_defect_detection.md`](docs/PRD_defect_detection.md) · [`PRD_fix_loop.md`](docs/PRD_fix_loop.md) · [`PRD_gatekeeper.md`](docs/PRD_gatekeeper.md) · [`PRD_token_experiment.md`](docs/PRD_token_experiment.md) · [`PRD_agent_orchestration.md`](docs/PRD_agent_orchestration.md) · [`PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 - **Process & reference** — [`PROMPTS.md`](docs/PROMPTS.md) (the AI prompt log) · [`SCORING_RUBRIC.md`](docs/SCORING_RUBRIC.md) (blind experiment scoring) · [`SKILL.md`](docs/SKILL.md) + [`SKILL_token_experiment.md`](docs/SKILL_token_experiment.md) (SKILL protocols) · [`TARGET_REPO.md`](docs/TARGET_REPO.md) (target provenance + unfamiliarity attestation).
 
@@ -255,9 +255,9 @@ The detectors are a binary classifier, so they get a classifier's yardstick. `hw
 
 **Recall 1.00** — all three planted defects (god-node `app.engine`, orphan `orphan.legacy`, doc gap `app.plugins`) detected. The lone **FP** is the fixture's `conftest.py`: genuinely disconnected, so the isolation detector surfaces it for triage — reported as an honest precision cost, not hidden, in keeping with Part-C's "isolation is a finding, not a diagnosis." The healthy-hub guard (`app.utils`, high fan-in / one concern) stays unflagged — the two true negatives that keep precision from collapsing. We publish the real 0.75, not a hand-tuned 1.0. Full breakdown: [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), design in [`docs/PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 
-### Debugging case — graph-guided bug fix (§5.3–5.4)
+### Debugging case — graph-guided bug fix
 
-Two debugging deliverables, because two different things are worth proving — and this repo carries **both** a large clean codebase (werkzeug, above) and a small buggy one.
+The assignment's core thread (EX04 §5.3–5.4) — and there are **two** debugging deliverables, because two different things are worth proving, and this repo carries **both** a large clean codebase (werkzeug, above) and a small buggy one.
 
 **① Real discovered bug — [`andela/buggy-python`](https://github.com/andela/buggy-python)** (one of the EX04-suggested repos; the bugs were authored by *andela*, not by us). We graphified it ([`results/buggy_python/`](results/buggy_python/), 16 nodes / 18 edges), let the import graph localize the implicated `snippets` modules from the failing harness, and fixed **five real defects** — a mutable-default argument, a dict-vs-list loop, `!==` / `is "paid"` / `sun` / `length` / attribute-on-dict typos, and missing package exports. andela's **own** `main.py` harness now prints `All test passed successfully!! 😀`. Runs green at [`examples/buggy-python/`](examples/buggy-python/); full write-up in [`results/BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md). *This is the genuine discovered fix — code neither of us wrote.*
 
