@@ -16,7 +16,7 @@
 | **Token savings + quality** (rubric KPI) | savings, with B correctness & citation ≥ A | ✅ **58.7%** savings with blind quality B≥A (correctness 1.20≥1.15, citation 0.70≥0.65) | [`results/experiment/SCORING.md`](results/experiment/SCORING.md) |
 | **Validated architectural defects** | ≥ 2 | ✅ **2** — `http` god-node (F-005), `datastructures` god-node (F-001) | [`results/FINDINGS.md`](results/FINDINGS.md) §3 |
 | **Automated fix** (tests green + graph improves) | ≥ 1 or honest analysis | ✅ **honest NO_SAFE_ACTION** (green but no structural gain → reverted) | [`results/loop_log.json`](results/loop_log.json), `results/dashboard.md` |
-| **Concrete bug fixed** (graph-guided debug, §5.3–5.4) | find → root-cause → verified fix | ✅ HTTP byte-range off-by-one; spec **red→green**; **51%** fewer tokens to localize | [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md) |
+| **Concrete bug fixed** (graph-guided debug, §5.3–5.4) | find → root-cause → verified fix | ✅ **real** bugs in `andela/buggy-python` — their own harness now prints *All test passed* (+ a gate-verified planted demo) | [`BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md) |
 | **Coverage** | ≥ 85% | ✅ **≈96%** | `scripts/check_gates.py` |
 | **Quality gates** | ruff 0 · ≤150 code-lines/file · no hardcodes/secrets | ✅ **GREEN** | `scripts/check_gates.py` |
 | **Cost discipline** | under $10 firewall, every call ledgered | ✅ **$0.088** / 109 calls | [`results/ledger.jsonl`](results/ledger.jsonl) |
@@ -255,9 +255,13 @@ The detectors are a binary classifier, so they get a classifier's yardstick. `hw
 
 **Recall 1.00** — all three planted defects (god-node `app.engine`, orphan `orphan.legacy`, doc gap `app.plugins`) detected. The lone **FP** is the fixture's `conftest.py`: genuinely disconnected, so the isolation detector surfaces it for triage — reported as an honest precision cost, not hidden, in keeping with Part-C's "isolation is a finding, not a diagnosis." The healthy-hub guard (`app.utils`, high fan-in / one concern) stays unflagged — the two true negatives that keep precision from collapsing. We publish the real 0.75, not a hand-tuned 1.0. Full breakdown: [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), design in [`docs/PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 
-### Debugging case — graph-guided bug fix
+### Debugging case — graph-guided bug fix (§5.3–5.4)
 
-The assignment's core debugging thread (EX04 §5.3–5.4), on a small planted-bug target ([`tests/fixtures/buggy_case`](tests/fixtures/buggy_case)) chosen over a heavy BugsInPy environment per the lecturer's "prefer a small, well-explained case" guidance. `uv run hw4 debug` runs it end-to-end and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md).
+Two debugging deliverables, because two different things are worth proving — and this repo carries **both** a large clean codebase (werkzeug, above) and a small buggy one.
+
+**① Real discovered bug — [`andela/buggy-python`](https://github.com/andela/buggy-python)** (one of the EX04-suggested repos; the bugs were authored by *andela*, not by us). We graphified it ([`results/buggy_python/`](results/buggy_python/), 16 nodes / 18 edges), let the import graph localize the implicated `snippets` modules from the failing harness, and fixed **five real defects** — a mutable-default argument, a dict-vs-list loop, `!==` / `is "paid"` / `sun` / `length` / attribute-on-dict typos, and missing package exports. andela's **own** `main.py` harness now prints `All test passed successfully!! 😀`. Runs green at [`examples/buggy-python/`](examples/buggy-python/); full write-up in [`results/BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md). *This is the genuine discovered fix — code neither of us wrote.*
+
+**② Planted unit demonstration — [`tests/fixtures/buggy_case`](tests/fixtures/buggy_case).** A small, deterministic, **gate-verified** case so the workflow is covered by offline tests (no network). `uv run hw4 debug` reproduces → graph-localizes → verifies a red→green fix and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md):
 
 - **Bug:** `httprange.parse_byte_range("bytes=0-499", 1000)` returns content-length **499**, but HTTP byte ranges are *inclusive* (RFC 9110 §14.1.2) → it must be **500**. A boundary bug that passes a casual read.
 - **Root cause:** off-by-one — `length = end - start` instead of `end - start + 1`.
@@ -357,6 +361,7 @@ Selected `setup.json` keys:
 | `config/` | versioned JSON — zero hardcoded values; secrets only via env |
 | `docs/` | PRD/PLAN/TODO, **7 mechanism PRDs**, SKILL protocols, SCORING_RUBRIC, PROMPTS log, TARGET_REPO |
 | `data/` | frozen question dataset (sha256-sealed in `PRD_token_experiment.md`) |
+| `examples/` | vendored real buggy repo (`andela/buggy-python`) — the discovered-bug target we fixed; runs green |
 | `results/` | graph iterations, findings, FINDINGS.md, loop log, experiment artifacts, ledger, REPORT, dashboard |
 | `notebooks/` | `analysis.ipynb` — restart-and-run-all from committed artifacts |
 | `vault/` | Obsidian vault (taxonomy + wiki incl. SKILL mirrors) |

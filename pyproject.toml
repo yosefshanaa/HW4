@@ -32,8 +32,9 @@ build-backend = "hatchling.build"
 packages = ["src/hw4"]
 
 [tool.ruff]
-# notebook cells use chart idiom (semicolons, late imports) by convention
-extend-exclude = ["notebooks", "results/patches"]
+# notebook cells use chart idiom (semicolons, late imports) by convention;
+# examples/ vendors a real external buggy repo verbatim (not our code to lint)
+extend-exclude = ["notebooks", "results/patches", "examples"]
 line-length = 100
 target-version = "py310"
 

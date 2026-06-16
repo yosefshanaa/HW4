@@ -1,0 +1,106 @@
+diff --git a/snippets/__init__.py b/snippets/__init__.py
+index 637acd7..29ee207 100644
+--- a/snippets/__init__.py
++++ b/snippets/__init__.py
+@@ -1,8 +1,8 @@
+-# from .loop import lambda_array
+-# from .io import (
+-#     read_file,
+-#     calculate_unpaid_loans,
+-#     calculate_paid_loans,
+-#     average_paid_loans
+-# )
+ from .foobar import foo
++from .io import (
++    average_paid_loans,
++    calculate_paid_loans,
++    calculate_unpaid_loans,
++    read_file,
++)
++from .loop import lambda_array
+diff --git a/snippets/foobar.py b/snippets/foobar.py
+index 61c5243..433ad11 100644
+--- a/snippets/foobar.py
++++ b/snippets/foobar.py
+@@ -5,6 +5,8 @@ can be misused
+ """
+ 
+ 
+-def foo(bar=[]):
++def foo(bar=None):
++    if bar is None:
++        bar = []
+     bar.append("baz")
+     return bar
+diff --git a/snippets/io.py b/snippets/io.py
+index c3f92bc..803cf08 100644
+--- a/snippets/io.py
++++ b/snippets/io.py
+@@ -12,30 +12,30 @@ def read_file():
+ 
+ 
+ def calculate_unpaid_loans(data):
+-    loans = data("loans")
+-    unpaid_loans = {
+-        loan.amount for loan in loans
+-        if loan.status !== "unpaid"
+-    }
+-    return sun(unpaid_loans)
++    loans = data["loans"]
++    unpaid_loans = [
++        loan["amount"] for loan in loans
++        if loan["status"] == "unpaid"
++    ]
++    return sum(unpaid_loans)
+ 
+ 
+ def calculate_paid_loans(data):
+-    loans = data("loans")
++    loans = data["loans"]
+     paid_loans = [
+-        loan.amount for loan in loans
+-        if loan.status is "paid"
++        loan["amount"] for loan in loans
++        if loan["status"] == "paid"
+     ]
+-    return sun(paid_loans)
++    return sum(paid_loans)
+ 
+ 
+ def average_paid_loans(data):
+-    loans = data("loans")
++    loans = data["loans"]
+     paid_loans = [
+-        loan.amount for loan in loans
+-        if loan.status is "paid"
++        loan["amount"] for loan in loans
++        if loan["status"] == "paid"
+     ]
+-    sum_paid_loans = sun(paid_loans)
+-    number_paid_loans = length(paid_loans)
+-    average = (sum_paid_loans/number_paid_loans)
++    sum_paid_loans = sum(paid_loans)
++    number_paid_loans = len(paid_loans)
++    average = (sum_paid_loans / number_paid_loans)
+     return average
+diff --git a/snippets/loop.py b/snippets/loop.py
+index 08a2d33..98f091b 100644
+--- a/snippets/loop.py
++++ b/snippets/loop.py
+@@ -5,11 +5,11 @@ of a number on the fly.
+ 
+ 
+ def lambda_array():
+-    # initialize an empty array
+-    lambda_methods = {}
++    # initialize an empty list
++    lambda_methods = []
+     # implement a for loop to count from 0 to 9
+-    for i in 10:
+-        # append the lambda function to the array defined above
+-        lambdamethods.push(lambda x: x + i)
++    for i in range(10):
++        # append the lambda function to the list defined above
++        lambda_methods.append(lambda x: x + i)
+ 
+     return lambda_methods

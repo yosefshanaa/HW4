@@ -1,0 +1,149 @@
+{
+ "betweenness": {
+  "doc:README.md": 0.0,
+  "main": 0.0,
+  "missing:main.py": 0.0,
+  "rationale:snippets.foobar.doc": 0.0,
+  "rationale:snippets.io.doc": 0.0,
+  "rationale:snippets.loop.doc": 0.0,
+  "snippets": 0.014285714285714287,
+  "snippets.foobar": 0.0,
+  "snippets.foobar.foo": 0.0,
+  "snippets.io": 0.0,
+  "snippets.io.average_paid_loans": 0.0,
+  "snippets.io.calculate_paid_loans": 0.0,
+  "snippets.io.calculate_unpaid_loans": 0.0,
+  "snippets.io.read_file": 0.0,
+  "snippets.loop": 0.0,
+  "snippets.loop.lambda_array": 0.0
+ },
+ "bottlenecks": [
+  {
+   "betweenness": 0.014286,
+   "fan_in": 1,
+   "fan_out": 3,
+   "mandatory_path_ratio": 1.0,
+   "node_id": "snippets",
+   "rank": 1,
+   "relation_profile": {
+    "calls": 1,
+    "implements": 3,
+    "imports": 4
+   },
+   "score": 1.0
+  }
+ ],
+ "bridges": [
+  [
+   "main",
+   "snippets"
+  ],
+  [
+   "snippets",
+   "snippets.foobar"
+  ],
+  [
+   "snippets",
+   "snippets.io"
+  ],
+  [
+   "snippets",
+   "snippets.loop"
+  ]
+ ],
+ "community_count": 12,
+ "community_of": {
+  "doc:README.md": 10,
+  "main": 0,
+  "missing:main.py": 11,
+  "rationale:snippets.foobar.doc": 7,
+  "rationale:snippets.io.doc": 8,
+  "rationale:snippets.loop.doc": 9,
+  "snippets": 0,
+  "snippets.foobar": 0,
+  "snippets.foobar.foo": 1,
+  "snippets.io": 0,
+  "snippets.io.average_paid_loans": 5,
+  "snippets.io.calculate_paid_loans": 4,
+  "snippets.io.calculate_unpaid_loans": 3,
+  "snippets.io.read_file": 2,
+  "snippets.loop": 0,
+  "snippets.loop.lambda_array": 6
+ },
+ "fan_in": {
+  "doc:README.md": 0,
+  "main": 0,
+  "missing:main.py": 0,
+  "rationale:snippets.foobar.doc": 0,
+  "rationale:snippets.io.doc": 0,
+  "rationale:snippets.loop.doc": 0,
+  "snippets": 1,
+  "snippets.foobar": 1,
+  "snippets.foobar.foo": 0,
+  "snippets.io": 1,
+  "snippets.io.average_paid_loans": 0,
+  "snippets.io.calculate_paid_loans": 0,
+  "snippets.io.calculate_unpaid_loans": 0,
+  "snippets.io.read_file": 0,
+  "snippets.loop": 1,
+  "snippets.loop.lambda_array": 0
+ },
+ "fan_out": {
+  "doc:README.md": 0,
+  "main": 1,
+  "missing:main.py": 0,
+  "rationale:snippets.foobar.doc": 0,
+  "rationale:snippets.io.doc": 0,
+  "rationale:snippets.loop.doc": 0,
+  "snippets": 3,
+  "snippets.foobar": 0,
+  "snippets.foobar.foo": 0,
+  "snippets.io": 0,
+  "snippets.io.average_paid_loans": 0,
+  "snippets.io.calculate_paid_loans": 0,
+  "snippets.io.calculate_unpaid_loans": 0,
+  "snippets.io.read_file": 0,
+  "snippets.loop": 0,
+  "snippets.loop.lambda_array": 0
+ },
+ "isolated_components": [
+  [
+   "snippets.foobar.foo"
+  ],
+  [
+   "snippets.io.read_file"
+  ],
+  [
+   "snippets.io.calculate_unpaid_loans"
+  ],
+  [
+   "snippets.io.calculate_paid_loans"
+  ],
+  [
+   "snippets.io.average_paid_loans"
+  ],
+  [
+   "snippets.loop.lambda_array"
+  ],
+  [
+   "rationale:snippets.foobar.doc"
+  ],
+  [
+   "rationale:snippets.io.doc"
+  ],
+  [
+   "rationale:snippets.loop.doc"
+  ],
+  [
+   "doc:README.md"
+  ],
+  [
+   "missing:main.py"
+  ]
+ ],
+ "iteration": 0,
+ "relations_considered": [
+  "imports",
+  "calls"
+ ]
+}

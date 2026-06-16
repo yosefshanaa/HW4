@@ -660,6 +660,10 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 - [x] T540 (P0) §13/§17.6 — ISO/IEC 25010 conformance table in README (the 8 product-quality characteristics → concrete evidence)
 - [x] T541 (P0) §12.1/§17.6 — documented **Extension points** section (how to add a detector, graph backend, LLM provider, agent role, CLI/SDK op, node/relation/evidence class)
 
+### real discovered-bug fix (EX04 §5.3–5.4) — beyond the planted demo
+- [x] T542 (P0) Clone `andela/buggy-python` @ 8870093 (EX04-suggested repo, bugs authored by andela); graphify it (`results/buggy_python/{graph.json,GRAPH_REPORT.md}`); localize via the import graph from the failing `main.py` harness
+- [x] T543 (P0) Fix five **real** defects (mutable-default arg, dict-vs-list loop, `!==`/`is`/`sun`/`length`/attr-on-dict, missing exports); andela's own `main.py` harness now prints "All test passed"; vendored green at `examples/buggy-python/` + `THE_FIX.patch`; write-up `results/BUG_ANALYSIS_buggy_python.md`; ruff excludes `examples/`
+
 ### reconcile
 - [x] T529 (P0) PRD/PLAN/TODO/README reconciled; full gates re-run GREEN; each unit committed + pushed
 

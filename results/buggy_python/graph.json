@@ -1,0 +1,247 @@
+{
+ "backend": "ast_extractor/1.00",
+ "edges": [
+  {
+   "confidence": 1.0,
+   "dst": "snippets",
+   "evidence": "EXTRACTED",
+   "relation": "imports",
+   "src": "main"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.foobar",
+   "evidence": "EXTRACTED",
+   "relation": "imports",
+   "src": "snippets"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.io",
+   "evidence": "EXTRACTED",
+   "relation": "imports",
+   "src": "snippets"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.loop",
+   "evidence": "EXTRACTED",
+   "relation": "imports",
+   "src": "snippets"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets",
+   "evidence": "EXTRACTED",
+   "relation": "calls",
+   "src": "main"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.foobar",
+   "evidence": "EXTRACTED",
+   "relation": "rationale_for",
+   "src": "rationale:snippets.foobar.doc"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.io",
+   "evidence": "EXTRACTED",
+   "relation": "rationale_for",
+   "src": "rationale:snippets.io.doc"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.loop",
+   "evidence": "EXTRACTED",
+   "relation": "rationale_for",
+   "src": "rationale:snippets.loop.doc"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.foobar"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.foobar",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.foobar.foo"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.io"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.io",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.io.read_file"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.io",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.io.calculate_unpaid_loans"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.io",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.io.calculate_paid_loans"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.io",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.io.average_paid_loans"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.loop"
+  },
+  {
+   "confidence": 1.0,
+   "dst": "snippets.loop",
+   "evidence": "EXTRACTED",
+   "relation": "implements",
+   "src": "snippets.loop.lambda_array"
+  },
+  {
+   "confidence": 0.4,
+   "dst": "missing:main.py",
+   "evidence": "AMBIGUOUS",
+   "relation": "mentions",
+   "src": "doc:README.md"
+  }
+ ],
+ "iteration": 0,
+ "nodes": [
+  {
+   "community": -1,
+   "id": "main",
+   "label": "main",
+   "source_file": "main.py",
+   "type": "module"
+  },
+  {
+   "community": -1,
+   "id": "snippets",
+   "label": "snippets",
+   "source_file": "snippets/__init__.py",
+   "type": "module"
+  },
+  {
+   "community": -1,
+   "id": "snippets.foobar",
+   "label": "snippets.foobar",
+   "source_file": "snippets/foobar.py",
+   "type": "module"
+  },
+  {
+   "community": -1,
+   "id": "snippets.foobar.foo",
+   "label": "foo",
+   "source_file": "snippets/foobar.py",
+   "type": "function"
+  },
+  {
+   "community": -1,
+   "id": "snippets.io",
+   "label": "snippets.io",
+   "source_file": "snippets/io.py",
+   "type": "module"
+  },
+  {
+   "community": -1,
+   "id": "snippets.io.read_file",
+   "label": "read_file",
+   "source_file": "snippets/io.py",
+   "type": "function"
+  },
+  {
+   "community": -1,
+   "id": "snippets.io.calculate_unpaid_loans",
+   "label": "calculate_unpaid_loans",
+   "source_file": "snippets/io.py",
+   "type": "function"
+  },
+  {
+   "community": -1,
+   "id": "snippets.io.calculate_paid_loans",
+   "label": "calculate_paid_loans",
+   "source_file": "snippets/io.py",
+   "type": "function"
+  },
+  {
+   "community": -1,
+   "id": "snippets.io.average_paid_loans",
+   "label": "average_paid_loans",
+   "source_file": "snippets/io.py",
+   "type": "function"
+  },
+  {
+   "community": -1,
+   "id": "snippets.loop",
+   "label": "snippets.loop",
+   "source_file": "snippets/loop.py",
+   "type": "module"
+  },
+  {
+   "community": -1,
+   "id": "snippets.loop.lambda_array",
+   "label": "lambda_array",
+   "source_file": "snippets/loop.py",
+   "type": "function"
+  },
+  {
+   "community": -1,
+   "id": "rationale:snippets.foobar.doc",
+   "label": "The purpose of this snippet is to test your knowledge of",
+   "source_file": "snippets/foobar.py",
+   "type": "rationale"
+  },
+  {
+   "community": -1,
+   "id": "rationale:snippets.io.doc",
+   "label": "Simple python script to read a json file of loan",
+   "source_file": "snippets/io.py",
+   "type": "rationale"
+  },
+  {
+   "community": -1,
+   "id": "rationale:snippets.loop.doc",
+   "label": "Simple array of lambda functions that is used to calculate the addition",
+   "source_file": "snippets/loop.py",
+   "type": "rationale"
+  },
+  {
+   "community": -1,
+   "id": "doc:README.md",
+   "label": "Buggy Python",
+   "source_file": "README.md",
+   "type": "doc"
+  },
+  {
+   "community": -1,
+   "id": "missing:main.py",
+   "label": "main.py (unresolved mention)",
+   "source_file": "README.md",
+   "type": "doc"
+  }
+ ],
+ "version": "1.00"
+}
