@@ -209,16 +209,18 @@ Rendering, file writes, and the vault log stay on the main thread, so the audit 
 
 ## Results deep-dive
 
-### Target repository
+### Targets — two repositories, two jobs
 
-| Field | Value |
-|---|---|
-| Repo / SHA | `pallets/werkzeug` @ `1b00618e787f40dfb21eba29caf8f8be7c8e1d93` (detached) |
-| Size | 27,498 code lines / **138 `.py` files** (src-only `src/werkzeug`: 16,829 / 52) |
-| License | BSD-3-Clause (attribution preserved below) |
-| Test baseline | **992 passed, 0 skipped, 0 xfailed in ~60 s** (stable across 2 runs, no serving-port flakes) |
+This project deliberately uses **two** repositories: a large, clean one for the *reverse-engineering* work, and a small, genuinely buggy one for the *debugging* work. They are independent — the werkzeug analysis below never touches buggy-python, and vice-versa.
 
-Selection trail, naive pre-graph impression, and the unfamiliarity attestation live in [`docs/TARGET_REPO.md`](docs/TARGET_REPO.md).
+| | **① Reverse-engineering target** | **② Debugging target** |
+|---|---|---|
+| Repo / SHA | [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` | [`andela/buggy-python`](https://github.com/andela/buggy-python) @ `8870093` |
+| Size | 27,498 LOC / **138 `.py` files** (meets the ≥70-file / ~10k-LOC floor) | 4 tiny files — *deliberately* small (lecturer §6: "prefer a small, well-explained case") |
+| State | healthy (**992 tests pass**) — graphed, vaulted, analysed for *architecture* | **buggy** — the graph localizes 5 real defects we fix; its harness goes green |
+| Covered in | this *Results deep-dive* (graph, findings, vault, experiment) | the [Debugging case](#debugging-case--graph-guided-bug-fix) |
+
+**Everything in the rest of this Results section is about werkzeug (target ①).** Selection trail, naive pre-graph impression, and the unfamiliarity attestation live in [`docs/TARGET_REPO.md`](docs/TARGET_REPO.md).
 
 ### Graph (iteration 0)
 
