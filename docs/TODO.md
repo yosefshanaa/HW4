@@ -663,6 +663,7 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 ### real discovered-bug fix (EX04 §5.3–5.4) — beyond the planted demo
 - [x] T542 (P0) Clone `andela/buggy-python` @ 8870093 (EX04-suggested repo, bugs authored by andela); graphify it (`results/buggy_python/{graph.json,GRAPH_REPORT.md}`); localize via the import graph from the failing `main.py` harness
 - [x] T543 (P0) Fix five **real** defects (mutable-default arg, dict-vs-list loop, `!==`/`is`/`sun`/`length`/attr-on-dict, missing exports); andela's own `main.py` harness now prints "All test passed"; vendored green at `examples/buggy-python/` + `THE_FIX.patch`; write-up `results/BUG_ANALYSIS_buggy_python.md`; ruff excludes `examples/`
+- [x] T544 (P0) Before/after **graphify visualizations** of the fix: matplotlib renders (`scripts/render_graph.py` → `assets/graphify_buggy_{before,after}.png`) **+ live Obsidian projects** (`scripts/graph_to_vault.py` → `vault/20_Projects/buggy-python-{before,after}/`, 6 vs 11 code notes — the `io` subtree appears once `io.py` parses)
 
 ### reconcile
 - [x] T529 (P0) PRD/PLAN/TODO/README reconciled; full gates re-run GREEN; each unit committed + pushed
@@ -704,8 +705,8 @@ Rule: if stuck >30 min on any single task — stop, think, descope or switch (L0
 | 14 Quality hardening | T413–T437 | 6/25 | gate-enforced subset GREEN: ruff 0 (T418), file-length ≤150 (T419), no-hardcodes (T420), no-secrets (T421), suite green + cov ~96% (T413/T414); deeper error-path/dup/edge audits (T415-417,T422-433) remain | 2026-06-15 |
 | 15 README & docs | T438–T455 | 14/18 | rich README (overview/arch diagram/methodology/usage/results/config guide/ADRs/repro/limits), all docs reflect werkzeug, PROMPTS+TODO current, FINDINGS qualified-language; T446 contrib + T452 screenshot inventory (human re-capture) + T454/455 remain | 2026-06-15 |
 | 16 Final & ship | T456–T505 | 2/50 | submission zip builds from tracked tree (228 files, excl workspace/.env/caches) + secrets-scanned clean — real key absent, .env-example dummy (T498/T499); id-named zip, clean-machine test, human sign-off + submit remain | 2026-06-15 |
-| 17 Reviewer enhancements | T516–T541 | 26/26 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00, honest FP), **Graphify backend** (real node-link adapter, AST default, ADR-4 revised), **parallelism+thread-safety** (§15), **graph-guided debugging case** (`hw4 debug`: HTTP byte-range off-by-one → root cause → verified red→green fix, 51% token saving), **vault `hot.md`** (was missing, §5.1); all behind green gates with tests + docs | 2026-06-16 |
+| 17 Reviewer enhancements | T516–T544 | 29/29 | **confusion matrix** (`hw4 evaluate`, P0.75/R1.00), **Graphify backend** (ADR-4), **parallelism+thread-safety** (§15), **debugging cases** — a real discovered fix on `andela/buggy-python` (5 real bugs → their harness prints "All test passed", before/after graphify images + Obsidian projects) **plus** a gate-verified planted `hw4 debug` demo — **vault `hot.md`**, ISO/IEC 25010 + extension-points docs; all behind green gates | 2026-06-16 |
 | Backlog | T506–T515 | 0/10 | parked | |
-| **Total** | **541 tasks** | **429/541** | | |
+| **Total** | **544 tasks** | **432/544** | | |
 
 *End of TODO v1.00.*

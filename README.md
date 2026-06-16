@@ -67,7 +67,7 @@ This project was written **docs-before-code** (guidelines §1.4): the requiremen
 - **Mechanism PRDs (7)** — one per subsystem: [`PRD_graph_pipeline.md`](docs/PRD_graph_pipeline.md) · [`PRD_defect_detection.md`](docs/PRD_defect_detection.md) · [`PRD_fix_loop.md`](docs/PRD_fix_loop.md) · [`PRD_gatekeeper.md`](docs/PRD_gatekeeper.md) · [`PRD_token_experiment.md`](docs/PRD_token_experiment.md) · [`PRD_agent_orchestration.md`](docs/PRD_agent_orchestration.md) · [`PRD_agent_evaluation.md`](docs/PRD_agent_evaluation.md).
 - **Process & reference** — [`PROMPTS.md`](docs/PROMPTS.md) (the AI prompt log) · [`SCORING_RUBRIC.md`](docs/SCORING_RUBRIC.md) (blind experiment scoring) · [`SKILL.md`](docs/SKILL.md) + [`SKILL_token_experiment.md`](docs/SKILL_token_experiment.md) (SKILL protocols) · [`TARGET_REPO.md`](docs/TARGET_REPO.md) (target provenance + unfamiliarity attestation).
 
-Key generated artifacts referenced throughout: [`results/FINDINGS.md`](results/FINDINGS.md), [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md), [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), [`results/graphs/i00/GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), and the Obsidian [`vault/`](vault/).
+Key generated artifacts referenced throughout: [`results/FINDINGS.md`](results/FINDINGS.md), the two bug analyses — [`BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md) (the real discovered fix) and [`BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md) (the planted unit demo) — [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md), [`results/graphs/i00/GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), the vendored fixed repo [`examples/buggy-python/`](examples/buggy-python/), and the Obsidian [`vault/`](vault/).
 
 ## Research questions (§4) — answered
 
@@ -267,6 +267,8 @@ The graph itself shows the fix: in the buggy state `io.py` has a syntax error (w
 |---|---|
 | ![graphify of buggy-python before the fix — 10 nodes](assets/graphify_buggy_before.png) | ![graphify of buggy-python after the fix — 16 nodes](assets/graphify_buggy_after.png) |
 
+The same two graphs ship as **live Obsidian projects** — [`vault/20_Projects/buggy-python-before/`](vault/20_Projects/buggy-python-before/) (6 code notes — the `io` subtree is absent) and [`vault/20_Projects/buggy-python-after/`](vault/20_Projects/buggy-python-after/) (11 code notes — whole) — generated deterministically by [`scripts/graph_to_vault.py`](scripts/graph_to_vault.py); open either and use Obsidian's graph view to navigate the code structure.
+
 **② Planted unit demonstration — [`tests/fixtures/buggy_case`](tests/fixtures/buggy_case).** A small, deterministic, **gate-verified** case so the workflow is covered by offline tests (no network). `uv run hw4 debug` reproduces → graph-localizes → verifies a red→green fix and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md):
 
 - **Bug:** `httprange.parse_byte_range("bytes=0-499", 1000)` returns content-length **499**, but HTTP byte ranges are *inclusive* (RFC 9110 §14.1.2) → it must be **500**. A boundary bug that passes a casual read.
@@ -320,7 +322,7 @@ The graph becomes a navigable Obsidian vault under `vault/20_Projects/werkzeug-a
 | **`werkzeug.datastructures` wiki — rank-1 god-node (F-001)** | **`werkzeug.wrappers` wiki — rank-5 dependency hub** |
 | ![werkzeug.datastructures wiki page](assets/wiki_datastructures.png) | ![werkzeug.wrappers wiki page](assets/wiki_wrappers.png) |
 
-Each wiki page carries an **evidence table** (EXTRACTED/INFERRED edges with their source files and confidence) plus open questions; the index ranks hubs by the graph's bottleneck metrics. A machine-owned **`hot.md`** focuses the critical area, and a second, smaller vault project — **`vault/20_Projects/range-debug/`** — documents the [debugging case](#debugging-case--graph-guided-bug-fix) (bug-focused `hot.md`, knowledge before/after). The community-size and experiment charts elsewhere in this README are exported by the notebook (`assets/`).
+Each wiki page carries an **evidence table** (EXTRACTED/INFERRED edges with their source files and confidence) plus open questions; the index ranks hubs by the graph's bottleneck metrics. A machine-owned **`hot.md`** focuses the critical area, and three smaller vault projects accompany the [debugging work](#debugging-case--graph-guided-bug-fix): **`range-debug/`** (the planted case — bug-focused `hot.md` + knowledge before/after) and **`buggy-python-before/`** + **`buggy-python-after/`** (the real andela bug rendered as a code graph — open either in Obsidian's graph view to see the `io` subtree appear once the syntax error is fixed). The community-size and experiment charts elsewhere in this README are exported by the notebook (`assets/`).
 
 ## Evidence discipline (Part-C)
 
