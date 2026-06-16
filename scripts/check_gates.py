@@ -19,6 +19,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
+# The 150-line limit covers the graded solution *and* its tests (guidelines
+# §3.2 + §6.1 item 6). scripts/ is one-off tooling (e.g. the notebook
+# generator, whose length is embedded cell content) and is out of scope.
+LENGTH_SCOPED_DIRS = (SRC, ROOT / "tests")
 MAX_CODE_LINES = 150
 
 # Narrow on purpose: broad patterns drown real findings in false positives.
@@ -47,12 +51,19 @@ def count_code_lines(path: Path) -> int:
 
 
 def check_file_lengths() -> list[str]:
-    """Gate: every file under src/ stays within MAX_CODE_LINES (guidelines §3.2)."""
+    """Gate: solution + test files stay within MAX_CODE_LINES (§3.2, §6.1).
+
+    Fixture trees under tests/fixtures/ vendor external sample repos verbatim,
+    so they are exempt — they are data, not our code.
+    """
     failures = []
-    for path in sorted(SRC.rglob("*.py")):
-        lines = count_code_lines(path)
-        if lines > MAX_CODE_LINES:
-            failures.append(f"{path.relative_to(ROOT)}: {lines} code lines > {MAX_CODE_LINES}")
+    for base in LENGTH_SCOPED_DIRS:
+        for path in sorted(base.rglob("*.py")):
+            if "fixtures" in path.parts:
+                continue
+            lines = count_code_lines(path)
+            if lines > MAX_CODE_LINES:
+                failures.append(f"{path.relative_to(ROOT)}: {lines} code lines > {MAX_CODE_LINES}")
     return failures
 
 

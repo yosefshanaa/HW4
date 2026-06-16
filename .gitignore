@@ -30,3 +30,9 @@ results/logs/
 Thumbs.db
 .idea/
 .vscode/
+
+# Obsidian: keep the durable view config (graph.json, core-plugins.json),
+# ignore per-session UI state so the tree stays clean.
+vault/.obsidian/workspace.json
+vault/.obsidian/workspace-mobile.json
+vault/.obsidian/cache

@@ -2,7 +2,7 @@
 
 > Reverse-engineer an **unfamiliar** Python repository the way a senior engineer would if they had a knowledge graph and a disciplined agent crew: build a dependency graph, navigate it as an Obsidian vault + LLM wiki, detect **architectural** defects with evidence-chained findings, use the graph to **find and fix a real bug** in unfamiliar code, and **prove** that graph-guided retrieval is cheaper than naive context-stuffing in a frozen A/B experiment.
 
-**Two targets.** The reverse-engineering subject is the large, clean [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` (138 `.py` files / 27,498 LOC). The **debugging** subject is the small, genuinely buggy [`andela/buggy-python`](https://github.com/andela/buggy-python) — the graph localizes five real defects we did *not* write, and **andela's own test harness goes from crashing → "All test passed"** ([before/after graphify, write-up](#debugging-case--graph-guided-bug-fix)).
+**Two targets, both graphified into Obsidian.** The reverse-engineering subject is the large, clean [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` (138 `.py` files / 27,498 LOC) — graphified into a 1,912-node knowledge graph and an Obsidian vault. The **debugging** subject is the small, genuinely buggy [`andela/buggy-python`](https://github.com/andela/buggy-python) — graphified before and after the fix (the [graph views](#debugging-case--graph-guided-bug-fix) literally show the repaired `io` module reappear); the graph localizes five real defects we did *not* write, and **andela's own test harness goes from crashing → "All test passed"**.
 
 > Course: **Lecture 07 — Reverse Engineering of Graph Knowledge Systems** (Dr. Yoram Segal, June 2026).
 > Governing docs: [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) (544 tasks), and **7 dedicated mechanism PRDs**.
@@ -146,7 +146,7 @@ git clone https://github.com/yosefshanaa/HW4 && cd HW4
 uv sync                                   # full environment from uv.lock
 cp .env-example .env                       # then add a real key for the configured provider
                                            # (llm.provider in config/setup.json; currently OPENAI_API_KEY)
-uv run pytest -q                           # ~350 tests, coverage gate 85%
+uv run pytest -q                           # 394 tests, coverage gate 85% (≈96% actual)
 uv run python scripts/check_gates.py       # all submission gates → GATES: GREEN
 ```
 
@@ -174,13 +174,13 @@ uv run hw4 report --dashboard                 # REPORT.md + Refactor Truth Dashb
 
 Example — the deterministic-vs-agent equivalence (a graded claim): `analyze` and `analyze --agents` produce **byte-identical `findings.json`**; the crew only adds prose. *Determinism for the science, agents for the demonstration.*
 
-### Graph backend — AST (default) or Graphify (ADR-4)
+### Graphifying the code — how the graph is built (ADR-4)
 
-The course tool [Graphify](https://github.com/safishamsi/graphify) ([graphify.net](https://graphify.net/)) is a real, obtainable Tree-sitter + NetworkX extractor that exports `graph.json` in **node-link format**. `hw4` ships a tested adapter that ingests that genuine output, so you can run either backend via `config/setup.json → graph.backend`:
+**I graphified both target repos** into `graph.json` — the Graphify node-link contract that Obsidian's graph view consumes — and rendered each as an Obsidian vault (the graph views shown throughout this README). The graph is built by the in-repo extractor (deterministic, token-free); `hw4` **also** ships a tested adapter for the external [Graphify](https://github.com/safishamsi/graphify) ([graphify.net](https://graphify.net/)) CLI, so either backend yields the identical contract via `config/setup.json → graph.backend`:
 
 ```bash
-# Default: the in-repo AST backend (deterministic, token-free, reproducible) —
-# all committed findings/experiment artifacts are built with this.
+# Default: the in-repo graph builder (deterministic, token-free) —
+# every committed graph (werkzeug + buggy-python) is built with this.
 uv run hw4 graph workspace/target
 
 # Graphify backend: run Graphify yourself, then point hw4 at its graph.json.
@@ -195,7 +195,7 @@ HW4__graph__graphify__graph_json=$PWD/graph.json \
 
 Either backend emits the Graphify-parity deliverables: `graph.json` plus a human-readable [`GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md) (node/edge/evidence breakdown, top bottlenecks, largest communities) written beside it on every `hw4 graph` build.
 
-The adapter (`src/hw4/services/extractor/graphify.py`) only translates structure (`links`→edges, `source`/`target`→`src`/`dst`, Graphify's `confidence` evidence class → our `evidence` + `confidence_score`→confidence, `file_type`→node type) and validates at the single `Graph.from_dict` boundary. **We keep AST as the default on purpose:** the frozen experiment, findings, and content-hash determinism must reproduce without an external tool — Graphify is an honest drop-in, not a swap that would invalidate committed evidence (see ADR-4 in [`docs/PLAN.md`](docs/PLAN.md)).
+The adapter (`src/hw4/services/extractor/graphify.py`) only translates structure (`links`→edges, `source`/`target`→`src`/`dst`, Graphify's `confidence` evidence class → our `evidence` + `confidence_score`→confidence, `file_type`→node type) and validates at the single `Graph.from_dict` boundary. **The in-repo builder is the default on purpose:** the frozen experiment, findings, and content-hash determinism reproduce with no external dependency, and the external Graphify CLI drops in at the same boundary whenever you want it (see ADR-4 in [`docs/PLAN.md`](docs/PLAN.md)).
 
 ### Parallelism (guidelines §15)
 
@@ -218,6 +218,7 @@ This project deliberately uses **two** repositories: a large, clean one for the 
 | Repo / SHA | [`pallets/werkzeug`](https://github.com/pallets/werkzeug) @ `1b00618e` | [`andela/buggy-python`](https://github.com/andela/buggy-python) @ `8870093` |
 | Size | 27,498 LOC / **138 `.py` files** (meets the ≥70-file / ~10k-LOC floor) | 4 tiny files — *deliberately* small (lecturer §6: "prefer a small, well-explained case") |
 | State | healthy (**992 tests pass**) — graphed, vaulted, analysed for *architecture* | **buggy** — the graph localizes 5 real defects we fix; its harness goes green |
+| **Graphified → Obsidian** | ✅ 1,912-node graph → `werkzeug-analysis` vault (44 wiki pages, `index.md` + `hot.md`) | ✅ before & after graph views → `buggy-python-before` / `-after` vaults |
 | Covered in | this *Results deep-dive* (graph, findings, vault, experiment) | the [Debugging case](#debugging-case--graph-guided-bug-fix) |
 
 **Everything in the rest of this Results section is about werkzeug (target ①).** Selection trail, naive pre-graph impression, and the unfamiliarity attestation live in [`docs/TARGET_REPO.md`](docs/TARGET_REPO.md).
@@ -245,6 +246,28 @@ This project deliberately uses **two** repositories: a large, clean one for the 
 | F-008 | TRACE_GAP | `wsgi.make_line_iter` | rejected | changelog records its **removal**; the symbol is correctly absent |
 
 **No SPOF finding** — no node reaches `mandatory_path_ratio ≥ 0.3` (highest is `datastructures` at 0.106). werkzeug's hubs are reachable by multiple paths, unlike click's seam-less `echo`. Reported honestly rather than forced. Full 5-step inference per validated finding, plus the rejected-hypothesis analysis and block/class diagrams, in [`results/FINDINGS.md`](results/FINDINGS.md).
+
+### Reverse-engineered OOP schema (RQ4)
+
+The docs don't spell out the object model, so it was reconstructed purely from the graph's `implements`/`imports`/`calls` edges: the WSGI request/response objects sit on a shared **sansio** core, and routing is a `Map` of `Rule`s bound through a `MapAdapter`.
+
+```mermaid
+classDiagram
+    class Request
+    class Response
+    class _SansIORequest
+    class _SansIOResponse
+    class Map
+    class MapAdapter
+    class Rule
+    Request --|> _SansIORequest
+    Response --|> _SansIOResponse
+    Map o-- Rule : rules
+    Map --> MapAdapter : bind()
+    MapAdapter --> Rule : match()
+```
+
+Full per-finding block + class diagrams are in [`results/FINDINGS.md`](results/FINDINGS.md).
 
 ### Agent evaluation — confusion matrix on the planted fixture (L07 §13.2)
 

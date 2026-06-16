@@ -44,13 +44,16 @@ ignore = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--cov=src --cov-report=term-missing"
+# cov targets the import package, not the "src" dir string: coverage resolves
+# a package name via its realpath, so measurement stays correct regardless of
+# the working directory's letter-case (DrvFs/WSL paths are case-insensitive).
+addopts = "--cov=hw4 --cov-report=term-missing"
 # fixture repos carry their own pytest suites — ours must not collect them
 norecursedirs = ["tests/fixtures"]
 
 [tool.coverage.run]
-source = ["src"]
-omit = ["src/hw4/main.py", "*/tests/*"]
+source_pkgs = ["hw4"]
+omit = ["*/hw4/main.py", "*/tests/*"]
 
 [tool.coverage.report]
 fail_under = 85
