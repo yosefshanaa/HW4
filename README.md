@@ -261,6 +261,12 @@ Two debugging deliverables, because two different things are worth proving — a
 
 **① Real discovered bug — [`andela/buggy-python`](https://github.com/andela/buggy-python)** (one of the EX04-suggested repos; the bugs were authored by *andela*, not by us). We graphified it ([`results/buggy_python/`](results/buggy_python/), 16 nodes / 18 edges), let the import graph localize the implicated `snippets` modules from the failing harness, and fixed **five real defects** — a mutable-default argument, a dict-vs-list loop, `!==` / `is "paid"` / `sun` / `length` / attribute-on-dict typos, and missing package exports. andela's **own** `main.py` harness now prints `All test passed successfully!! 😀`. Runs green at [`examples/buggy-python/`](examples/buggy-python/); full write-up in [`results/BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md). *This is the genuine discovered fix — code neither of us wrote.*
 
+The graph itself shows the fix: in the buggy state `io.py` has a syntax error (won't parse) and `__init__.py` is missing its exports, so graphify produces an **incomplete 10-node** graph; after the fix every module parses and every import resolves — a **whole 16-node** graph (+`io`'s four functions, +the resolved imports).
+
+| Graphify — **before** the fix (buggy): `io.py` unparseable, exports missing | Graphify — **after** the fix: all modules parse, imports resolve |
+|---|---|
+| ![graphify of buggy-python before the fix — 10 nodes](assets/graphify_buggy_before.png) | ![graphify of buggy-python after the fix — 16 nodes](assets/graphify_buggy_after.png) |
+
 **② Planted unit demonstration — [`tests/fixtures/buggy_case`](tests/fixtures/buggy_case).** A small, deterministic, **gate-verified** case so the workflow is covered by offline tests (no network). `uv run hw4 debug` reproduces → graph-localizes → verifies a red→green fix and writes [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md):
 
 - **Bug:** `httprange.parse_byte_range("bytes=0-499", 1000)` returns content-length **499**, but HTTP byte ranges are *inclusive* (RFC 9110 §14.1.2) → it must be **500**. A boundary bug that passes a casual read.
