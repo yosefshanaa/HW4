@@ -23,6 +23,25 @@
 
 *The validated result is **58.7% savings with answer quality ≥ naive** (blind LLM-as-judge scoring, `results/experiment/SCORING.md`). Pushing to 89.8% savings (run-2) broke quality — reported honestly as the savings/quality cliff, not the headline.*
 
+## What to inspect first
+
+A 30-second reviewer map — every row is a committed artifact you can open right now:
+
+| To verify… | Open |
+|---|---|
+| Headline KPIs (this report) | `README.md` — [TL;DR table](#tldr--headline-results) above |
+| Reverse-engineering findings (8 hypotheses, 2 validated god-nodes) | [`results/FINDINGS.md`](results/FINDINGS.md) |
+| The knowledge graph + human-readable report (werkzeug, i00) | [`results/graphs/i00/GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), `graph.json` |
+| The Obsidian vault (navigate the graph, not the files) | [`vault/20_Projects/werkzeug-analysis/index.md`](vault/20_Projects/werkzeug-analysis/index.md), [`hot.md`](vault/20_Projects/werkzeug-analysis/hot.md) |
+| The **real** discovered bug fix (andela harness → green) | [`results/BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md), [`examples/buggy-python/`](examples/buggy-python/) |
+| The planted graph-guided debug demo (RFC 9110 off-by-one) | [`results/BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md), [`vault/20_Projects/range-debug/`](vault/20_Projects/range-debug/) |
+| Token A/B experiment + blind quality scoring | [`results/experiment/SCORING.md`](results/experiment/SCORING.md), [`comparison.json`](results/experiment/comparison.json) |
+| Detector quality as a classifier (confusion matrix) | [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md) |
+| The fix-loop honest negative (`NO_SAFE_ACTION`) | [`results/loop_log.json`](results/loop_log.json), [`results/dashboard.md`](results/dashboard.md) |
+| Cost discipline (every call ledgered) | [`results/ledger.jsonl`](results/ledger.jsonl) |
+| All submission gates | `uv run python scripts/check_gates.py` → **GATES: GREEN** |
+| Governing docs (docs-before-code) | [`docs/PRD.md`](docs/PRD.md), [`docs/PLAN.md`](docs/PLAN.md), [`docs/TODO.md`](docs/TODO.md) |
+
 ## Table of contents
 
 1. [What this is & why a graph](#what-this-is--why-a-graph)
@@ -32,7 +51,7 @@
 5. [The pipeline, stage by stage](#the-pipeline-stage-by-stage)
 6. [Installation](#installation)
 7. [Usage tour](#usage-tour)
-8. [Results deep-dive](#results-deep-dive) — findings, agent evaluation, **debugging case**, fix loop, token experiment, the Obsidian vault
+8. [Results deep-dive](#results-deep-dive) — findings, **impact analysis**, agent evaluation, **debugging case**, fix loop, token experiment, the Obsidian vault
 9. [Evidence discipline (Part-C)](#evidence-discipline-part-c)
 10. [Configuration guide](#configuration-guide)
 11. [Repository layout](#repository-layout)
@@ -40,8 +59,9 @@
 13. [Key design decisions (ADRs)](#key-design-decisions-adrs-in-docsplanmd-5)
 14. [Reproducing the analysis](#reproducing-the-analysis)
 15. [Quality standards (ISO/IEC 25010)](#quality-standards--isoiec-25010-conformance)
-16. [Quality, cost & limitations](#quality-cost--limitations)
-17. [License & attribution](#license--attribution)
+16. [Requirement coverage & submission checklist](#requirement-coverage--submission-checklist)
+17. [Quality, cost & limitations](#quality-cost--limitations)
+18. [License & attribution](#license--attribution)
 
 ---
 
@@ -269,6 +289,19 @@ classDiagram
 
 Full per-finding block + class diagrams are in [`results/FINDINGS.md`](results/FINDINGS.md).
 
+### Impact analysis — what breaks if a central node changes (the `impact` tier)
+
+The third task tier ("what breaks if I change Y?") is answered straight off the graph's `imports`/`calls`/`implements` edges and the bottleneck metrics — a **blast-radius estimate**, validated in source like every other finding (Part-C discipline), *not* a runtime guarantee.
+
+| Central node | Why central (graph evidence) | Likely blast radius if changed | Evidence |
+|---|---|---|---|
+| `werkzeug.datastructures` | rank-1 bottleneck — degree 76, fan-in **66**, reaches **11 communities** (F-001) | a re-export backbone for ~10 container families; a signature or relocation change ripples to importers across 11 communities | `results/graphs/i00/metrics.json`, [`FINDINGS.md`](results/FINDINGS.md) §F-001 |
+| `werkzeug.http` | fan-in **21**, 1,543 LOC, ≥6 header families, no per-concern seam (F-005) | touching one header concern (cookies / etags / dates / ranges / accept / cache-control) risks the other five and exposes 21 importers — the precise reason the fix loop tried, and failed, to split it | [`FINDINGS.md`](results/FINDINGS.md) §F-005 |
+| `wrappers.request` / `.response` | deliberate public façades over the `sansio` core (F-002/3, *rejected* as god-nodes) | a public-API change hits every WSGI request/response consumer; an internal `sansio` change is absorbed behind the façade — the seam is doing its job | [`FINDINGS.md`](results/FINDINGS.md), OOP schema above |
+| `httprange.parser` (debug case) | reached from `tests.test_range` via a `tested_by` edge | an off-by-one here flips inclusive-range length for every range consumer; the graph names the **one** file to open instead of a whole-tree sweep | [`BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md) |
+
+This is the same mechanism the [debugging case](#debugging-case--graph-guided-bug-fix) exploits: the graph turns "what could this touch?" into a bounded, citable hop set rather than a full re-read.
+
 ### Agent evaluation — confusion matrix on the planted fixture (L07 §13.2)
 
 The detectors are a binary classifier, so they get a classifier's yardstick. `hw4 evaluate` runs the deterministic spine over [`tests/fixtures/mini_repo`](tests/fixtures/mini_repo) — a synthetic target whose README documents its planted defects *and* two false-positive guards — and scores findings against the machine-readable answer key. No LLM, no network; fully reproducible.
@@ -454,6 +487,43 @@ Assessed against the eight ISO/IEC 25010 product-quality characteristics (guidel
 | **Security** | Secrets only via env (`.env` gitignored, `.env-example` committed); a grep gate blocks hardcoded secrets/keys; the key is never printed or logged. |
 | **Maintainability** | SDK + services modularity, ≤150 code-lines/file, ruff-0, OOP without duplication, **7 mechanism PRDs** + ADRs, and documented [extension points](#extension-points). |
 | **Portability** | `uv`-managed env (`pyproject.toml` + `uv.lock`), relative paths only, config-driven throughout; runs fully locally except the LLM API. |
+
+## Requirement coverage & submission checklist
+
+Every EX04 / Lecture-07 deliverable mapped to a status and a committed artifact, so the rubric can be ticked top-to-bottom without hunting through the prose above.
+
+| Requirement (EX04 / L07) | Status | Evidence |
+|---|---|---|
+| Full GitHub repo, Python solution, reproducible env | ✅ | `src/hw4/`, `tests/`, `pyproject.toml`, `uv.lock` |
+| Unfamiliar target + provenance / unfamiliarity attestation | ✅ | `pallets/werkzeug` @ `1b00618e` — [`docs/TARGET_REPO.md`](docs/TARGET_REPO.md) |
+| Knowledge graph of the codebase (Graphify-compatible contract) | ✅ 1,912 nodes / 3,304 edges | [`results/graphs/i00/GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), `graph.json` |
+| Obsidian vault with linked Markdown + focused `hot.md` | ✅ 44 wiki pages | [`vault/…/werkzeug-analysis/index.md`](vault/20_Projects/werkzeug-analysis/index.md), [`hot.md`](vault/20_Projects/werkzeug-analysis/hot.md) |
+| Research questions §4 — all 8 answered with evidence | ✅ | [§Research questions](#research-questions-4--answered), [`results/FINDINGS.md`](results/FINDINGS.md) |
+| Most-central components / modules / classes / functions | ✅ | [`GRAPH_REPORT.md`](results/graphs/i00/GRAPH_REPORT.md), [`hot.md`](vault/20_Projects/werkzeug-analysis/hot.md) |
+| Architectural defects (god-node / SPOF / isolation / traceability) | ✅ 8 findings, 2 validated | [`results/FINDINGS.md`](results/FINDINGS.md) |
+| Block diagram + reverse-engineered OOP/class schema (RQ4) | ✅ | [§Architecture](#architecture), [§OOP schema](#reverse-engineered-oop-schema-rq4) |
+| Impact analysis ("what breaks if I change Y?") | ✅ | [§Impact analysis](#impact-analysis--what-breaks-if-a-central-node-changes-the-impact-tier) |
+| Graph-guided bug: find → root-cause → verified fix (§5.3–5.4) | ✅ real (andela) + planted demo | [`BUG_ANALYSIS_buggy_python.md`](results/BUG_ANALYSIS_buggy_python.md), [`BUG_ANALYSIS.md`](results/BUG_ANALYSIS.md) |
+| Knowledge-level before/after of the fix (§5.4) | ✅ before/after graph views | [`buggy-python-before`](vault/20_Projects/buggy-python-before/) / [`-after`](vault/20_Projects/buggy-python-after/), [`range-debug`](vault/20_Projects/range-debug/) |
+| Token comparison naive vs graph-guided, all 4 dimensions (§5.5) | ✅ 58.7%, quality-validated | [`results/experiment/SCORING.md`](results/experiment/SCORING.md), [`comparison.json`](results/experiment/comparison.json) |
+| Multi-agent workflow | ✅ CrewAI analyst / fixer / QA on the gated spine | `src/hw4/services/agents/`, [`docs/PRD_agent_orchestration.md`](docs/PRD_agent_orchestration.md) |
+| Agent evaluation — confusion matrix (L07 §13.2) | ✅ P = 0.75 / R = 1.00 | [`results/CONFUSION_MATRIX.md`](results/CONFUSION_MATRIX.md) |
+| Automated fix attempt under a test-and-graph guard | ✅ honest `NO_SAFE_ACTION` | [`results/loop_log.json`](results/loop_log.json), [`results/dashboard.md`](results/dashboard.md) |
+| Extensions / original mechanisms | ✅ | [RQ8](#research-questions-4--answered), [§Key design decisions](#key-design-decisions-adrs-in-docsplanmd-5) |
+
+**Submission checklist:**
+
+- [x] 394 tests pass; coverage **≈96%** (gate ≥85%)
+- [x] ruff **0** findings; every source file **≤150 code lines**
+- [x] no hardcoded values in `src/`; no secrets in tracked files
+- [x] secrets only via env — `.env-example` committed, `.env` gitignored
+- [x] `uv.lock` committed; `workspace/` target clone gitignored
+- [x] no broken vault wikilinks (gate-checked)
+- [x] cost under the $10 firewall — **$0.088 / 109 calls**, all ledgered ([`results/ledger.jsonl`](results/ledger.jsonl))
+- [x] screenshots captured and embedded → [`assets/`](assets/)
+- [x] all submission gates GREEN — `uv run python scripts/check_gates.py`
+
+Submission is the **GitHub repository + this README** — no archive required.
 
 ## Quality, cost & limitations
 
